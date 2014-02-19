@@ -1,4 +1,8 @@
-GRA
+GRA 
 ===
+=========================================
+ Exercicis per a la asignatura de Grafics
+=========================================
 
-Repositori per a les practiques de grafics
+
+Juan Marín && Dennis Quitaquís
