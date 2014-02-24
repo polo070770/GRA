@@ -10,8 +10,8 @@ using namespace spacefigure;
 int main()
 {
 
-   Circle * circle = new Circle();
-   Square * square = new Square();
+   Circle * circle = new Circle(2);
+   Square * square = new Square(2);
 
    FigureContainer container;
 

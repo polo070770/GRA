@@ -5,13 +5,25 @@ namespace spacefigure{
 
    class Figure
    {
-   public:
+   protected:
 
        double perimeter;
 
+   public:
        Figure();
 
-       virtual void getPerimeter() = 0;
+       /*
+        * Funcion que imprime el perimetro por pantalla
+        */
+       virtual void printPerimeter() = 0;
+
+       /*
+        * Funcion que devuelve el perimetro
+        */
+       virtual double getPerimeter() = 0;
+
+    private:
+       virtual void setPerimeter() = 0;
 
    };
 

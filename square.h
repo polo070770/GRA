@@ -14,7 +14,10 @@ namespace spacefigure{
        Square();
        Square(int length);
 
-       void getPerimeter();
+       void printPerimeter();
+       double getPerimeter();
+   private:
+       void setPerimeter();
 
    };
 

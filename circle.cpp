@@ -10,18 +10,23 @@ using namespace spacefigure;
 
 Circle::Circle()
 {
-   this->radius = 2;
-   this->perimeter = 2 * M_PI * this->radius;
+   //Inicializamos el circulo con radio 0
+   this->radius = 0;
+   this->setPerimeter();
 }
 
 Circle::Circle(int radius){
 
    this->radius = radius;
-   this->perimeter = 2 * M_PI * radius;
+   this->setPerimeter();
 
 }
 
-void Circle::getPerimeter(){
+void Circle::setPerimeter(){
+    this->perimeter = 2 * M_PI * radius;
+}
+
+void Circle::printPerimeter(){
 
    printf("\nPerimeter of a circle with radius %d is %f", this->radius, this->perimeter);
 }
@@ -29,6 +34,10 @@ void Circle::getPerimeter(){
 void Circle::setRadius(double radius){
 
    this->radius = radius;
-   this->perimeter = 2 * M_PI * radius;
+   this->setPerimeter();
 
+}
+
+double Circle::getPerimeter(){
+    return this->perimeter;
 }

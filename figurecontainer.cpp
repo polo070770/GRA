@@ -20,8 +20,11 @@ double FigureContainer::getPerimeters(){
    double sum = 0.0;
    vector<Figure *>::iterator i;
 
-   for (i = this->vector_figures.begin(); i != this->vector_figures.end(); ++i) {
-       sum += (*i)->perimeter;
+
+   for (i = this->vector_figures.begin(); i < this->vector_figures.end(); i++) {
+                //(*i)-> : es un puntero a un puntero y equivalente a
+                //(*(*i)).
+       sum += (*i)->getPerimeter();
    }
 
    return sum;
