@@ -3,3 +3,6 @@ using namespace spacefigure;
 Figure::Figure()
 {
 }
+Figure::~Figure()
+{
+}

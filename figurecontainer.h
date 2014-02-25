@@ -17,7 +17,7 @@ namespace spacefigure {
    public:
 
        FigureContainer();
-
+       ~FigureContainer();
        void addFigure(Figure * figure);
 
        double getPerimeters();

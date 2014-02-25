@@ -41,3 +41,7 @@ void Circle::setRadius(double radius){
 double Circle::getPerimeter(){
     return this->perimeter;
 }
+
+Circle::~Circle(){
+    cout << "deleting circle" << endl;
+}

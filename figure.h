@@ -11,6 +11,7 @@ namespace spacefigure{
 
    public:
        Figure();
+       ~Figure();
 
        /*
         * Funcion que imprime el perimetro por pantalla

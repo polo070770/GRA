@@ -29,3 +29,7 @@ void Square::printPerimeter(){
 double Square::getPerimeter(){
     return this->perimeter;
 }
+
+Square::~Square(){
+    cout << "deleting circle" << endl;
+}

@@ -16,6 +16,7 @@ namespace spacefigure{
 
        Circle();
        Circle(int radius);
+       ~Circle();
 
        void printPerimeter();
        double getPerimeter();
