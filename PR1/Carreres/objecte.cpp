@@ -4,6 +4,7 @@
 Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
     QObject(parent)
 {
+    std::cout<< "Estic en el constructor default\n";
     points = new point4[npoints];
     colors = new color4[npoints];
 }
@@ -13,7 +14,7 @@ Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble
     points = new point4[npoints];
     colors = new color4[npoints];
     tam = tamanio;
-    std::cout<<"Estic en el constructor parametritzat del cotxe\n";
+    std::cout<< "Estic en el constructor parametritzat del cotxe\n";
     xorig = x0;
     yorig = y0;
     zorig = z0;
@@ -42,7 +43,6 @@ Objecte::~Objecte()
 
 Capsa3D Objecte::calculCapsa3D()
 {
-       // la definimos como un punto mini altura,anchura y profundidad
 
     // Metode a implementar: calcula la capsa mínima contenidora d'un objecte
 
@@ -130,7 +130,7 @@ void Objecte::draw()
     program->setAttributeBuffer("vColor", GL_FLOAT, sizeof(point4) * Index, 4);
 
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // si cambiamos G_LINE por GL_FILL rellena las caras
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glDrawArrays( GL_TRIANGLES, 0, Index );
 
     // Abans nomes es feia: glDrawArrays( GL_TRIANGLES, 0, NumVerticesP );

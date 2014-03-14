@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this->ui->actionReset, SIGNAL(triggered()), this, SLOT(resetView()));
 
-
 }
 
 MainWindow::~MainWindow()

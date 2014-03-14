@@ -16,6 +16,7 @@
 
 #include <objecte.h>
 #include <cotxe.h>
+#include <terra.h>
 
 using namespace std;
 
@@ -39,6 +40,8 @@ public:
 
     // Objectes de l'escena: a modificar. Ara nomes té un objecte. Cal afegir un conjunt d'objectes
     Cotxe *cotxe;
+
+    Terra *terra;
 
 };
 

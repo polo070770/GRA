@@ -107,6 +107,7 @@ static void qNormalizeAngle(int &angle)
 void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
     // Metode a implementar
+
 }
 
 void GLWidget::newObjecte(Objecte * obj)
@@ -115,7 +116,7 @@ void GLWidget::newObjecte(Objecte * obj)
     obj->toGPU(program);
     esc->addObjecte(obj);
 
-    updateGL();
+    updateGL(); // actualiza display
 }
 
 void GLWidget::newObstacle(int nombre)
@@ -133,6 +134,11 @@ void GLWidget::newTerra(float amplaria, float profunditat, float y)
     // (quadrat d'una certa mida amb origen a xorig, yorig, zorig
 
     // Metode a implementar
+
+    Terra *obj;
+
+    obj = new Terra(amplaria, profunditat, y);
+    newObjecte(obj);
 
  }
 
@@ -186,11 +192,9 @@ void GLWidget::paintGL()
                         RotateY( yRot / 16.0 ) *
                         RotateZ( zRot / 16.0 ) );
 
+    esc->aplicaTGCentrat(transform);
+    esc->draw();
 
-    if (esc->cotxe!=NULL) {
-        esc->cotxe->aplicaTGCentrat(transform);
-        esc->draw();
-    }
 }
 
 void GLWidget::resizeGL(int width, int height)
