@@ -16,6 +16,7 @@ public:
           double girx, double giry, double girz,
           float xdir, float ydir, float zdir);
 
+    void readObj(QString filename);
     void forward();
     void backward();
     void turnleft();

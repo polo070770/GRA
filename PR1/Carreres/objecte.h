@@ -79,8 +79,10 @@ public:
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);
 
+protected:
+    void construeix_cara ( char **words, int nwords, Objecte*objActual, int vindexUlt);
 private:
-    void construeix_cara ( char **words, int nwords);
+
 
 };
 
