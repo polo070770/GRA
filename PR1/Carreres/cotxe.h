@@ -18,15 +18,21 @@ public:
           float xdir, float ydir, float zdir);
 
     void readObj(QString filename);
+    void make();
+    void aplicaTG(mat4 trans);
+    void draw();
+    void toGPU(QGLShaderProgram *program);
+    void aplicaTGCentrat(mat4 mtrans);
     void forward();
     void backward();
     void turnleft();
     void turnright();
     point4 direction;
-    void make();
-    void aplicaTG(mat4 trans);
+
+
 private:
     vector<Objecte * > vector_fills;
+    vector<Objecte *>::iterator fill_iter;
     Carrosseria *carroseria;
     Roda *roda_dreta_davantera;
     Roda *roda_esquerra_davantera;

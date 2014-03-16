@@ -59,7 +59,7 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     this->vector_fills.push_back(roda_esquerra_posterior);
     this->vector_fills.push_back(roda_dreta_posterior);
     this->vector_fills.push_back(roda_esquerra_davantera);
-    this->vector_fills.push_back(roda_dreta_davantera);
+    this->vector_fills.push_back(carroseria);
     this->vector_fills.push_back(roda_dreta_davantera);
 
     readObj(n);
@@ -75,6 +75,63 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
 
 }
 
+
+
+/*
+ *Hace un make a la carroceria y a las ruedas;
+ */
+void Cotxe::make(){
+
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        (*fill_iter)->make();
+    }
+}
+/*
+ *Hace un aplicaTG a la carroceria y las ruedas;
+ */
+
+void Cotxe::aplicaTG(mat4 trans){
+
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        (*fill_iter)->aplicaTG(trans);
+    }
+}
+
+void Cotxe::toGPU(QGLShaderProgram *program){
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        (*fill_iter)->toGPU(program);
+    }
+}
+void Cotxe::draw(){
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        (*fill_iter)->draw();
+    }
+}
+
+void Cotxe::aplicaTGCentrat(mat4 trans){
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        (*fill_iter)->aplicaTGCentrat(trans);
+    }
+}
+
+void Cotxe::forward(){
+    // Metode a implementar per fer el moviment del cotxe
+}
+
+void Cotxe::backward(){
+    // Metode a implementar per fer el moviment del cotxe
+
+}
+
+void Cotxe::turnleft(){
+    // Metode a implementar per fer el moviment del cotxe
+
+}
+
+void Cotxe::turnright(){
+    // Metode a implementar per fer el moviment del cotxe
+
+}
 void Cotxe::readObj(QString filename)
 {   Objecte *current;
     std::cout<< "Estic en el readobjdel cotxe del cotxe\n" << endl;
@@ -175,43 +232,4 @@ void Cotxe::readObj(QString filename)
                             //free(words);
                         }
                     }
-}
-
-/*
- *Hace un make a la carroceria y a las ruedas;
- */
-void Cotxe::make(){
-    vector<Objecte *>::iterator i;
-    for (i = this->vector_fills.begin(); i < this->vector_fills.end(); ++i) {
-        (*i)->make();
-    }
-}
-/*
- *Hace un aplicaTG a la carroceria y las ruedas;
- */
-
-void Cotxe::aplicaTG(mat4 trans){
-    vector<Objecte *>::iterator i;
-    for (i = this->vector_fills.begin(); i < this->vector_fills.end(); ++i) {
-        (*i)->aplicaTG(trans);
-    }
-}
-
-void Cotxe::forward(){
-    // Metode a implementar per fer el moviment del cotxe
-}
-
-void Cotxe::backward(){
-    // Metode a implementar per fer el moviment del cotxe
-
-}
-
-void Cotxe::turnleft(){
-    // Metode a implementar per fer el moviment del cotxe
-
-}
-
-void Cotxe::turnright(){
-    // Metode a implementar per fer el moviment del cotxe
-
 }

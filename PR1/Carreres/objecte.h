@@ -66,7 +66,7 @@ public:
     virtual void make();
 
     // Pas generic de vertexs i colors a la GPU
-    void toGPU(QGLShaderProgram *p);
+    virtual void toGPU(QGLShaderProgram *p);
     // Pintat amb la GPU
     virtual void draw();
 

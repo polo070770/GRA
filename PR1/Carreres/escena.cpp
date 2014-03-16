@@ -36,6 +36,7 @@ void escena::addObjecte(Objecte *obj) {
 void escena::CapsaMinCont3DEscena()
 {
     // Metode a implementar
+    //TODO
 }
 
 void escena::aplicaTG(mat4 m) {
@@ -78,6 +79,8 @@ void escena::reset() {
 
     if (cotxe!=NULL)
         cotxe->make();
+    if (terra!=NULL)
+        terra->make();
 
 }
 
