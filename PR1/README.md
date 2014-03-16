@@ -1,5 +1,6 @@
 #PR1
-##Ej 2 : TERRA
+##Ej 1 :OK
+##Ej 2 : TERRA :pendiente
 ####Archivos a crear
 * terra.h
 * terra.cpp
@@ -21,8 +22,14 @@ Añade a los arrays colors[] y points[], que son de Objecte, los datos de los ar
 ####Pendientes
 Queda pendiente todo lo relativo a ajustar el tamaño etc en funcion de los parametros de entrada
 
+##Ej 2 : ESCENA :pendiente
+####Añadir i/o modificar
+* cotxe pasa a ser un objeto CotxeContainer
+* todos los metodos que añaden y o aplican cambios a elementos deben aplicarlos tmb a cada subelemento del vector_cotxes
+* añadir vector_obstacles
+* todos los metodos que añaden y o aplican cambios a los elementos deben tmb aplicarlo a cada subelemtn del vector_obstacles
 
-##Ej 3: COTXE
+##Ej 4: COTXE :pendiente
 ####Clases a crear
 * Carrosseria
 * Roda
@@ -38,4 +45,10 @@ El cotxe pasa a tener 5 atributos que son
 Todos heredan de objecte
 La funcio readobj del coche ahora tiene que gestionar que parte del coche esta leyendo, para ello utilizamos el codigo suministrado en clase, y un contador que indica que puntero del vector_fills estamos utilizando
 
-etc...
+####Funciones a sobrecargar en Cotxe de Objecte
+* readoObj() --> OK
+* make() --> OK
+* aplicaTg(mat4 trans) --> OK
+* draw() --> OK
+* toGPU() --> Ok
+* aplicaTGCentrar() --> OK
