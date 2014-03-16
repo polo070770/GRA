@@ -24,7 +24,7 @@ Cotxe::Cotxe(QString n) : Objecte(NumVerticesF)
     make();
 }
 
-Cotxe::Cotxe(QString n, GLfloat tamanio, GLfloat x0, GLfloat y0, GLfloat z0,
+Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
              double girx, double giry, double girz,
              float xdir, float ydir, float zdir):Objecte(NumVerticesF){
     // El seguent codi escala el cotxe entre 0 i 1 i el situa el seu centre  0,0,0. aixo fa que es vegi en la primera visualització
@@ -34,7 +34,7 @@ Cotxe::Cotxe(QString n, GLfloat tamanio, GLfloat x0, GLfloat y0, GLfloat z0,
 
 
 
-    tam = tamanio;
+    tam = mida;
     std::cout<< "Estic en el constructor parametritzat del cotxe\n" << endl;
     xorig = x0;
     yorig = y0;
@@ -48,21 +48,35 @@ Cotxe::Cotxe(QString n, GLfloat tamanio, GLfloat x0, GLfloat y0, GLfloat z0,
     nom = n;
     Index = 0;
 
+    //roda_esquerra_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
+
+    carroseria = new Carrosseria(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
+    roda_dreta_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
+    roda_dreta_posterior = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);;
+    roda_esquerra_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);;
+    roda_esquerra_posterior = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);;
+
+    this->vector_fills.push_back(roda_esquerra_posterior);
+    this->vector_fills.push_back(roda_dreta_posterior);
+    this->vector_fills.push_back(roda_esquerra_davantera);
+    this->vector_fills.push_back(roda_dreta_davantera);
+    this->vector_fills.push_back(roda_dreta_davantera);
+
     readObj(n);
 
-    make();
-
-
+    this->make();
 
     double escalaX = 1.0 / 4.6;
-    mat4 m= Translate(-1.93*escalaX, (+0.26)*escalaX, -2.16*escalaX)*Scale(escalaX, escalaX, escalaX)*Translate(+1.93, -0.26, 2.16);
+    mat4 trans = Translate(-1.93*escalaX, (+0.26)*escalaX, -2.16*escalaX)*Scale(escalaX, escalaX, escalaX)*Translate(+1.93, -0.26, 2.16);
 
-    aplicaTG(m);
+
+    this->aplicaTG(trans);
+
 
 }
 
 void Cotxe::readObj(QString filename)
-{
+{   Objecte *current;
     std::cout<< "Estic en el readobjdel cotxe del cotxe\n" << endl;
     FILE *fp = fopen(filename.toLocal8Bit(),"rb");
     if (!fp)
@@ -73,6 +87,7 @@ void Cotxe::readObj(QString filename)
 
         int vindexAct = 0;
         int vindexUlt = 0;
+        int currentObj = -1;
 
         while (true)
         {
@@ -123,8 +138,10 @@ void Cotxe::readObj(QString filename)
                                   z/=w;
                                 }
                                 // S'afegeix el vertex a l'objecte
-                                vertexs.push_back(point4(x, y, z, 1));
+                                current = vector_fills[currentObj];
+                                current->vertexs.push_back(point4(x, y, z, 1));
                                 vindexAct++;
+
 
                             }
                             else if (!strcmp (first_word, "vn")) {
@@ -132,8 +149,9 @@ void Cotxe::readObj(QString filename)
                             else if (!strcmp (first_word, "vt")) {
                             }
                             else if (!strcmp (first_word, "f")) {
+                                current = vector_fills[currentObj];
                                 // S'afegeix la cara a l'objecte
-                                construeix_cara (&ReadFile::words[1], nwords-1, this, vindexUlt);
+                                construeix_cara (&ReadFile::words[1], nwords-1, current, vindexUlt);
                             }
                             // added
                             else if (!strcmp (first_word, "mtllib")) {
@@ -145,7 +163,8 @@ void Cotxe::readObj(QString filename)
                                 //currentMaterial = matlib.index(words[1]);
                             }
                             else if (!strcmp (first_word, "o")) {
-                                //cada nou objecte s'actualitza aquest Ã­ndex
+                                //cada nou objecte s'actualitza aquest i­ndex
+                                currentObj++;
                                 vindexUlt = vindexAct;
                             }
                             // fadded
@@ -158,7 +177,25 @@ void Cotxe::readObj(QString filename)
                     }
 }
 
+/*
+ *Hace un make a la carroceria y a las ruedas;
+ */
+void Cotxe::make(){
+    vector<Objecte *>::iterator i;
+    for (i = this->vector_fills.begin(); i < this->vector_fills.end(); ++i) {
+        (*i)->make();
+    }
+}
+/*
+ *Hace un aplicaTG a la carroceria y las ruedas;
+ */
 
+void Cotxe::aplicaTG(mat4 trans){
+    vector<Objecte *>::iterator i;
+    for (i = this->vector_fills.begin(); i < this->vector_fills.end(); ++i) {
+        (*i)->aplicaTG(trans);
+    }
+}
 
 void Cotxe::forward(){
     // Metode a implementar per fer el moviment del cotxe

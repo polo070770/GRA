@@ -261,10 +261,10 @@ void Objecte::readObj(QString filename)
                                 //while (size && (words[1][size]=='\n' || words[1][size]=='\r') ) words[1][size--]=0;
                                 //currentMaterial = matlib.index(words[1]);
                             }
-                            else if (!strcmp (first_word, "o")) {
+                            /*else if (!strcmp (first_word, "o")) {
                                 //cada nou objecte s'actualitza aquest Ã­ndex
                                 vindexUlt = vindexAct;
-                            }
+                            }*/
                             // fadded
                             else {
                                 //fprintf (stderr, "Do not recognize: '%s'\n", str_orig);

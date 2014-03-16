@@ -12,7 +12,7 @@ public:
 
     point4 direction;
 
-    virtual void make();
+    void make();
 
 
 
