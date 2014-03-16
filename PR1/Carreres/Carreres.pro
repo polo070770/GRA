@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     readfile.cpp \
     roda.cpp \
     carrosseria.cpp \
-    cotxecontainer.cpp
+    cotxecontainer.cpp \
+    obstaclecontainer.cpp \
+    obstacle.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -45,7 +47,9 @@ HEADERS  += mainwindow.h \
     terra.h \
     roda.h \
     carrosseria.h \
-    cotxecontainer.h
+    cotxecontainer.h \
+    obstaclecontainer.h \
+    obstacle.h
 
 FORMS    += mainwindow.ui \
     newcotxedialog.ui \

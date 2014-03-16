@@ -14,7 +14,7 @@ Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble
     points = new point4[npoints];
     colors = new color4[npoints];
     tam = tamanio;
-    std::cout<< "Estic en el constructor parametritzat del cotxe\n";
+    std::cout<< "Estic en el constructor parametritzat de l'objecte";
     xorig = x0;
     yorig = y0;
     zorig = z0;

@@ -24,7 +24,7 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-    void newObstacle(int nombre);
+    void newObstacle(QString fichero, int nombre);
     void newCotxe(QString fichero, float xorig, float zorig, float mida, float xdirec, float ydirec, float zdirec);
     void newTerra(float amplaria, float profunditat, float y);
 

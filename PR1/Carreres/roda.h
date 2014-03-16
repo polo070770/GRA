@@ -8,7 +8,7 @@
 class Roda : public Objecte
 {
 public:
-    Roda( GLfloat tamanio, GLfloat x0, GLfloat y0, GLfloat z0,
+    Roda(GLfloat tamanio, GLfloat x0, GLfloat y0, GLfloat z0,
           double girx, double giry, double girz,
           float xdir, float ydir, float zdir);
 

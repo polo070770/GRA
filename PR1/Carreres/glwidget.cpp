@@ -119,13 +119,22 @@ void GLWidget::newObjecte(Objecte * obj)
     updateGL(); // actualiza display
 }
 
-void GLWidget::newObstacle(int nombre)
+void GLWidget::newObstacle(QString fichero, int nombre)
 {
     // Metode que serveix per a donar d'alta un obstacle amb el punt original a xorig, yorig,zorig
     // d'una certa mida
     // ha d'estar a les ys del pla de la terra
-
+    GLfloat yorig = 0;
     // Metode a implementar
+    Obstacle *obj;
+    GLfloat xorig, zorig;
+    float  mida;
+    xorig = 0;
+    zorig = 0;
+    mida = 1;
+    //TODO bucle para añadir el resto de obstaculos en posiciones aleatorias
+    obj = new Obstacle(fichero, mida, xorig, yorig, zorig, 0., 0., 0.);
+    newObjecte(obj);
 
 }
 void GLWidget::newTerra(float amplaria, float profunditat, float y)

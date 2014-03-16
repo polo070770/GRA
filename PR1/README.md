@@ -52,3 +52,7 @@ La funcio readobj del coche ahora tiene que gestionar que parte del coche esta l
 * draw() --> OK
 * toGPU() --> Ok
 * aplicaTGCentrar() --> OK
+
+####Pendientes
+* calculCapsa3D
+* 

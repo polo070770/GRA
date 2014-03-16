@@ -42,7 +42,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::acceptedNewObstacle(int nombre)
 {
-    this->glWidget->newObstacle(nombre);
+    QString fileName = QFileDialog::getOpenFileName(this);
+    if (!fileName.isNull())
+    this->glWidget->newObstacle(fileName,nombre);
 }
 
 

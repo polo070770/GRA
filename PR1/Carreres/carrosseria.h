@@ -8,7 +8,7 @@ class Carrosseria : public Objecte
 
 {
 public:
-    Carrosseria( GLfloat tamanio, GLfloat x0, GLfloat y0, GLfloat z0,
+    Carrosseria(GLfloat tamanio, GLfloat x0, GLfloat y0, GLfloat z0,
                             double girx, double giry, double girz,
                             float xdir, float ydir, float zdir);
 

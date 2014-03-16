@@ -27,34 +27,16 @@ Cotxe::Cotxe(QString n) : Objecte(NumVerticesF)
 Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
              double girx, double giry, double girz,
              float xdir, float ydir, float zdir):Objecte(NumVerticesF){
-    // El seguent codi escala el cotxe entre 0 i 1 i el situa el seu centre  0,0,0. aixo fa que es vegi en la primera visualització
-    //
-    // Cal modificar el codi seguent
+   std::cout<< "Estic en el constructor parametritzat del cotxe\n" << endl;
 
-
-
-
-    tam = mida;
-    std::cout<< "Estic en el constructor parametritzat del cotxe\n" << endl;
-    xorig = x0;
-    yorig = y0;
-    zorig = z0;
-
-    xRot = xdir;
-    yRot = ydir;
-    zRot = zdir;
-
-
-    nom = n;
-    Index = 0;
 
     //roda_esquerra_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
 
     carroseria = new Carrosseria(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
     roda_dreta_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
-    roda_dreta_posterior = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);;
-    roda_esquerra_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);;
-    roda_esquerra_posterior = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);;
+    roda_dreta_posterior = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
+    roda_esquerra_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
+    roda_esquerra_posterior = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
 
     this->vector_fills.push_back(roda_esquerra_posterior);
     this->vector_fills.push_back(roda_dreta_posterior);
@@ -66,6 +48,7 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
 
     this->make();
 
+    // esto se debera modificar
     double escalaX = 1.0 / 4.6;
     mat4 trans = Translate(-1.93*escalaX, (+0.26)*escalaX, -2.16*escalaX)*Scale(escalaX, escalaX, escalaX)*Translate(+1.93, -0.26, 2.16);
 

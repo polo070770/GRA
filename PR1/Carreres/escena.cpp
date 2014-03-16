@@ -28,6 +28,12 @@ void escena::addObjecte(Objecte *obj) {
         //inserim el cotxe a la llista de cotxes
         cotxes.add((Cotxe*) obj);
     }
+
+    if (dynamic_cast<Obstacle*>(obj)){
+        //inserim el cotxe a la llista de cotxes
+        obstacles.add((Obstacle*) obj);
+    }
+
     if (dynamic_cast<Terra*>(obj))
         this->terra = (Terra*)obj;
 }
@@ -44,6 +50,7 @@ void escena::aplicaTG(mat4 m) {
     // Metode a modificar
     //apliquem a la llista de cotxes
     cotxes.aplicaTG(m);
+    obstacles.aplicaTG(m);
     if(terra!=NULL)
         terra->aplicaTG(m);
 
@@ -54,7 +61,7 @@ void escena::aplicaTGCentrat(mat4 m) {
     // Metode a modificar
     //apliquem a la llista de cotxes
     cotxes.aplicaTGCentrat(m);
-
+    obstacles.aplicaTGCentrat(m);
     if(terra!=NULL)
         terra->aplicaTGCentrat(m);
 
@@ -65,7 +72,7 @@ void escena::draw() {
     // Metode a modificar
 
     cotxes.draw();
-
+    obstacles.draw();
     if (terra!=NULL)
         terra->draw();
 }
@@ -74,7 +81,7 @@ void escena::reset() {
 
     // Metode a modificar
     cotxes.reset();
-
+    obstacles.reset();
     if (terra!=NULL)
         terra->make();
 

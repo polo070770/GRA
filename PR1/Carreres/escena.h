@@ -16,8 +16,10 @@
 
 #include <objecte.h>
 #include <cotxe.h>
+#include <obstacle.h>
 #include <terra.h>
 #include <cotxecontainer.h>
+#include <obstaclecontainer.h>
 
 using namespace std;
 
@@ -44,6 +46,7 @@ public:
 
 private:
     CotxeContainer cotxes;
+    ObstacleContainer obstacles;
 
 };
 

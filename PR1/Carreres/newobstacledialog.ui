@@ -42,7 +42,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>NOMBRE</string>
+    <string>Cantidad</string>
    </property>
   </widget>
   <widget class="QPlainTextEdit" name="nombre">
