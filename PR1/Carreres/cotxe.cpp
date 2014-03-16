@@ -81,9 +81,9 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
  *Hace un make a la carroceria y a las ruedas;
  */
 void Cotxe::make(){
-
+    std::cout<< "make del cotxe"<< endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        (*fill_iter)->make();
+        if(*fill_iter!=NULL)(*fill_iter)->make();
     }
 }
 /*
@@ -91,26 +91,28 @@ void Cotxe::make(){
  */
 
 void Cotxe::aplicaTG(mat4 trans){
-
+    std::cout<<"aplicaTG del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        (*fill_iter)->aplicaTG(trans);
+        if(*fill_iter!=NULL)(*fill_iter)->aplicaTG(trans);
     }
 }
 
 void Cotxe::toGPU(QGLShaderProgram *program){
+    std::cout<<"toGPU del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        (*fill_iter)->toGPU(program);
+        if(*fill_iter!=NULL)(*fill_iter)->toGPU(program);
     }
 }
 void Cotxe::draw(){
+    std::cout<<"draw del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        (*fill_iter)->draw();
+        if(*fill_iter!=NULL)(*fill_iter)->draw();
     }
 }
 
 void Cotxe::aplicaTGCentrat(mat4 trans){
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        (*fill_iter)->aplicaTGCentrat(trans);
+        if(*fill_iter!=NULL)(*fill_iter)->aplicaTGCentrat(trans);
     }
 }
 
