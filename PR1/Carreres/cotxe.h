@@ -22,11 +22,13 @@ public:
     void aplicaTG(mat4 trans);
     void draw();
     void toGPU(QGLShaderProgram *program);
+    void aplicaTGPoints(mat4 mtrans);
     void aplicaTGCentrat(mat4 mtrans);
     void forward();
     void backward();
     void turnleft();
     void turnright();
+    Capsa3D calculCapsa3D();
     point4 direction;
 
 

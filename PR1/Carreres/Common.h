@@ -76,6 +76,7 @@ using namespace Common;
 
 typedef struct {
       vec3 pmin;
+      // a = anchura, h altura, p profunditat
       GLfloat a, h, p;
 } Capsa3D;
 

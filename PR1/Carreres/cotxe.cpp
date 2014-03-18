@@ -49,13 +49,52 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     this->make();
 
     // esto se debera modificar
-    double escalaX = 1.0 / 4.6;
-    mat4 trans = Translate(-1.93*escalaX, (+0.26)*escalaX, -2.16*escalaX)*Scale(escalaX, escalaX, escalaX)*Translate(+1.93, -0.26, 2.16);
+    double escalaX = mida;
+
+    //mat4 trans = Translate(-1.93*escalaX, (+0.26)*escalaX, -2.16*escalaX)*Scale(escalaX, escalaX, escalaX)*Translate(+1.93, -0.26, 2.16);
 
 
-    this->aplicaTG(trans);
+    //this->aplicaTG(trans);
+
+    //calculCapsa3D();
+}
 
 
+Capsa3D Cotxe::calculCapsa3D()
+{
+
+    vec3 pmin, pmax;
+
+    vector_fills[0]->calculCapsa3D();
+    Capsa3D capsa_init = vector_fills[0]->capsa;
+
+    pmin.x = capsa_init.pmin.x;
+    pmin.y = capsa_init.pmin.y;
+    pmin.z = capsa_init.pmin.z;
+
+    pmax.x = capsa_init.pmin.x + capsa_init.a;
+    pmax.y = capsa_init.pmin.y + capsa_init.h;
+    pmax.z = capsa_init.pmin.z + capsa_init.p;
+
+    for ( int i = 1; i < vector_fills.size(); i++ ){
+        vector_fills[i]->calculCapsa3D();
+        Capsa3D capsa = vector_fills[i]->capsa;
+        if(capsa.pmin.x < pmin.x) pmin.x = capsa.pmin.x;
+        if(capsa.pmin.y < pmin.y) pmin.y = capsa.pmin.y;
+        if(capsa.pmin.z < pmin.z) pmin.z = capsa.pmin.z;
+
+        if(capsa.pmin.x + capsa.a > pmax.x) pmax.x = capsa.pmin.x + capsa.a;
+        if(capsa.pmin.y + capsa.h > pmax.y) pmax.y = capsa.pmin.y + capsa.h;
+        if(capsa.pmin.z + capsa.p > pmax.z) pmax.z = capsa.pmin.z + capsa.p;
+    }
+
+
+    this->capsa.pmin = pmin;
+    this->capsa.a = pmax.x - pmin.x;
+    this->capsa.h = pmax.y - pmin.y;
+    this->capsa.p = pmax.z - pmin.z;
+
+    return this->capsa;
 }
 
 
@@ -68,6 +107,9 @@ void Cotxe::make(){
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->make();
     }
+
+
+
 }
 /*
  *Hace un aplicaTG a la carroceria y las ruedas;
@@ -93,12 +135,25 @@ void Cotxe::draw(){
     }
 }
 
-void Cotxe::aplicaTGCentrat(mat4 trans){
+void Cotxe::aplicaTGPoints(mat4 trans){
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        if(*fill_iter!=NULL)(*fill_iter)->aplicaTGCentrat(trans);
+        if(*fill_iter!=NULL)(*fill_iter)->aplicaTGPoints(trans);
     }
 }
 
+void Cotxe::aplicaTGCentrat(mat4 trans){
+    // calculamos el centro del coche
+    point4 centre = calculCentre();
+
+    // montamos la matriz en orden inverso al que queremos aplicar las
+
+    // transformaciones
+    mat4 transform_centrada = ( Translate(centre) * trans * Translate(-centre) );
+
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        if(*fill_iter!=NULL)(*fill_iter)->aplicaTG(transform_centrada);
+    }
+}
 void Cotxe::forward(){
     // Metode a implementar per fer el moviment del cotxe
 }

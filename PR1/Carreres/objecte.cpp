@@ -43,10 +43,32 @@ Objecte::~Objecte()
 
 Capsa3D Objecte::calculCapsa3D()
 {
+    vec3 pmin, pmax;
 
     // Metode a implementar: calcula la capsa mínima contenidora d'un objecte
+    pmin.x = points[0].x;
+    pmin.y = points[0].y;
+    pmin.z = points[0].z;
 
-    vec3    pmin, pmax;
+    pmax.x = points[0].x;
+    pmax.y = points[0].y;
+    pmax.z = points[0].z;
+
+    for ( int i = 1; i < Index; ++i ){
+        if(points[i].x < pmin.x) pmin.x = points[i].x;
+        if(points[i].y < pmin.y) pmin.y = points[i].y;
+        if(points[i].z < pmin.z) pmin.z = points[i].z;
+
+        if(points[i].x > pmax.x) pmax.x = points[i].x;
+        if(points[i].y > pmax.y) pmax.y = points[i].y;
+        if(points[i].z > pmax.z) pmax.z = points[i].z;
+    }
+
+
+    capsa.pmin = pmin;
+    capsa.a = pmax.x - pmin.x;
+    capsa.h = pmax.y - pmin.y;
+    capsa.p = pmax.z - pmin.z;
 
     return capsa;
 }
@@ -84,12 +106,26 @@ void Objecte::aplicaTGPoints(mat4 m)
     delete transformed_points;
 }
 
+
+point4 Objecte::calculCentre(){
+    centre.x = capsa.pmin.x + (capsa.a / 2);
+    centre.y = capsa.pmin.y + (capsa.h / 2);
+    centre.z = capsa.pmin.z + (capsa.p / 2);
+    return centre;
+}
+
 void Objecte::aplicaTGCentrat(mat4 m)
 {
+    // calculamos el centro
+    point4 centre = calculCentre();
 
-    // Metode a modificar
-    aplicaTGPoints(m);
-    aplicaTG(m);
+    // montamos la matriz en orden inverso al que queremos aplicar las
+    // transformaciones
+    mat4 transform_centrada = ( Translate(centre) * m * Translate(-centre) );
+
+    // aplicmos las transformaciones
+    aplicaTG(transform_centrada);
+
 }
 
 void Objecte::toGPU(QGLShaderProgram *pr){

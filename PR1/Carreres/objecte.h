@@ -51,6 +51,7 @@ public:
     // Capsa mínima contenidora de l'objecte
     Capsa3D capsa;
 
+
     //explicit Objecte(QObject *parent = 0);
     Objecte(const int npoints, QObject *parent = 0);
 
@@ -71,7 +72,8 @@ public:
     virtual void draw();
 
     // Calcula la capsa 3D contenidora de l'objecte
-    Capsa3D calculCapsa3D();
+    virtual Capsa3D calculCapsa3D();
+    virtual point4 calculCentre();
 
     // Aplica una TG qualsevol a un objecte
     void aplicaTG(mat4 m);
@@ -82,6 +84,7 @@ public:
 
 
 protected:
+    point4 centre;
     void construeix_cara ( char **words, int nwords, Objecte*objActual, int vindexUlt);
 private:
 
