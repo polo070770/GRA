@@ -44,19 +44,11 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     this->vector_fills.push_back(carroseria);
     this->vector_fills.push_back(roda_dreta_davantera);
 
+    this->tam = mida;
+
     readObj(n);
 
     this->make();
-
-    // esto se debera modificar
-    double escalaX = mida;
-
-    //mat4 trans = Translate(-1.93*escalaX, (+0.26)*escalaX, -2.16*escalaX)*Scale(escalaX, escalaX, escalaX)*Translate(+1.93, -0.26, 2.16);
-
-
-    //this->aplicaTG(trans);
-
-    //calculCapsa3D();
 }
 
 
@@ -97,6 +89,22 @@ Capsa3D Cotxe::calculCapsa3D()
     return this->capsa;
 }
 
+void Cotxe::escalar(float factor){
+
+    Capsa3D capsa = calculCapsa3D();
+
+    float max = capsa.a;
+    if (capsa.h > max){
+        max = capsa.h;
+    }else if(capsa.p > max){
+        max = capsa.p;
+    }
+
+    max = factor * (1./max);
+    mat4 transform = Scale(max,max,max);
+    aplicaTGCentrat(transform);
+
+}
 
 
 /*
@@ -108,7 +116,7 @@ void Cotxe::make(){
         if(*fill_iter!=NULL)(*fill_iter)->make();
     }
 
-
+    escalar(this->tam);
 
 }
 /*
@@ -150,9 +158,8 @@ void Cotxe::aplicaTGCentrat(mat4 trans){
     // transformaciones
     mat4 transform_centrada = ( Translate(centre) * trans * Translate(-centre) );
 
-    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        if(*fill_iter!=NULL)(*fill_iter)->aplicaTG(transform_centrada);
-    }
+    this->aplicaTG(transform_centrada);
+
 }
 void Cotxe::forward(){
     // Metode a implementar per fer el moviment del cotxe
@@ -217,9 +224,6 @@ void Cotxe::readObj(QString filename)
                 }
                 QString sx(ReadFile::words[1]);
                 QString sy(ReadFile::words[2]);
-
-
-
 
                 QString sz(ReadFile::words[3]);
                                 double x = sx.toDouble();

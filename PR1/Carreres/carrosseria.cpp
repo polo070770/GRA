@@ -7,7 +7,9 @@ Carrosseria::Carrosseria(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
 
 
     tam = mida;
+
     std::cout<< "Estic en el constructor parametritzat de la carrosseria" << endl;
+
     xorig = x0;
     yorig = y0;
     zorig = z0;

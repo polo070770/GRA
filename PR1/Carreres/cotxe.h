@@ -33,6 +33,7 @@ public:
 
 
 private:
+
     vector<Objecte * > vector_fills;
     vector<Objecte *>::iterator fill_iter;
     Carrosseria *carroseria;
@@ -43,6 +44,8 @@ private:
 
     static const int NumVerticesF = 100000;
     static const int NumCares = 300000;
+
+    void escalar(float factor);
 
 
 };

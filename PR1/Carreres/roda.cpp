@@ -5,13 +5,16 @@ Roda::Roda(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
             float xdir, float ydir, float zdir):
     Objecte(NumVerticesF){
 
-tam = mida;
-std::cout<< "Estic en el constructor parametritzat de la roda" << endl;
-xorig = x0;
-yorig = y0;
-zorig = z0;
+    tam = mida;
 
-xRot = xdir;
-yRot = ydir;
-zRot = zdir;
+    std::cout<< "Estic en el constructor parametritzat de la roda" << endl;
+
+    xorig = x0;
+    yorig = y0;
+    zorig = z0;
+
+    xRot = xdir;
+    yRot = ydir;
+    zRot = zdir;
+
 }
