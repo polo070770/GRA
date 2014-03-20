@@ -29,8 +29,22 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
              float xdir, float ydir, float zdir):Objecte(NumVerticesF){
    std::cout<< "Estic en el constructor parametritzat del cotxe\n" << endl;
 
+    nom = n;
+    Index = 0;
+    tam = mida;
 
-    //roda_esquerra_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
+    xorig = x0;
+    yorig = y0;
+    zorig = z0;
+
+    xRot = girx;
+    yRot = giry;
+    zRot = girz;
+
+    this->direction[0] = xdir;
+    this->direction[1] = ydir;
+    this->direction[2] = zdir;
+    this->direction[3] = 0;
 
     carroseria = new Carrosseria(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
     roda_dreta_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
@@ -44,11 +58,10 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     this->vector_fills.push_back(carroseria);
     this->vector_fills.push_back(roda_dreta_davantera);
 
-    this->tam = mida;
-
     readObj(n);
 
     this->make();
+
 }
 
 
@@ -101,11 +114,12 @@ void Cotxe::escalar(float factor){
     }
 
     max = factor * (1./max);
+
     mat4 transform = Scale(max,max,max);
+
     aplicaTGCentrat(transform);
 
 }
-
 
 /*
  *Hace un make a la carroceria y a las ruedas;
@@ -119,10 +133,10 @@ void Cotxe::make(){
     escalar(this->tam);
 
 }
+
 /*
  *Hace un aplicaTG a la carroceria y las ruedas;
  */
-
 void Cotxe::aplicaTG(mat4 trans){
     std::cout<<"aplicaTG del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
@@ -136,6 +150,7 @@ void Cotxe::toGPU(QGLShaderProgram *program){
         if(*fill_iter!=NULL)(*fill_iter)->toGPU(program);
     }
 }
+
 void Cotxe::draw(){
     std::cout<<"draw del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
@@ -161,6 +176,7 @@ void Cotxe::aplicaTGCentrat(mat4 trans){
     this->aplicaTG(transform_centrada);
 
 }
+
 void Cotxe::forward(){
     // Metode a implementar per fer el moviment del cotxe
 }
@@ -179,6 +195,7 @@ void Cotxe::turnright(){
     // Metode a implementar per fer el moviment del cotxe
 
 }
+
 void Cotxe::readObj(QString filename)
 {   Objecte *current;
     std::cout<< "Estic en el readobjdel cotxe del cotxe\n" << endl;

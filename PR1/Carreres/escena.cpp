@@ -8,7 +8,7 @@ escena::escena()
     // Capsa minima contenidora provisional: S'ha de fer un recorregut dels objectes de l'escenes
     capsaMinima.pmin[0] = 0;
     capsaMinima.pmin[1] = 0;
-    capsaMinima.pmin[2]=0;
+    capsaMinima.pmin[2] = 0;
     capsaMinima.a = 1;
     capsaMinima.h = 1;
     capsaMinima.p = 1;
