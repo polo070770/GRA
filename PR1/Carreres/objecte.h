@@ -42,12 +42,13 @@ protected:
     point4 *points;
     color4 *colors;
     int Index; // index de control del numero de vertexs a posar a la GPU
-
+    virtual void escalarFrom1(float factor);
 
 public:
 
     vector<point4> vertexs; // vertexs de l'objecte sense repetits
     float getYOrig();
+    void setYorig(float orig);
     // Capsa mínima contenidora de l'objecte
     Capsa3D capsa;
 

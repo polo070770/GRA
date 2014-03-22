@@ -14,7 +14,7 @@ Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble
     points = new point4[npoints];
     colors = new color4[npoints];
     tam = tamanio;
-    std::cout<< "Estic en el constructor parametritzat de l'objecte";
+    //std::cout<< "Estic en el constructor parametritzat de l'objecte";
     xorig = x0;
     yorig = y0;
     zorig = z0;
@@ -38,6 +38,35 @@ Objecte::~Objecte()
 {
     delete points;
     delete colors;
+}
+
+/**
+ *Funcio que transforma un objecte al tamany atomic i despres
+ *l'escala pel factor de entrada
+ * @brief Objecte::escalarFrom1
+ * @param factor
+ */
+void Objecte:: escalarFrom1(float factor){
+    cout << "escalo objecte a " << factor << endl;
+    Capsa3D capsa = calculCapsa3D();
+
+    float max = capsa.a;
+    if (capsa.h > max){
+        max = capsa.h;
+    }else if(capsa.p > max){
+        max = capsa.p;
+    }
+
+    max = factor * (1./max);
+
+    mat4 transform = Scale(max,max,max);
+
+    aplicaTGCentrat(transform);
+    // calculem la nova capsa
+    calculCapsa3D();
+
+
+
 }
 
 
@@ -114,14 +143,15 @@ point4 Objecte::calculCentre(){
     return centre;
 }
 
-void Objecte::aplicaTGCentrat(mat4 m)
-{
+void Objecte::aplicaTGCentrat(mat4 m){
     // calculamos el centro
+    calculCapsa3D();
     point4 centre = calculCentre();
 
     // montamos la matriz en orden inverso al que queremos aplicar las
     // transformaciones
     mat4 transform_centrada = ( Translate(centre) * m * Translate(-centre) );
+
 
     // aplicmos las transformaciones
     aplicaTG(transform_centrada);
@@ -167,13 +197,13 @@ void Objecte::draw()
 
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
     glDrawArrays( GL_TRIANGLES, 0, Index );
 
     // Abans nomes es feia: glDrawArrays( GL_TRIANGLES, 0, NumVerticesP );
 }
 
-void Objecte::make()
-{
+void Objecte::make(){
 
     static vec3  base_colors[] = {
         vec3( 1.0, 0.0, 0.0 ),
@@ -205,6 +235,9 @@ float Objecte::getYOrig() {
     return this->yorig;
 }
 
+void Objecte::setYorig(float orig){
+    this->yorig = orig;
+}
 
 // Llegeix un fitxer .obj
 //  Si el fitxer referencia fitxers de materials (.mtl), encara no es llegeixen

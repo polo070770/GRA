@@ -2,11 +2,49 @@
 
 Obstacle::Obstacle(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
                    double girx, double giry, double girz):
-    Objecte(NumVerticesF, n,  mida,  x0,  y0,  z0, girx,  giry,  girz){
-std::cout<< "Estic en el constructor parametritzat de l'obstacle";
-double escalaX = 1.0 / 4.6;
-mat4 trans = Translate(-1.93*escalaX, (+0.26)*escalaX, -2.16*escalaX)*Scale(escalaX, escalaX, escalaX)*Translate(+1.93, -0.26, 2.16);
+    Objecte(NumVerticesF){
 
+    nom = n;
+    Index = 0;
+    tam = mida;
 
-aplicaTG(trans);
+    xorig = x0;
+    yorig = y0;
+    zorig = z0;
+
+    xRot = girx;
+    yRot = giry;
+    zRot = girz;
+    readObj(n);
+
+   make();
+
+}
+
+void Obstacle::make(){
+
+    //cridem al make del pare
+    Objecte::make();
+
+    escalarFrom1(tam); // escalem l'obstacle a mida
+    // calculem la nova capsa
+    calculCapsa3D();
+
+    //centre del cotxe
+    point4 centre = calculCentre();
+
+    // el movem al centre i despres al desti
+    mat4 transform = Translate(-centre);
+    // apliquem la transformacio, no cal que sigui centrada
+    this->aplicaTG(transform);
+    // calculem la nova capsa
+    calculCapsa3D();
+
+    //movem l'objecte al desti
+    //invertimos la direccion
+    // tambe serviria l'altura
+    float y_desti = yorig + (-capsa.pmin.y);
+    point4 desti = point4(xorig * 1, y_desti,zorig * 1 ,0); // vector destino
+    this->aplicaTG(Translate(desti));
+
 }

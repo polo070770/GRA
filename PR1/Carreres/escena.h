@@ -38,13 +38,24 @@ public:
     void draw();
     void CapsaMinCont3DEscena();
 
+    float getYOrig();
+
+    void accelera_cotxe1();
+    void desaccelera_cotxe1();
+    void gira_dreta_cotxe1();
+    void gira_esquerra_cotxe1();
+    void llibera_gir_cotxe1();
+    void llibera_acceleracio_cotxe1();
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
 
 
     Terra *terra;
+    void temps();
 
 private:
+    Cotxe *cotxe_1;
+    Cotxe *cotxe_2;
     CotxeContainer cotxes;
     ObstacleContainer obstacles;
 

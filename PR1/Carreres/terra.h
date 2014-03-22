@@ -15,7 +15,6 @@ public:
     void make();
 
 
-
 private:
     int a; // amplada
     int y; // y

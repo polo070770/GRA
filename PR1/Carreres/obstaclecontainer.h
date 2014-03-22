@@ -17,7 +17,7 @@ public:
     void aplicaTG(mat4 trans);
     void aplicaTGCentrat(mat4 trans);
     void draw();
-    void reset();
+    void reset(float yorig);
 private:
     vector<Obstacle * > listado; // lo llamamos listado y no vector para evitar problemas de nombres
     vector<Obstacle *>::iterator iterador;

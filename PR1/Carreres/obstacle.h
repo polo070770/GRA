@@ -11,7 +11,7 @@ public:
     Obstacle(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
              double girx, double giry, double girz);
     point4 direction;
-
+    void make();
 
 
 private:

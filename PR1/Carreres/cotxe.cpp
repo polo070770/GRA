@@ -46,6 +46,12 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     this->direction[2] = zdir;
     this->direction[3] = 0;
 
+    velocitat = 0.0;
+    angle_gir = 0.0;
+    accelerant = 0;
+    girant = 0;
+    reset_rodes = 0;
+
     carroseria = new Carrosseria(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
     roda_dreta_davantera = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
     roda_dreta_posterior = new Roda(mida, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
@@ -101,8 +107,13 @@ Capsa3D Cotxe::calculCapsa3D()
 
     return this->capsa;
 }
-
-void Cotxe::escalar(float factor){
+/**
+ *Funcio que transforma un objecte al tamany atomic i despres
+ *l'escala pel factor de entrada
+ * @brief Objecte::escalarFrom1
+ * @param factor
+ */
+void Cotxe:: escalarFrom1(float factor){
 
     Capsa3D capsa = calculCapsa3D();
 
@@ -119,40 +130,62 @@ void Cotxe::escalar(float factor){
 
     aplicaTGCentrat(transform);
 
+
+
+
 }
 
 /*
  *Hace un make a la carroceria y a las ruedas;
  */
 void Cotxe::make(){
-    std::cout<< "make del cotxe"<< endl;
+    //std::cout<< "make del cotxe"<< endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->make();
     }
 
-    escalar(this->tam);
+    escalarFrom1(this->tam);
 
+    // calculem la nova capsa
+    calculCapsa3D();
+
+    //centre del cotxe
+    point4 centre = calculCentre();
+
+    // el movem al centre i despres al desti
+    mat4 transform = Translate(-centre);
+    // apliquem la transformacio, no cal que sigui centrada
+    this->aplicaTG(transform);
+    // calculem la nova capsa
+    calculCapsa3D();
+
+    //movem l'objecte al desti
+    //invertimos la direccion
+    // tambe serviria l'altura
+    float y_desti = yorig + (-capsa.pmin.y);
+    point4 desti = point4(xorig * 1, y_desti,zorig * 1 ,0); // vector destino
+    this->aplicaTG(Translate(desti));
 }
 
 /*
  *Hace un aplicaTG a la carroceria y las ruedas;
  */
 void Cotxe::aplicaTG(mat4 trans){
-    std::cout<<"aplicaTG del cotxe"<<endl;
+    //std::cout<<"aplicaTG del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->aplicaTG(trans);
     }
 }
 
 void Cotxe::toGPU(QGLShaderProgram *program){
-    std::cout<<"toGPU del cotxe"<<endl;
+    //std::cout<<"toGPU del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->toGPU(program);
     }
 }
 
 void Cotxe::draw(){
-    std::cout<<"draw del cotxe"<<endl;
+    //std::cout<<"draw del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->draw();
     }
@@ -177,28 +210,130 @@ void Cotxe::aplicaTGCentrat(mat4 trans){
 
 }
 
+void Cotxe::moviment(){
+
+    point4 desti = point4(
+                this->direction[0] * velocitat * FACTOR_VELOCITAT,
+                this->direction[1] * velocitat * FACTOR_VELOCITAT,
+                this->direction[2] * velocitat * FACTOR_VELOCITAT,
+                this->direction[3] * velocitat * FACTOR_VELOCITAT
+                );
+
+    mat4 moviment = (Translate(desti));
+    this->aplicaTG(moviment);
+    //apliquem moviment a les rodes
+    this->avansar_rodes();
+
+}
+void Cotxe::avansar_rodes(){
+    mat4 moviment_roda = RotateZ(velocitat);
+    this->roda_dreta_davantera->aplicaTGCentrat(moviment_roda);
+    this->roda_esquerra_davantera->aplicaTGCentrat(moviment_roda);
+    this->roda_dreta_posterior->aplicaTGCentrat(moviment_roda);
+    this->roda_esquerra_posterior->aplicaTGCentrat(moviment_roda);
+
+
+}
+
+void Cotxe::girar_rodes_davanteres(){
+    this->roda_dreta_davantera->fer_gir(angle_gir);
+    this->roda_esquerra_davantera->fer_gir(angle_gir);
+
+
+}
+
 void Cotxe::forward(){
-    // Metode a implementar per fer el moviment del cotxe
+    accelerant = 1;
+
+    if(velocitat < MAX_VELOCITAT){
+        //anem cap endarrere i estem accelerant accelerant cap endarrere
+        if(velocitat <= 0)velocitat += 2 * FACTOR_ROSAMENT;
+        //estem accelerant cap endevant
+        else if(velocitat >= 0) velocitat  += 1;
+    }
 }
 
 void Cotxe::backward(){
-    // Metode a implementar per fer el moviment del cotxe
+    accelerant = 1;
+    if(velocitat > MIN_VELOCITAT){
+        //estem accelerant cap endarrere
+        if(velocitat <= 0)velocitat  -= 1;
+        //anem cap endevant y estem frenant
+        else if(velocitat >= 0) velocitat -= 2 * FACTOR_ROSAMENT;
+    }
 
 }
 
 void Cotxe::turnleft(){
-    // Metode a implementar per fer el moviment del cotxe
+    if(girant == 0){
+        angle_gir = 1 * MIN_ANGLE;
+        this->girar_rodes_davanteres();
+        girant = 1;
+    }
 
 }
 
 void Cotxe::turnright(){
-    // Metode a implementar per fer el moviment del cotxe
+    if(girant == 0){
+        angle_gir = 1 * MAX_ANGLE;
+        this->girar_rodes_davanteres();
+        girant = 1;
+    }
 
+}
+
+
+void Cotxe::temps(){
+
+
+    // si ja no estem girant fem un reset dels angles
+    if(reset_rodes == 1){
+        this->roda_dreta_davantera->reset_angle();
+        this->roda_esquerra_davantera->reset_angle();
+        reset_rodes = 0;
+    }
+
+
+    //apliquem el rossament
+    if(accelerant == 0){
+        if(velocitat > 0){
+            velocitat -= FACTOR_ROSAMENT;
+        }else if(velocitat < 0 ){
+            velocitat += FACTOR_ROSAMENT;
+        }
+
+        // donem un marge
+        float marge = 2 * FACTOR_ROSAMENT;
+
+        if(velocitat >  -marge && velocitat <  marge ){
+            //parem el cotxe
+            velocitat = 0;
+        }
+    }
+
+    moviment();
+}
+
+void Cotxe::llibera_acceleracio(){
+    accelerant = 0;
+}
+
+void Cotxe::llibera_gir(){
+    /*
+     *para liberar el giro hemos de girar las ruedas en el sentido contrario al que
+     *
+     **/
+    if(girant == 1){
+        angle_gir = -angle_gir;
+        this->girar_rodes_davanteres();
+        girant = 0;
+        reset_rodes = 1;
+    }
 }
 
 void Cotxe::readObj(QString filename)
 {   Objecte *current;
-    std::cout<< "Estic en el readobjdel cotxe del cotxe\n" << endl;
+    //std::cout<< "Estic en el readobjdel cotxe del cotxe\n" << endl;
     FILE *fp = fopen(filename.toLocal8Bit(),"rb");
     if (!fp)
     {

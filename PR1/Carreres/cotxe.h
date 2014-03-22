@@ -30,7 +30,9 @@ public:
     void turnright();
     Capsa3D calculCapsa3D();
     point4 direction;
-
+    void temps();
+    void llibera_acceleracio();
+    void llibera_gir();
 
 private:
 
@@ -41,12 +43,25 @@ private:
     Roda *roda_esquerra_davantera;
     Roda *roda_dreta_posterior;
     Roda *roda_esquerra_posterior;
-
+    void moviment();
+    void avansar_rodes();
+    void girar_rodes_davanteres();
     static const int NumVerticesF = 100000;
     static const int NumCares = 300000;
-
-    void escalar(float factor);
-
+    static const int MAX_VELOCITAT = 330;
+    static const int MIN_VELOCITAT = -50;
+    static const float FACTOR_ROSAMENT = 2.9;
+    static const float FACTOR_VELOCITAT = 0.002;
+    static const float MAX_ANGLE = 40.0;
+    static const float MIN_ANGLE = -40.0;
+    static const float FACTOR_MOTLLA_DIRECCIO = 2.5;
+    static const float FACTOR_ANGLE_GIR = 4;
+    virtual void escalarFrom1(float factor);
+    float velocitat;
+    float angle_gir;
+    int girant;
+    int reset_rodes;
+    int accelerant;
 
 };
 

@@ -35,8 +35,17 @@ void CotxeContainer::draw(){
     }
 }
 
-void CotxeContainer::reset(){
+void CotxeContainer::reset(float yorig){
     for (iterador = this->listado.begin(); iterador < this->listado.end(); ++iterador) {
-        if(*iterador!=NULL)(*iterador)->make();
+        if(*iterador!=NULL) {
+        (*iterador)->setYorig(yorig);
+        (*iterador)->make();
+     }
+    }
+}
+
+void CotxeContainer::temps(){
+    for (iterador = this->listado.begin(); iterador < this->listado.end(); ++iterador) {
+        if(*iterador!=NULL)(*iterador)->temps();
     }
 }

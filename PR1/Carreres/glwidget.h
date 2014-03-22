@@ -55,6 +55,9 @@ private:
     QColor qtPurple;
     mat4   modScalat;
     float  a, p, h;
+    bool llibera_acceleracio_1;
+    bool llibera_gir_1;
+    QSet<Qt::Key> pulsaciones;
 
 // Programa de la GPU
     QGLShaderProgram *program;
@@ -70,6 +73,9 @@ private:
 
     // Metode per adaptar l'escena al tamany del widget
     void adaptaObjecteTamanyWidget(Objecte *obj);
+private slots:
+    //controla accions a partir del timer
+    void accions_timer();
 };
 
 

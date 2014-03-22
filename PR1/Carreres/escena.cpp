@@ -6,14 +6,16 @@ escena::escena()
 
 {
     // Capsa minima contenidora provisional: S'ha de fer un recorregut dels objectes de l'escenes
-    capsaMinima.pmin[0] = 0;
-    capsaMinima.pmin[1] = 0;
-    capsaMinima.pmin[2] = 0;
-    capsaMinima.a = 1;
-    capsaMinima.h = 1;
-    capsaMinima.p = 1;
+    capsaMinima.pmin[0] = -25;
+    capsaMinima.pmin[1] = -25;
+    capsaMinima.pmin[2] = -25;
+    capsaMinima.a = 25;
+    capsaMinima.h = 25;
+    capsaMinima.p = 25;
 
     terra = NULL;
+    cotxe_1 = NULL;
+    cotxe_2 = NULL;
 }
 
 
@@ -26,6 +28,9 @@ escena::~escena()
 void escena::addObjecte(Objecte *obj) {
     if (dynamic_cast<Cotxe*>(obj)){
         //inserim el cotxe a la llista de cotxes
+        if (cotxe_1 == NULL) cotxe_1 = (Cotxe*) obj;
+        else if(cotxe_2 == NULL) cotxe_2 = (Cotxe*) obj;
+
         cotxes.add((Cotxe*) obj);
     }
 
@@ -79,11 +84,63 @@ void escena::draw() {
 
 void escena::reset() {
 
+    // posem tots els element al origin
+    float yorig = terra!=NULL ? terra->getYOrig() : 0;
     // Metode a modificar
-    cotxes.reset();
-    obstacles.reset();
+    cotxes.reset(yorig);
+    obstacles.reset(yorig);
     if (terra!=NULL)
         terra->make();
 
 }
 
+void escena::accelera_cotxe1(){
+    if(cotxe_1!=NULL){
+        cotxe_1->forward();
+    }
+}
+void escena::desaccelera_cotxe1(){
+    if(cotxe_1!=NULL){
+        cotxe_1->backward();
+    }
+}
+
+void escena::gira_dreta_cotxe1(){
+    if(cotxe_1!=NULL){
+        cotxe_1->turnright();
+    }
+}
+
+void escena::gira_esquerra_cotxe1(){
+    if(cotxe_1!=NULL){
+        cotxe_1->turnleft();
+    }
+}
+void escena::llibera_gir_cotxe1(){
+    if(cotxe_1!=NULL){
+        cotxe_1->llibera_gir();
+    }
+}
+
+void escena::llibera_acceleracio_cotxe1(){
+    if(cotxe_1!=NULL){
+        cotxe_1->llibera_acceleracio();
+    }
+}
+/**
+ * Retorna el punt y origen de l'escena
+ * @brief escena::getYOrig
+ * @return
+ */
+float escena::getYOrig(){
+    if (terra!=NULL)
+        return terra->getYOrig();
+    else
+        return 0;
+
+}
+
+
+void escena::temps(){
+    cotxes.temps();
+}

@@ -1,6 +1,6 @@
 #include <QtGui>
 #include <QtOpenGL>
-
+#include <QSet>
 #include <math.h>
 
 #include "glwidget.h"
@@ -27,6 +27,11 @@ GLWidget::GLWidget(QWidget *parent)
 
     program = 0;
 
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(accions_timer()));
+    timer->start(50);
+    llibera_acceleracio_1 = false;
+    llibera_gir_1 = false;
 }
 
 
@@ -124,7 +129,7 @@ void GLWidget::newObstacle(QString fichero, int nombre)
     // Metode que serveix per a donar d'alta un obstacle amb el punt original a xorig, yorig,zorig
     // d'una certa mida
     // ha d'estar a les ys del pla de la terra
-    GLfloat yorig = 0;
+    GLfloat yorig = esc->getYOrig();
     // Metode a implementar
     Obstacle *obj;
     GLfloat xorig, zorig;
@@ -145,7 +150,6 @@ void GLWidget::newTerra(float amplaria, float profunditat, float y)
     // Metode a implementar
 
     Terra *obj;
-
     obj = new Terra(amplaria, profunditat, y);
     newObjecte(obj);
 
@@ -156,7 +160,7 @@ void GLWidget::newCotxe(QString fichero, float xorig, float zorig, float mida, f
     Cotxe *obj;
     // parametres que posen l'objecte cotxe al punt original xorig, yorig, zorig i d'una certa mida
     // Cal modificar-lo per a que es posicioni a la Y correcte
-    float yorig = 0;
+    float yorig = esc->getYOrig();
 
     obj = new Cotxe(fichero, mida, xorig, yorig, zorig, 0., 0., 0.,xdirec, ydirec, zdirec);
     newObjecte(obj);
@@ -276,22 +280,89 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     switch ( event->key() )
     {
     case Qt::Key_Up:
-
+        pulsaciones.insert(Qt::Key_Up);
         break;
     case Qt::Key_Down:
-
+        pulsaciones.insert(Qt::Key_Down);
         break;
     case Qt::Key_Left:
-
+        pulsaciones.insert(Qt::Key_Left);
         break;
     case Qt::Key_Right:
+        pulsaciones.insert(Qt::Key_Right);
+        break;
+    case Qt::Key_W:
 
+        break;
+    case Qt::Key_S:
+
+        break;
+    case Qt::Key_A:
+
+        break;
+    case Qt::Key_D:
         break;
     }
 
 }
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-    // Metode a implementar en el cas que es doni velocitat al cotxe
+    // Metode a implementar
+    switch ( event->key() )
+    {
+    case Qt::Key_Up:
+        llibera_acceleracio_1 = true;
+        break;
+    case Qt::Key_Down:
+        llibera_acceleracio_1 = true;
+        break;
+    case Qt::Key_Left:
+        llibera_gir_1 = true;
+        break;
+    case Qt::Key_Right:
+        llibera_gir_1 = true;
+        break;
+    case Qt::Key_W:
 
+        break;
+    case Qt::Key_S:
+
+        break;
+    case Qt::Key_A:
+
+        break;
+    case Qt::Key_D:
+        break;
+    }
+}
+
+void GLWidget::accions_timer(){
+
+    if (pulsaciones.contains(Qt::Key_Up)){
+        pulsaciones.remove((Qt::Key_Up));
+        esc->accelera_cotxe1();
+    }else if (pulsaciones.contains(Qt::Key_Down)){
+        pulsaciones.remove((Qt::Key_Down));
+        esc->desaccelera_cotxe1();
+    }else if(llibera_acceleracio_1){
+        llibera_acceleracio_1 = false;
+        esc->llibera_acceleracio_cotxe1();
+    }
+
+
+    if (pulsaciones.contains(Qt::Key_Left)){
+        pulsaciones.remove((Qt::Key_Left));
+        esc->gira_esquerra_cotxe1();
+    }else if(pulsaciones.contains(Qt::Key_Right)){
+        pulsaciones.remove((Qt::Key_Right));
+        esc->gira_dreta_cotxe1();
+    }else if(llibera_gir_1){
+        llibera_gir_1 = false;
+        esc->llibera_gir_cotxe1();
+    }
+
+
+
+    esc->temps();
+    updateGL();
 }
