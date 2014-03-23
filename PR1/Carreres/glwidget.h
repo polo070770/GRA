@@ -55,8 +55,8 @@ private:
     QColor qtPurple;
     mat4   modScalat;
     float  a, p, h;
-    bool llibera_acceleracio_1;
-    bool llibera_gir_1;
+    bool acceleracio_lliberada_cotxe_1;
+    bool gir_lliberat_cotxe_1;
     QSet<Qt::Key> pulsaciones;
 
 // Programa de la GPU

@@ -139,6 +139,13 @@ void Cotxe:: escalarFrom1(float factor){
  *Hace un make a la carroceria y a las ruedas;
  */
 void Cotxe::make(){
+
+    velocitat = 0.0;
+    angle_gir = 0.0;
+    accelerant = 0;
+    girant = 0;
+    reset_rodes = 0;
+
     //std::cout<< "make del cotxe"<< endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->make();
@@ -246,7 +253,7 @@ void Cotxe::forward(){
     accelerant = 1;
 
     if(velocitat < MAX_VELOCITAT){
-        //anem cap endarrere i estem accelerant accelerant cap endarrere
+        //anem cap endarrere i estem accelerant , el cotxe frena accelerant
         if(velocitat <= 0)velocitat += 2 * FACTOR_ROSAMENT;
         //estem accelerant cap endevant
         else if(velocitat >= 0) velocitat  += 1;
@@ -324,6 +331,7 @@ void Cotxe::llibera_gir(){
      *
      **/
     if(girant == 1){
+        // aixo ho fem per tornar les rodes a la seva posicio natural
         angle_gir = -angle_gir;
         this->girar_rodes_davanteres();
         girant = 0;

@@ -29,9 +29,9 @@ GLWidget::GLWidget(QWidget *parent)
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(accions_timer()));
-    timer->start(50);
-    llibera_acceleracio_1 = false;
-    llibera_gir_1 = false;
+    timer->start(20);
+    acceleracio_lliberada_cotxe_1 = false;
+    gir_lliberat_cotxe_1 = false;
 }
 
 
@@ -280,84 +280,140 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     switch ( event->key() )
     {
     case Qt::Key_Up:
-        pulsaciones.insert(Qt::Key_Up);
+        cout << "up" << endl;
+        pulsaciones.insert((Qt::Key_Up));
         break;
     case Qt::Key_Down:
-        pulsaciones.insert(Qt::Key_Down);
+        pulsaciones.insert((Qt::Key_Down));
         break;
     case Qt::Key_Left:
-        pulsaciones.insert(Qt::Key_Left);
+        pulsaciones.insert((Qt::Key_Left));
         break;
     case Qt::Key_Right:
-        pulsaciones.insert(Qt::Key_Right);
+        pulsaciones.insert((Qt::Key_Right));
         break;
     case Qt::Key_W:
-
+        cout << "w" << endl;
+        pulsaciones.insert((Qt::Key_W));
         break;
     case Qt::Key_S:
-
+        pulsaciones.insert((Qt::Key_S));
         break;
     case Qt::Key_A:
-
+        pulsaciones.insert((Qt::Key_A));
         break;
     case Qt::Key_D:
+        pulsaciones.insert((Qt::Key_D));
         break;
     }
 
 }
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
+cout << "release" << endl;
+    //AQUEST METODE TE UN FUNCIONAMENT EXTRANY
+
     // Metode a implementar
     switch ( event->key() )
     {
     case Qt::Key_Up:
-        llibera_acceleracio_1 = true;
+        pulsaciones.remove((Qt::Key_Up));
         break;
     case Qt::Key_Down:
-        llibera_acceleracio_1 = true;
+        pulsaciones.remove((Qt::Key_Down));
         break;
     case Qt::Key_Left:
-        llibera_gir_1 = true;
+        pulsaciones.remove((Qt::Key_Left));
         break;
     case Qt::Key_Right:
-        llibera_gir_1 = true;
+        pulsaciones.remove((Qt::Key_Right));
         break;
     case Qt::Key_W:
-
+        pulsaciones.remove((Qt::Key_W));
         break;
     case Qt::Key_S:
-
+        pulsaciones.remove((Qt::Key_S));
         break;
     case Qt::Key_A:
-
+        pulsaciones.remove((Qt::Key_A));
         break;
     case Qt::Key_D:
+        pulsaciones.remove((Qt::Key_D));
         break;
     }
+
 }
 
 void GLWidget::accions_timer(){
-
+    /*
     if (pulsaciones.contains(Qt::Key_Up)){
         pulsaciones.remove((Qt::Key_Up));
         esc->accelera_cotxe1();
+        acceleracio_lliberada_cotxe_1 = false;
     }else if (pulsaciones.contains(Qt::Key_Down)){
         pulsaciones.remove((Qt::Key_Down));
         esc->desaccelera_cotxe1();
-    }else if(llibera_acceleracio_1){
-        llibera_acceleracio_1 = false;
-        esc->llibera_acceleracio_cotxe1();
-    }
-
-
-    if (pulsaciones.contains(Qt::Key_Left)){
+        acceleracio_lliberada_cotxe_1 = false;
+    }else if (pulsaciones.contains(Qt::Key_Left)){
         pulsaciones.remove((Qt::Key_Left));
         esc->gira_esquerra_cotxe1();
+        gir_lliberat_cotxe_1 = false;
     }else if(pulsaciones.contains(Qt::Key_Right)){
         pulsaciones.remove((Qt::Key_Right));
         esc->gira_dreta_cotxe1();
-    }else if(llibera_gir_1){
-        llibera_gir_1 = false;
+        gir_lliberat_cotxe_1 = false;
+    }else if(!gir_lliberat_cotxe_1){
+        gir_lliberat_cotxe_1 = true;
+        esc->llibera_gir_cotxe1();
+    }else if(!acceleracio_lliberada_cotxe_1){
+        acceleracio_lliberada_cotxe_1 = true;
+        esc->llibera_acceleracio_cotxe1();
+    }
+    */
+/*
+    if (pulsaciones.contains(Qt::Key_Up)){
+        esc->accelera_cotxe1();
+        acceleracio_lliberada_cotxe_1 = false;
+    }else if (pulsaciones.contains(Qt::Key_Down)){
+        esc->desaccelera_cotxe1();
+        acceleracio_lliberada_cotxe_1 = false;
+    }else if(!acceleracio_lliberada_cotxe_1){
+        acceleracio_lliberada_cotxe_1 = true;
+        esc->llibera_acceleracio_cotxe1();
+    }
+
+    if (pulsaciones.contains(Qt::Key_Left)){
+        esc->gira_esquerra_cotxe1();
+        gir_lliberat_cotxe_1 = false;
+    }else if(pulsaciones.contains(Qt::Key_Right)){
+        esc->gira_dreta_cotxe1();
+        gir_lliberat_cotxe_1 = false;
+    }else if(!gir_lliberat_cotxe_1){
+        gir_lliberat_cotxe_1 = true;
+        esc->llibera_gir_cotxe1();
+    }
+*/
+
+
+    if (pulsaciones.contains(Qt::Key_W)){
+        esc->accelera_cotxe1();
+        acceleracio_lliberada_cotxe_1 = false;
+    }else if (pulsaciones.contains(Qt::Key_S)){
+        esc->desaccelera_cotxe1();
+        acceleracio_lliberada_cotxe_1 = false;
+    }else if(!acceleracio_lliberada_cotxe_1){
+        acceleracio_lliberada_cotxe_1 = true;
+        esc->llibera_acceleracio_cotxe1();
+    }
+
+    if (pulsaciones.contains(Qt::Key_A)){
+        esc->gira_esquerra_cotxe1();
+        gir_lliberat_cotxe_1 = false;
+    }else if(pulsaciones.contains(Qt::Key_D)){
+        esc->gira_dreta_cotxe1();
+        gir_lliberat_cotxe_1 = false;
+    }else if(!gir_lliberat_cotxe_1){
+        gir_lliberat_cotxe_1 = true;
         esc->llibera_gir_cotxe1();
     }
 
