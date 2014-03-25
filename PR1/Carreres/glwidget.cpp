@@ -113,6 +113,32 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
     // Metode a implementar
 
+    float factorAdapta = 2. / 50;
+
+    cout << "escalo objecte a " << factorAdapta << endl;
+
+    point4 centre = obj->calculCentre();
+
+    mat4 traslada_centre = Translate(-centre);
+
+    mat4 escala = Scale(factorAdapta, factorAdapta, factorAdapta);
+
+    mat4 traslada_relatiu = Translate(centre.x * factorAdapta,
+                                      centre.y * factorAdapta,
+                                      centre.z * factorAdapta);
+
+    mat4 transformAdapta = traslada_relatiu * escala * traslada_centre;
+
+    if (dynamic_cast<Cotxe*>(obj)){
+
+        ((Cotxe*) obj)->aplicaTG(transformAdapta);
+
+    }else{
+
+        obj->aplicaTG(transformAdapta);
+
+    }
+
 }
 
 void GLWidget::newObjecte(Objecte * obj)
