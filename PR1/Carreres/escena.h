@@ -53,6 +53,9 @@ public:
     Terra *terra;
     void temps();
 
+    vector<Cotxe *> getCotxes();
+    vector<Obstacle *> getObstacles();
+
 private:
     Cotxe *cotxe_1;
     Cotxe *cotxe_2;

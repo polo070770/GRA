@@ -49,3 +49,7 @@ void CotxeContainer::temps(){
         if(*iterador!=NULL)(*iterador)->temps();
     }
 }
+
+vector<Cotxe *> CotxeContainer::getListado(){
+    return this->listado;
+}

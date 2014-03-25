@@ -14,6 +14,7 @@ public:
     CotxeContainer();
     ~CotxeContainer();
     void add(Cotxe *cotxe);
+    vector<Cotxe *> getListado();
     void aplicaTG(mat4 trans);
     void aplicaTGPoints(mat4 trans);
     void aplicaTGCentrat(mat4 trans);

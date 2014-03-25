@@ -37,3 +37,7 @@ void ObstacleContainer::reset(float yorig){
         }
     }
 }
+
+vector<Obstacle * > ObstacleContainer::getListado(){
+    return this->listado;
+}

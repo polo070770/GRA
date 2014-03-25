@@ -144,3 +144,11 @@ float escena::getYOrig(){
 void escena::temps(){
     cotxes.temps();
 }
+
+vector<Cotxe *> escena::getCotxes(){
+    return cotxes.getListado();
+}
+
+vector<Obstacle *> escena::getObstacles(){
+    return obstacles.getListado();
+}

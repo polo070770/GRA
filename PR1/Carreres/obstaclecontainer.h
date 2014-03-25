@@ -14,6 +14,7 @@ public:
     ObstacleContainer();
     ~ObstacleContainer();
     void add(Obstacle *obstacle);
+    vector<Obstacle * > getListado();
     void aplicaTG(mat4 trans);
     void aplicaTGCentrat(mat4 trans);
     void draw();

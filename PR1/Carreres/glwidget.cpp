@@ -219,6 +219,21 @@ void GLWidget::resetView()
 
     // Metode a modificar per a adaptar tots els objectes de l'escena.
 
+    vector <Cotxe *> listado_cotxes = esc->getCotxes();
+    for(int i = 0; i < listado_cotxes.size(); i++){
+        if (listado_cotxes.at(i) != NULL)
+            adaptaObjecteTamanyWidget(listado_cotxes.at(i));
+    }
+
+    vector <Obstacle *> listado_obs = esc->getObstacles();
+    for(int i = 0; i < listado_obs.size(); i++){
+        if (listado_obs.at(i) != NULL)
+            adaptaObjecteTamanyWidget(listado_obs.at(i));
+    }
+
+    if (esc->terra != NULL)
+        adaptaObjecteTamanyWidget(esc->terra);
+
     updateGL();
 }
 
