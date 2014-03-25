@@ -87,7 +87,6 @@ void GLWidget::initShadersGPU()
 
 }
 
-
 QSize GLWidget::minimumSizeHint() const
 {
     return QSize(50, 50);
@@ -113,7 +112,7 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
     // Metode a implementar
 
-    float factorAdapta = 2. / 50;
+    float factorAdapta = 2. / 50; // longitud real de la escena / longitud logica de la escena
 
     cout << "escalo objecte a " << factorAdapta << endl;
 
@@ -123,6 +122,8 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
     mat4 escala = Scale(factorAdapta, factorAdapta, factorAdapta);
 
+    // trasladamos el centro relativamente respecto a
+    // la longitud de adaptacion del widget
     mat4 traslada_relatiu = Translate(centre.x * factorAdapta,
                                       centre.y * factorAdapta,
                                       centre.z * factorAdapta);
@@ -131,6 +132,8 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
     if (dynamic_cast<Cotxe*>(obj)){
 
+        // Si es un coche el objeto a adaptar, se ha de llamar a su propio
+        // aplica TG para que lo aplique a sus componentes
         ((Cotxe*) obj)->aplicaTG(transformAdapta);
 
     }else{
@@ -168,6 +171,7 @@ void GLWidget::newObstacle(QString fichero, int nombre)
     newObjecte(obj);
 
 }
+
 void GLWidget::newTerra(float amplaria, float profunditat, float y)
 {
     // Metode que crea un objecte terra poligon amb el punt original a xorig, yorig, zorig
@@ -251,7 +255,6 @@ void GLWidget::resizeGL(int width, int height)
     glMatrixMode(GL_MODELVIEW);
 }
 
-
 void GLWidget::setXRotation(int angle)
 {
     qNormalizeAngle(angle);
@@ -278,7 +281,6 @@ void GLWidget::setZRotation(int angle)
         updateGL();
     }
 }
-
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
@@ -334,6 +336,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     }
 
 }
+
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
 cout << "release" << endl;
@@ -420,7 +423,6 @@ void GLWidget::accions_timer(){
     }
 */
 
-
     if (pulsaciones.contains(Qt::Key_W)){
         esc->accelera_cotxe1();
         acceleracio_lliberada_cotxe_1 = false;
@@ -442,8 +444,6 @@ void GLWidget::accions_timer(){
         gir_lliberat_cotxe_1 = true;
         esc->llibera_gir_cotxe1();
     }
-
-
 
     esc->temps();
     updateGL();

@@ -65,8 +65,6 @@ void Objecte:: escalarFrom1(float factor){
     // calculem la nova capsa
     calculCapsa3D();
 
-
-
 }
 
 
@@ -92,7 +90,6 @@ Capsa3D Objecte::calculCapsa3D()
         if(points[i].y > pmax.y) pmax.y = points[i].y;
         if(points[i].z > pmax.z) pmax.z = points[i].z;
     }
-
 
     capsa.pmin = pmin;
     capsa.a = pmax.x - pmin.x;

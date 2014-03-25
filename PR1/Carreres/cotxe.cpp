@@ -19,6 +19,7 @@ Cotxe::Cotxe(QString n) : Objecte(NumVerticesF)
     this->direction[1] = 0;
     this->direction[2] = 0;
     this->direction[3] = 0;
+
     readObj(n);
 
     make();
@@ -27,7 +28,7 @@ Cotxe::Cotxe(QString n) : Objecte(NumVerticesF)
 Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
              double girx, double giry, double girz,
              float xdir, float ydir, float zdir):Objecte(NumVerticesF){
-   std::cout<< "Estic en el constructor parametritzat del cotxe\n" << endl;
+    std::cout<< "Estic en el constructor parametritzat del cotxe\n" << endl;
 
     nom = n;
     Index = 0;
@@ -107,6 +108,7 @@ Capsa3D Cotxe::calculCapsa3D()
 
     return this->capsa;
 }
+
 /**
  *Funcio que transforma un objecte al tamany atomic i despres
  *l'escala pel factor de entrada
@@ -129,9 +131,6 @@ void Cotxe:: escalarFrom1(float factor){
     mat4 transform = Scale(max,max,max);
 
     aplicaTGCentrat(transform);
-
-
-
 
 }
 
@@ -238,8 +237,6 @@ void Cotxe::avansar_rodes(){
     this->roda_esquerra_davantera->aplicaTGCentrat(moviment_roda);
     this->roda_dreta_posterior->aplicaTGCentrat(moviment_roda);
     this->roda_esquerra_posterior->aplicaTGCentrat(moviment_roda);
-
-
 }
 
 void Cotxe::girar_rodes_davanteres(){
@@ -268,7 +265,6 @@ void Cotxe::backward(){
         //anem cap endevant y estem frenant
         else if(velocitat >= 0) velocitat -= 2 * FACTOR_ROSAMENT;
     }
-
 }
 
 void Cotxe::turnleft(){
@@ -277,7 +273,6 @@ void Cotxe::turnleft(){
         this->girar_rodes_davanteres();
         girant = 1;
     }
-
 }
 
 void Cotxe::turnright(){
@@ -286,7 +281,6 @@ void Cotxe::turnright(){
         this->girar_rodes_davanteres();
         girant = 1;
     }
-
 }
 
 
@@ -299,7 +293,6 @@ void Cotxe::temps(){
         this->roda_esquerra_davantera->reset_angle();
         reset_rodes = 0;
     }
-
 
     //apliquem el rossament
     if(accelerant == 0){
