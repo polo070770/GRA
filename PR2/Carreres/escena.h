@@ -20,6 +20,7 @@
 #include <terra.h>
 #include <cotxecontainer.h>
 #include <obstaclecontainer.h>
+#include <camera.h>
 
 using namespace std;
 
@@ -48,7 +49,8 @@ public:
     void llibera_acceleracio_cotxe1();
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
-
+    Camera *cameraPanoramica;
+    Camera *cameraTerceraPersona;
 
     Terra *terra;
     void temps();

@@ -29,7 +29,9 @@ SOURCES += main.cpp\
     carrosseria.cpp \
     cotxecontainer.cpp \
     obstaclecontainer.cpp \
-    obstacle.cpp
+    obstacle.cpp \
+    camera.cpp \
+    trajectoria.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -49,7 +51,9 @@ HEADERS  += mainwindow.h \
     carrosseria.h \
     cotxecontainer.h \
     obstaclecontainer.h \
-    obstacle.h
+    obstacle.h \
+    camera.h \
+    trajectoria.h
 
 FORMS    += mainwindow.ui \
     newcotxedialog.ui \

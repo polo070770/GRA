@@ -16,6 +16,7 @@ escena::escena()
     terra = NULL;
     cotxe_1 = NULL;
     cotxe_2 = NULL;
+
 }
 
 
@@ -47,7 +48,12 @@ void escena::addObjecte(Objecte *obj) {
 void escena::CapsaMinCont3DEscena()
 {
     // Metode a implementar
-    //TODO
+    //de momento
+    if(cotxe_1 != NULL){
+        this->capsaMinima = cotxe_1->calculCapsa3D();
+    }
+
+
 }
 
 void escena::aplicaTG(mat4 m) {
@@ -86,11 +92,23 @@ void escena::reset() {
 
     // posem tots els element al origin
     float yorig = terra!=NULL ? terra->getYOrig() : 0;
+
     // Metode a modificar
     cotxes.reset(yorig);
+
     obstacles.reset(yorig);
+
     if (terra!=NULL)
         terra->make();
+
+    //calculo la capsa minima
+    this->CapsaMinCont3DEscena();
+    //inicio la camera
+    // HAY QUE CAMBIAR LOS DOS PRIMEROS PARAMETROS
+    // POR LOS VALORES DEL VIEWPORT SACADOS DEL GLWIDGET
+    cameraPanoramica->ini(50.0, 50.0, this->capsaMinima);
+
+
 
 }
 
