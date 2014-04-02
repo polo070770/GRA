@@ -109,34 +109,6 @@ Capsa3D Cotxe::calculCapsa3D()
     return this->capsa;
 }
 
-/**
- *Funcio que transforma un objecte al tamany atomic i despres
- *l'escala pel factor de entrada
- * @brief Objecte::escalarFrom1
- * @param factor
- */
-void Cotxe:: escalarFrom1(float factor){
-
-    Capsa3D capsa = calculCapsa3D();
-
-    float max = capsa.a;
-    if (capsa.h > max){
-        max = capsa.h;
-    }else if(capsa.p > max){
-        max = capsa.p;
-    }
-
-    max = factor * (1./max);
-
-    mat4 transform = Scale(max,max,max);
-
-    aplicaTGCentrat(transform);
-
-}
-
-/*
- *Hace un make a la carroceria y a las ruedas;
- */
 void Cotxe::make(){
 
     velocitat = 0.0;
@@ -145,23 +117,21 @@ void Cotxe::make(){
     girant = 0;
     reset_rodes = 0;
 
-    //std::cout<< "make del cotxe"<< endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->make();
     }
 
     escalarFrom1(this->tam);
 
-    // calculem la nova capsa
-    calculCapsa3D();
-
     //centre del cotxe
     point4 centre = calculCentre();
 
     // el movem al centre i despres al desti
     mat4 transform = Translate(-centre);
+
     // apliquem la transformacio, no cal que sigui centrada
     this->aplicaTG(transform);
+
     // calculem la nova capsa
     calculCapsa3D();
 
@@ -169,29 +139,23 @@ void Cotxe::make(){
     //invertimos la direccion
     // tambe serviria l'altura
     float y_desti = yorig + (-capsa.pmin.y);
-    point4 desti = point4(xorig * 1, y_desti,zorig * 1 ,0); // vector destino
+    point4 desti = point4(capsa.pmin.x, y_desti, capsa.pmin.z ,0); // vector destino
     this->aplicaTG(Translate(desti));
 }
 
-/*
- *Hace un aplicaTG a la carroceria y las ruedas;
- */
 void Cotxe::aplicaTG(mat4 trans){
-    //std::cout<<"aplicaTG del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->aplicaTG(trans);
     }
 }
 
 void Cotxe::toGPU(QGLShaderProgram *program){
-    //std::cout<<"toGPU del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->toGPU(program);
     }
 }
 
 void Cotxe::draw(){
-    //std::cout<<"draw del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->draw();
     }
@@ -208,7 +172,6 @@ void Cotxe::aplicaTGCentrat(mat4 trans){
     point4 centre = calculCentre();
 
     // montamos la matriz en orden inverso al que queremos aplicar las
-
     // transformaciones
     mat4 transform_centrada = ( Translate(centre) * trans * Translate(-centre) );
 
@@ -217,7 +180,6 @@ void Cotxe::aplicaTGCentrat(mat4 trans){
 }
 
 void Cotxe::moviment(){
-
     point4 desti = point4(
                 this->direction[0] * velocitat * FACTOR_VELOCITAT,
                 this->direction[1] * velocitat * FACTOR_VELOCITAT,
@@ -231,6 +193,7 @@ void Cotxe::moviment(){
     this->avansar_rodes();
 
 }
+
 void Cotxe::avansar_rodes(){
     mat4 moviment_roda = RotateZ(velocitat);
     this->roda_dreta_davantera->aplicaTGCentrat(moviment_roda);
@@ -242,8 +205,6 @@ void Cotxe::avansar_rodes(){
 void Cotxe::girar_rodes_davanteres(){
     this->roda_dreta_davantera->fer_gir(angle_gir);
     this->roda_esquerra_davantera->fer_gir(angle_gir);
-
-
 }
 
 void Cotxe::forward(){
@@ -282,7 +243,6 @@ void Cotxe::turnright(){
         girant = 1;
     }
 }
-
 
 void Cotxe::temps(){
 
@@ -379,54 +339,54 @@ void Cotxe::readObj(QString filename)
                 QString sy(ReadFile::words[2]);
 
                 QString sz(ReadFile::words[3]);
-                                double x = sx.toDouble();
-                                double y = sy.toDouble();
-                                double z = sz.toDouble();
+                double x = sx.toDouble();
+                double y = sy.toDouble();
+                double z = sz.toDouble();
 
-                                if (nwords == 5)
-                                {
-                                  QString sw(ReadFile::words[4]);
-                                  double w = sw.toDouble();
-                                  x/=w;
-                                  y/=w;
-                                  z/=w;
-                                }
-                                // S'afegeix el vertex a l'objecte
-                                current = vector_fills[currentObj];
-                                current->vertexs.push_back(point4(x, y, z, 1));
-                                vindexAct++;
+                if (nwords == 5)
+                {
+                    QString sw(ReadFile::words[4]);
+                    double w = sw.toDouble();
+                    x/=w;
+                    y/=w;
+                    z/=w;
+                }
+                // S'afegeix el vertex a l'objecte
+                current = vector_fills[currentObj];
+                current->vertexs.push_back(point4(x, y, z, 1));
+                vindexAct++;
 
 
-                            }
-                            else if (!strcmp (first_word, "vn")) {
-                            }
-                            else if (!strcmp (first_word, "vt")) {
-                            }
-                            else if (!strcmp (first_word, "f")) {
-                                current = vector_fills[currentObj];
-                                // S'afegeix la cara a l'objecte
-                                construeix_cara (&ReadFile::words[1], nwords-1, current, vindexUlt);
-                            }
-                            // added
-                            else if (!strcmp (first_word, "mtllib")) {
-                                //read_mtllib (&words[1], nwords-1, matlib, filename);
-                            }
-                            else if (!strcmp (first_word, "usemtl")) {
-                                //int size = strlen(words[1])-1;
-                                //while (size && (words[1][size]=='\n' || words[1][size]=='\r') ) words[1][size--]=0;
-                                //currentMaterial = matlib.index(words[1]);
-                            }
-                            else if (!strcmp (first_word, "o")) {
-                                //cada nou objecte s'actualitza aquest i­ndex
-                                currentObj++;
-                                vindexUlt = vindexAct;
-                            }
-                            // fadded
-                            else {
-                                //fprintf (stderr, "Do not recognize: '%s'\n", str_orig);
-                            }
+            }
+            else if (!strcmp (first_word, "vn")) {
+            }
+            else if (!strcmp (first_word, "vt")) {
+            }
+            else if (!strcmp (first_word, "f")) {
+                current = vector_fills[currentObj];
+                // S'afegeix la cara a l'objecte
+                construeix_cara (&ReadFile::words[1], nwords-1, current, vindexUlt);
+            }
+            // added
+            else if (!strcmp (first_word, "mtllib")) {
+                //read_mtllib (&words[1], nwords-1, matlib, filename);
+            }
+            else if (!strcmp (first_word, "usemtl")) {
+                //int size = strlen(words[1])-1;
+                //while (size && (words[1][size]=='\n' || words[1][size]=='\r') ) words[1][size--]=0;
+                //currentMaterial = matlib.index(words[1]);
+            }
+            else if (!strcmp (first_word, "o")) {
+                //cada nou objecte s'actualitza aquest i­ndex
+                currentObj++;
+                vindexUlt = vindexAct;
+            }
+            // fadded
+            else {
+                //fprintf (stderr, "Do not recognize: '%s'\n", str_orig);
+            }
 
-                            //free(words);
-                        }
-                    }
+            //free(words);
+        }
+    }
 }

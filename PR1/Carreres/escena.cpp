@@ -9,9 +9,9 @@ escena::escena()
     capsaMinima.pmin[0] = -25;
     capsaMinima.pmin[1] = -25;
     capsaMinima.pmin[2] = -25;
-    capsaMinima.a = 25;
-    capsaMinima.h = 25;
-    capsaMinima.p = 25;
+    capsaMinima.a = 50;
+    capsaMinima.h = 50;
+    capsaMinima.p = 50;
 
     terra = NULL;
     cotxe_1 = NULL;

@@ -54,12 +54,14 @@ private:
     QColor qtGreen;
     QColor qtPurple;
     mat4   modScalat;
+
     float  a, p, h;
     bool acceleracio_lliberada_cotxe_1;
     bool gir_lliberat_cotxe_1;
+
     QSet<Qt::Key> pulsaciones;
 
-// Programa de la GPU
+    // Programa de la GPU
     QGLShaderProgram *program;
 
     //  Metode per a carregar de fitxers el vertex i el fragment shader
@@ -73,6 +75,7 @@ private:
 
     // Metode per adaptar l'escena al tamany del widget
     void adaptaObjecteTamanyWidget(Objecte *obj);
+
 private slots:
     //controla accions a partir del timer
     void accions_timer();

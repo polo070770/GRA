@@ -4,17 +4,19 @@
 Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
     QObject(parent)
 {
-    std::cout<< "Estic en el constructor default\n";
     points = new point4[npoints];
     colors = new color4[npoints];
 }
 
 Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble y0, GLdouble z0, double girx, double giry, double girz) : numPoints(npoints)
 {
+    nom = n;
+    Index = 0;
+    tam = tamanio;
+
     points = new point4[npoints];
     colors = new color4[npoints];
-    tam = tamanio;
-    //std::cout<< "Estic en el constructor parametritzat de l'objecte";
+
     xorig = x0;
     yorig = y0;
     zorig = z0;
@@ -22,10 +24,6 @@ Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble
     xRot = girx;
     yRot = giry;
     zRot = girz;
-
-
-    nom = n;
-    Index = 0;
 
     readObj(n);
 
@@ -47,7 +45,7 @@ Objecte::~Objecte()
  * @param factor
  */
 void Objecte:: escalarFrom1(float factor){
-    cout << "escalo objecte a " << factor << endl;
+
     Capsa3D capsa = calculCapsa3D();
 
     float max = capsa.a;
@@ -62,11 +60,10 @@ void Objecte:: escalarFrom1(float factor){
     mat4 transform = Scale(max,max,max);
 
     aplicaTGCentrat(transform);
+
     // calculem la nova capsa
     calculCapsa3D();
-
 }
-
 
 Capsa3D Objecte::calculCapsa3D()
 {
@@ -99,9 +96,6 @@ Capsa3D Objecte::calculCapsa3D()
     return capsa;
 }
 
-
-
-
 void Objecte::aplicaTG(mat4 m)
 {
     aplicaTGPoints(m);
@@ -111,7 +105,6 @@ void Objecte::aplicaTG(mat4 m)
                      &points[0] );
 
 }
-
 
 void Objecte::aplicaTGPoints(mat4 m)
 {
@@ -171,7 +164,6 @@ void Objecte::toGPU(QGLShaderProgram *pr){
     glEnable( GL_DEPTH_TEST );
 }
 
-// Pintat en la GPU.
 void Objecte::draw()
 {
 
@@ -339,8 +331,8 @@ void Objecte::readObj(QString filename)
             }
 
             //free(words);
-            }
         }
+    }
 }
 
 

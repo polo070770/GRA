@@ -35,7 +35,6 @@ Terra::Terra(float amplaria, float profunditat, float y):Objecte(NumVerticesF)
 
 
 // Realitzacio de la geometria del cub en una genList o en el vertex array, segons el que visualitzem
-
 void Terra::make()
 {
     //std::cout<<"Estic en el make del terra\n";
@@ -43,7 +42,6 @@ void Terra::make()
     // generacio de la geometria dels triangles per a visualitzar-lo
     Index = 0;
     quad(3,2,1,0); // cara con la normal hacia arriba
-
 
     escalarFrom1(1); // escalem el terra a 1
 

@@ -23,15 +23,15 @@ protected:
     QString nom; // nom del fitxer on esta el cotxe
     vector<Cara> cares; // cares de l'objecte
 
-
     // Sistema de coordenades d'un objecte: punt origen i eixos de rotació
     GLfloat xorig, yorig, zorig;
     float xRot;
     float yRot;
     float zRot;
 
-    GLfloat tam; // Escala de l'objecte aplicada al fitxer d'entrada
+    point4 centre;
 
+    GLfloat tam; // Escala de l'objecte aplicada al fitxer d'entrada
 
     // Programa de shaders de la GPU
     QGLShaderProgram *program;
@@ -42,7 +42,10 @@ protected:
     point4 *points;
     color4 *colors;
     int Index; // index de control del numero de vertexs a posar a la GPU
-    virtual void escalarFrom1(float factor);
+
+    void escalarFrom1(float factor);
+
+    void construeix_cara ( char **words, int nwords, Objecte*objActual, int vindexUlt);
 
 public:
 
@@ -51,7 +54,6 @@ public:
     void setYorig(float orig);
     // Capsa mínima contenidora de l'objecte
     Capsa3D capsa;
-
 
     //explicit Objecte(QObject *parent = 0);
     Objecte(const int npoints, QObject *parent = 0);
@@ -74,7 +76,8 @@ public:
 
     // Calcula la capsa 3D contenidora de l'objecte
     virtual Capsa3D calculCapsa3D();
-    virtual point4 calculCentre();
+
+    point4 calculCentre();
 
     // Aplica una TG qualsevol a un objecte
     void aplicaTG(mat4 m);
@@ -82,11 +85,6 @@ public:
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);
 
-
-
-protected:
-    point4 centre;
-    void construeix_cara ( char **words, int nwords, Objecte*objActual, int vindexUlt);
 private:
 
 

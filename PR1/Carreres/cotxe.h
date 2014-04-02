@@ -38,14 +38,17 @@ private:
 
     vector<Objecte * > vector_fills;
     vector<Objecte *>::iterator fill_iter;
+
     Carrosseria *carroseria;
     Roda *roda_dreta_davantera;
     Roda *roda_esquerra_davantera;
     Roda *roda_dreta_posterior;
     Roda *roda_esquerra_posterior;
+
     void moviment();
     void avansar_rodes();
     void girar_rodes_davanteres();
+
     static const int NumVerticesF = 100000;
     static const int NumCares = 300000;
     static const int MAX_VELOCITAT = 330;
@@ -56,7 +59,7 @@ private:
     static const float MIN_ANGLE = -40.0;
     static const float FACTOR_MOTLLA_DIRECCIO = 2.5;
     static const float FACTOR_ANGLE_GIR = 4;
-    virtual void escalarFrom1(float factor);
+
     float velocitat;
     float angle_gir;
     int girant;

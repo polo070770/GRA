@@ -13,7 +13,6 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy( Qt::StrongFocus );
     esc = new escena();
 
-
     xRot = 0;
     yRot = 0;
     zRot = 0;
@@ -30,10 +29,10 @@ GLWidget::GLWidget(QWidget *parent)
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(accions_timer()));
     timer->start(20);
+
     acceleracio_lliberada_cotxe_1 = false;
     gir_lliberat_cotxe_1 = false;
 }
-
 
 GLWidget::~GLWidget()
 {
@@ -49,10 +48,9 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
         GLenum       type;
         GLchar*      source;
     }  shaders[2] = {
-    { vShaderFile, GL_VERTEX_SHADER, NULL },
-    { fShaderFile, GL_FRAGMENT_SHADER, NULL }
-};
-
+        { vShaderFile, GL_VERTEX_SHADER, NULL },
+        { fShaderFile, GL_FRAGMENT_SHADER, NULL }
+    };
 
     QGLShader *vshader = new QGLShader(QGLShader::Vertex, this);
     QGLShader *fshader = new QGLShader(QGLShader::Fragment, this);
@@ -93,7 +91,6 @@ QSize GLWidget::minimumSizeHint() const
 }
 
 QSize GLWidget::sizeHint() const
-
 {
     return QSize(400, 400);
 }
@@ -168,6 +165,7 @@ void GLWidget::newObstacle(QString fichero, int nombre)
     mida = 1;
     //TODO bucle para añadir el resto de obstaculos en posiciones aleatorias
     obj = new Obstacle(fichero, mida, xorig, yorig, zorig, 0., 0., 0.);
+
     newObjecte(obj);
 
 }
@@ -183,7 +181,7 @@ void GLWidget::newTerra(float amplaria, float profunditat, float y)
     obj = new Terra(amplaria, profunditat, y);
     newObjecte(obj);
 
- }
+}
 
 void GLWidget::newCotxe(QString fichero, float xorig, float zorig, float mida, float xdirec, float ydirec, float zdirec)
 {
@@ -214,11 +212,9 @@ void GLWidget::resetView()
     yRot = 0;
     zRot = 0;
 
-
     esc->reset();
 
     // Metode a modificar per a adaptar tots els objectes de l'escena.
-
     vector <Cotxe *> listado_cotxes = esc->getCotxes();
     for(int i = 0; i < listado_cotxes.size(); i++){
         if (listado_cotxes.at(i) != NULL)
@@ -247,8 +243,8 @@ void GLWidget::paintGL()
     qNormalizeAngle(zRot);
 
     mat4 transform = ( RotateX( xRot / 16.0 ) *
-                        RotateY( yRot / 16.0 ) *
-                        RotateZ( zRot / 16.0 ) );
+                       RotateY( yRot / 16.0 ) *
+                       RotateZ( zRot / 16.0 ) );
 
     esc->aplicaTGCentrat(transform);
     esc->draw();
@@ -354,7 +350,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
 
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-cout << "release" << endl;
+    cout << "release" << endl;
     //AQUEST METODE TE UN FUNCIONAMENT EXTRANY
 
     // Metode a implementar
@@ -414,7 +410,7 @@ void GLWidget::accions_timer(){
         esc->llibera_acceleracio_cotxe1();
     }
     */
-/*
+    /*
     if (pulsaciones.contains(Qt::Key_Up)){
         esc->accelera_cotxe1();
         acceleracio_lliberada_cotxe_1 = false;
