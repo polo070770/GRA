@@ -2,13 +2,16 @@
 
 Camera::Camera()
 {
-    vs.vrp = vec4(0.0, 0.0, 0.0, 1.0);
-    vs.obs = vec4(0.0, 0.0, 200.0, 1.0);
+    // view system
+    vs.vrp = vec4(0.0, 0.0, 0.0, 1.0); // view reference point
+    vs.obs = vec4(0.0, 0.0, 200.0, 1.0); // posicio de l'obs
 
+    // angles de gir del sistema de coordenades del obs
     vs.angx = 0;
     vs.angy = 0;
     vs.angz = 0;
 
+    //capsa 2d del viewport
     vp.a = 600;
     vp.h = 600;
     vp.pmin[0] = 0;
@@ -24,12 +27,16 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     // CAL IMPLEMENTAR
     // CODI A MODIFICAR
 
+    // view system, view reference point
+    // lo que quiero mirar, mirare en el centro
+    // de la escena
     vec3 centre = calculCentreCapsa(capsaMinima);
     vs.vrp[0] = centre[0];
     vs.vrp[1] = centre[1];
     vs.vrp[2] = centre[2];
-    Ortho();
 
+    //capsa 2d del viewport
+    //el view port sera el tamaño del glwidget, la ventana
     vp.a = a;
     vp.h = h;
     vp.pmin[0] = 0;
@@ -42,6 +49,10 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
 void Camera::toGPU(QGLShaderProgram *program)
 {
  // CAL IMPLEMENTAR
+
+    this->model_view = program->uniformLocation("model_view");
+    glUniformMatrix4fv(this->model_view, 1, GL_TRUE, modView);
+
 }
 
 
@@ -53,15 +64,33 @@ void Camera::CalculaMatriuModelView()
 {
     // CAL IMPLEMENTAR
     // modView = identity();
-    vec4 ang = vec4(vs.angx, vs.angy, vs.angz, 0.0);
 
-    modView = LookAt(vs.obs, vs.vrp, ang);
+    // vec4 ang = vec4(vs.angx, vs.angy, vs.angz, 0.0);
+
+    vec4 upVector = vec4(0,1,0,1); // vista TOP
+    modView = LookAt(vs.obs, vs.vrp, upVector);
 }
 
 void Camera::CalculaMatriuProjection()
 {
     // CAL IMPLEMENTAR
-    proj = identity();
+    // proj = identity();
+
+    // rango de mostreo, entre 0.1 y 100.0
+    piram.dant = 0.1;
+    piram.dpost = 100.0;
+    piram.alfav = 45.0; // obertura en vertical de 45º
+    piram.alfah = 45.0; // obertura en horizontal de 45º
+
+    // Ortho (left, right, bottom, top, near, far)
+    // left = 0, anchura empieza en x = 0
+    // right = 50, anchura acaba en x = 50
+    // bottom = 0, altura empieza en y = 0
+    // top = 0, altura termina en y = 50
+    // de profundidad: near y far
+    // se definen con dant y dpost, atributos de piram
+
+    proj = Ortho(0.0, 50.0, 0.0, 50.0, piram.dant, piram.dpost);
 
 }
 
@@ -79,6 +108,7 @@ void Camera::CalculWindow( Capsa3D c)
 
 }
 */
+
 void Camera::setViewport(int x, int y, int a, int h)
 {
     vp.pmin[0] = x;

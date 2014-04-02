@@ -137,6 +137,7 @@ point4 Objecte::calculCentre(){
     centre.x = capsa.pmin.x + (capsa.a / 2);
     centre.y = capsa.pmin.y + (capsa.h / 2);
     centre.z = capsa.pmin.z + (capsa.p / 2);
+    centre.w = 1.0;
     return centre;
 }
 

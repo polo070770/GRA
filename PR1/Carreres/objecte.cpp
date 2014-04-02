@@ -142,7 +142,6 @@ void Objecte::aplicaTGCentrat(mat4 m){
     // transformaciones
     mat4 transform_centrada = ( Translate(centre) * m * Translate(-centre) );
 
-
     // aplicmos las transformaciones
     aplicaTG(transform_centrada);
 

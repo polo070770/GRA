@@ -34,7 +34,6 @@ GLWidget::GLWidget(QWidget *parent)
     gir_lliberat_cotxe_1 = false;
 }
 
-
 GLWidget::~GLWidget()
 {
     makeCurrent();
@@ -49,13 +48,13 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
         GLenum       type;
         GLchar*      source;
     }  shaders[2] = {
-    { vShaderFile, GL_VERTEX_SHADER, NULL },
-    { fShaderFile, GL_FRAGMENT_SHADER, NULL }
-};
-
+        { vShaderFile, GL_VERTEX_SHADER, NULL },
+        { fShaderFile, GL_FRAGMENT_SHADER, NULL }
+    };
 
     QGLShader *vshader = new QGLShader(QGLShader::Vertex, this);
     QGLShader *fshader = new QGLShader(QGLShader::Fragment, this);
+
     // Es llegeixen els dos shaders: el vertex i el fragment shader
     for ( int i = 0; i < 2; ++i ) {
         Shader& s = shaders[i];
@@ -65,16 +64,23 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
             exit( EXIT_FAILURE );
         }
     }
+
+    // Es compilen els programes en temps d'execucio de l'aplicacio
     vshader->compileSourceCode(shaders[0].source);
     fshader->compileSourceCode(shaders[1].source);
+
+    // S'afegeixen unes variables de classe
     program = new QGLShaderProgram(this);
     program->addShader(vshader);
     program->addShader(fshader);
 
     program->bindAttributeLocation("vPosition", PROGRAM_VERTEX_ATTRIBUTE);
     program->bindAttributeLocation("vColor", PROGRAM_COLOR_ATTRIBUTE);
+
+    // Es munta el programa
     program->link();
 
+    // Es vincula el programa al context de GL per a ser executat amb les comandes GL
     program->bind();
 
 }
@@ -93,7 +99,6 @@ QSize GLWidget::minimumSizeHint() const
 }
 
 QSize GLWidget::sizeHint() const
-
 {
     return QSize(400, 400);
 }
@@ -183,7 +188,7 @@ void GLWidget::newTerra(float amplaria, float profunditat, float y)
     obj = new Terra(amplaria, profunditat, y);
     newObjecte(obj);
 
- }
+}
 
 void GLWidget::newCotxe(QString fichero, float xorig, float zorig, float mida, float xdirec, float ydirec, float zdirec)
 {
@@ -213,7 +218,6 @@ void GLWidget::resetView()
     xRot = 0;
     yRot = 0;
     zRot = 0;
-
 
     esc->reset();
 
@@ -247,8 +251,8 @@ void GLWidget::paintGL()
     qNormalizeAngle(zRot);
 
     mat4 transform = ( RotateX( xRot / 16.0 ) *
-                        RotateY( yRot / 16.0 ) *
-                        RotateZ( zRot / 16.0 ) );
+                       RotateY( yRot / 16.0 ) *
+                       RotateZ( zRot / 16.0 ) );
 
     esc->aplicaTGCentrat(transform);
     esc->draw();
@@ -258,6 +262,10 @@ void GLWidget::paintGL()
 void GLWidget::resizeGL(int width, int height)
 {
     int side = qMin(width, height);
+
+    esc->setWidthGLWidget(this->size().width());
+    esc->setHeightGLWidget(this->size().height());
+
     glViewport((width - side) / 2, (height - side) / 2, side, side);
 
     glMatrixMode(GL_PROJECTION);
@@ -355,7 +363,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
 
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-cout << "release" << endl;
+    cout << "release" << endl;
     //AQUEST METODE TE UN FUNCIONAMENT EXTRANY
 
     // Metode a implementar
@@ -415,7 +423,7 @@ void GLWidget::accions_timer(){
         esc->llibera_acceleracio_cotxe1();
     }
     */
-/*
+    /*
     if (pulsaciones.contains(Qt::Key_Up)){
         esc->accelera_cotxe1();
         acceleracio_lliberada_cotxe_1 = false;

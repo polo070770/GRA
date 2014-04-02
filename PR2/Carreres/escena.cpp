@@ -17,6 +17,9 @@ escena::escena()
     cotxe_1 = NULL;
     cotxe_2 = NULL;
 
+    widthGLWidget = 50.0;
+    heightGLWidget = 50.0;
+
 }
 
 
@@ -103,12 +106,11 @@ void escena::reset() {
 
     //calculo la capsa minima
     this->CapsaMinCont3DEscena();
+
     //inicio la camera
     // HAY QUE CAMBIAR LOS DOS PRIMEROS PARAMETROS
     // POR LOS VALORES DEL VIEWPORT SACADOS DEL GLWIDGET
-    cameraPanoramica->ini(50.0, 50.0, this->capsaMinima);
-
-
+    cameraPanoramica->ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
 
 }
 
@@ -158,6 +160,13 @@ float escena::getYOrig(){
 
 }
 
+void escena::setWidthGLWidget(float w){
+    this->widthGLWidget = w;
+}
+
+void escena::setHeightGLWidget(float h){
+    this->heightGLWidget = h;
+}
 
 void escena::temps(){
     cotxes.temps();

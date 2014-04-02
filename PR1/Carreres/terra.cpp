@@ -14,7 +14,6 @@ Terra::Terra(float amplaria, float profunditat, float y):Objecte(NumVerticesF)
     yRot = 0;
     zRot = 0;
 
-
     vertices[0] = point4( 1., yorig, 1., 1.0 );
     vertices[1] = point4( 1., yorig, -1., 1.0 );
 
@@ -26,7 +25,6 @@ Terra::Terra(float amplaria, float profunditat, float y):Objecte(NumVerticesF)
     vertex_colors[1] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
     vertex_colors[2] =    color4( 1.0, 0.0, 0.0, 1.0 );  // red
     vertex_colors[3] =    color4( 1.0, 0.0, 0.0, 1.0 );  // red
-
 
     make();
 }

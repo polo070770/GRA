@@ -145,12 +145,11 @@ void Cotxe::make(){
     girant = 0;
     reset_rodes = 0;
 
-    //std::cout<< "make del cotxe"<< endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->make();
     }
 
-    escalarFrom1(this->tam);
+    this->escalarFrom1(this->tam);
 
     // calculem la nova capsa
     calculCapsa3D();
@@ -160,8 +159,10 @@ void Cotxe::make(){
 
     // el movem al centre i despres al desti
     mat4 transform = Translate(-centre);
+
     // apliquem la transformacio, no cal que sigui centrada
     this->aplicaTG(transform);
+
     // calculem la nova capsa
     calculCapsa3D();
 
@@ -169,7 +170,7 @@ void Cotxe::make(){
     //invertimos la direccion
     // tambe serviria l'altura
     float y_desti = yorig + (-capsa.pmin.y);
-    point4 desti = point4(xorig * 1, y_desti,zorig * 1 ,0); // vector destino
+    point4 desti = point4(capsa.pmin.x, y_desti, capsa.pmin.z, 1.0); // vector destino
     this->aplicaTG(Translate(desti));
 }
 

@@ -47,6 +47,7 @@ public:
     void gira_esquerra_cotxe1();
     void llibera_gir_cotxe1();
     void llibera_acceleracio_cotxe1();
+
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
     Camera *cameraPanoramica;
@@ -58,7 +59,15 @@ public:
     vector<Cotxe *> getCotxes();
     vector<Obstacle *> getObstacles();
 
+    void setWidthGLWidget(float w);
+    void setHeightGLWidget(float h);
+
+
 private:
+
+    float widthGLWidget;
+    float heightGLWidget;
+
     Cotxe *cotxe_1;
     Cotxe *cotxe_2;
     CotxeContainer cotxes;

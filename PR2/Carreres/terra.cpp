@@ -44,7 +44,6 @@ void Terra::make()
     Index = 0;
     quad(3,2,1,0); // cara con la normal hacia arriba
 
-
     escalarFrom1(1); // escalem el terra a 1
 
     // apliquem transformacio amb les dades rebudes per l'usuari

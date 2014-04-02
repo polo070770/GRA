@@ -82,7 +82,6 @@ public:
     void pan();
     void zoom();
 
-
     VisuSystem vs;      /* Sistema de visualitzacio  */
     PiramProj piram;    /* Piramide de visualitzacio */
     Capsa2D wd;	      /* Window                    */
@@ -92,8 +91,10 @@ public:
 private:
     void VertexCapsa3D(Capsa3D capsaMinima, vec4 vaux[8]);
     vec3 calculCentreCapsa(Capsa3D capsa);
+
     mat4  modView; // Matriu model-view de la CPU
     mat4  proj;  // Matriu projection de la CPU
+
     GLuint  model_view;  // model-view matrix uniform shader variable (GPU)
     GLuint  projection;  // projection matrix uniform shader variable (GPU)
 };
