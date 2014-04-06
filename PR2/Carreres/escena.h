@@ -41,12 +41,14 @@ public:
 
     float getYOrig();
 
-    void accelera_cotxe1();
-    void desaccelera_cotxe1();
-    void gira_dreta_cotxe1();
-    void gira_esquerra_cotxe1();
-    void llibera_gir_cotxe1();
-    void llibera_acceleracio_cotxe1();
+    void accelera_cotxe(int num);
+    void desaccelera_cotxe(int num);
+    void gira_dreta_cotxe(int num);
+    void gira_esquerra_cotxe(int num);
+    void llibera_gir_cotxe(int num);
+    void llibera_acceleracio_cotxe(int num);
+
+
 
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
@@ -59,12 +61,14 @@ public:
     vector<Cotxe *> getCotxes();
     vector<Obstacle *> getObstacles();
 
+    void setWidgetSize(float width, float height);
+
+    // deprecated
     void setWidthGLWidget(float w);
     void setHeightGLWidget(float h);
 
 
 private:
-
     float widthGLWidget;
     float heightGLWidget;
 

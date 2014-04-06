@@ -9,13 +9,14 @@
 
 IN vec4 vPosition;
 IN vec4 vColor;
+uniform mat4 model_view;
+uniform mat4 projection;
 
 OUT vec4 color;
 
 
-
 void main() 
 {
-  gl_Position = vPosition;
+  gl_Position = model_view * vPosition;
   color = vColor;
 } 

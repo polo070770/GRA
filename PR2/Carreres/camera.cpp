@@ -50,8 +50,11 @@ void Camera::toGPU(QGLShaderProgram *program)
 {
  // CAL IMPLEMENTAR
 
-    this->model_view = program->uniformLocation("model_view");
-    glUniformMatrix4fv(this->model_view, 1, GL_TRUE, modView);
+    model_view = program->uniformLocation("model_view");
+    glUniformMatrix4fv(model_view, 1, GL_TRUE, modView);
+
+    projection = program->uniformLocation("projection");
+    glUniformMatrix4fv(projection, 1, GL_TRUE, proj);
 
 }
 
@@ -121,6 +124,9 @@ void Camera::setModelView(QGLShaderProgram *program, mat4 m)
 {
 
     // CAL IMPLEMENTAR
+    modView = m;
+    model_view = program->uniformLocation("model_view");
+    glUniformMatrix4fv(model_view, 1, GL_TRUE, modView);
 
 }
 
@@ -128,6 +134,11 @@ void Camera::setProjection(QGLShaderProgram *program, mat4 p)
 {
 
     // CAL IMPLEMENTAR
+
+    proj = p;
+    projection = program->uniformLocation("projection");
+    glUniformMatrix4fv(projection, 1, GL_TRUE, proj);
+
 }
 
 void  Camera::AmpliaWindow(double r)

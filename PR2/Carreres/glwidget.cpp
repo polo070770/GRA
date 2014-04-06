@@ -14,6 +14,8 @@ GLWidget::GLWidget(QWidget *parent)
     esc = new escena();
 
 
+
+
     xRot = 0;
     yRot = 0;
     zRot = 0;
@@ -27,11 +29,20 @@ GLWidget::GLWidget(QWidget *parent)
 
     program = 0;
 
+    // timer para controlar los frames
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(accions_timer()));
     timer->start(20);
+
+    // variables para controlar el movimiento del coche
     acceleracio_lliberada_cotxe_1 = false;
     gir_lliberat_cotxe_1 = false;
+    acceleracio_lliberada_cotxe_2 = false;
+    gir_lliberat_cotxe_2 = false;
+
+    // cambiamos los valores del tamaño en la escena
+    esc->setWidthGLWidget(this->size().width());
+    esc->setHeightGLWidget(this->size().height());
 }
 
 GLWidget::~GLWidget()
@@ -151,7 +162,7 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
 void GLWidget::newObjecte(Objecte * obj)
 {
-    adaptaObjecteTamanyWidget(obj);
+   // adaptaObjecteTamanyWidget(obj); // se supone que ya no es necesario
     obj->toGPU(program);
     esc->addObjecte(obj);
 
@@ -223,7 +234,9 @@ void GLWidget::resetView()
 
     // Metode a modificar per a adaptar tots els objectes de l'escena.
 
+    /*
     vector <Cotxe *> listado_cotxes = esc->getCotxes();
+
     for(int i = 0; i < listado_cotxes.size(); i++){
         if (listado_cotxes.at(i) != NULL)
             adaptaObjecteTamanyWidget(listado_cotxes.at(i));
@@ -237,7 +250,7 @@ void GLWidget::resetView()
 
     if (esc->terra != NULL)
         adaptaObjecteTamanyWidget(esc->terra);
-
+    */
     updateGL();
 }
 
@@ -263,8 +276,9 @@ void GLWidget::resizeGL(int width, int height)
 {
     int side = qMin(width, height);
 
-    esc->setWidthGLWidget(this->size().width());
-    esc->setHeightGLWidget(this->size().height());
+    //esc->setWidthGLWidget(this->size().width());
+    //esc->setHeightGLWidget(this->size().height());
+    esc->setWidgetSize(this->size().width(), this->size().height());
 
     glViewport((width - side) / 2, (height - side) / 2, side, side);
 
@@ -332,7 +346,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     switch ( event->key() )
     {
     case Qt::Key_Up:
-        cout << "up" << endl;
         pulsaciones.insert((Qt::Key_Up));
         break;
     case Qt::Key_Down:
@@ -345,7 +358,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
         pulsaciones.insert((Qt::Key_Right));
         break;
     case Qt::Key_W:
-        cout << "w" << endl;
         pulsaciones.insert((Qt::Key_W));
         break;
     case Qt::Key_S:
@@ -398,77 +410,59 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 }
 
 void GLWidget::accions_timer(){
-    /*
-    if (pulsaciones.contains(Qt::Key_Up)){
-        pulsaciones.remove((Qt::Key_Up));
-        esc->accelera_cotxe1();
-        acceleracio_lliberada_cotxe_1 = false;
-    }else if (pulsaciones.contains(Qt::Key_Down)){
-        pulsaciones.remove((Qt::Key_Down));
-        esc->desaccelera_cotxe1();
-        acceleracio_lliberada_cotxe_1 = false;
-    }else if (pulsaciones.contains(Qt::Key_Left)){
-        pulsaciones.remove((Qt::Key_Left));
-        esc->gira_esquerra_cotxe1();
-        gir_lliberat_cotxe_1 = false;
-    }else if(pulsaciones.contains(Qt::Key_Right)){
-        pulsaciones.remove((Qt::Key_Right));
-        esc->gira_dreta_cotxe1();
-        gir_lliberat_cotxe_1 = false;
-    }else if(!gir_lliberat_cotxe_1){
-        gir_lliberat_cotxe_1 = true;
-        esc->llibera_gir_cotxe1();
-    }else if(!acceleracio_lliberada_cotxe_1){
-        acceleracio_lliberada_cotxe_1 = true;
-        esc->llibera_acceleracio_cotxe1();
-    }
-    */
-    /*
-    if (pulsaciones.contains(Qt::Key_Up)){
-        esc->accelera_cotxe1();
-        acceleracio_lliberada_cotxe_1 = false;
-    }else if (pulsaciones.contains(Qt::Key_Down)){
-        esc->desaccelera_cotxe1();
-        acceleracio_lliberada_cotxe_1 = false;
-    }else if(!acceleracio_lliberada_cotxe_1){
-        acceleracio_lliberada_cotxe_1 = true;
-        esc->llibera_acceleracio_cotxe1();
-    }
-
-    if (pulsaciones.contains(Qt::Key_Left)){
-        esc->gira_esquerra_cotxe1();
-        gir_lliberat_cotxe_1 = false;
-    }else if(pulsaciones.contains(Qt::Key_Right)){
-        esc->gira_dreta_cotxe1();
-        gir_lliberat_cotxe_1 = false;
-    }else if(!gir_lliberat_cotxe_1){
-        gir_lliberat_cotxe_1 = true;
-        esc->llibera_gir_cotxe1();
-    }
-*/
+    int cotxe = 0;
 
     if (pulsaciones.contains(Qt::Key_W)){
-        esc->accelera_cotxe1();
+        esc->accelera_cotxe(cotxe);
         acceleracio_lliberada_cotxe_1 = false;
     }else if (pulsaciones.contains(Qt::Key_S)){
-        esc->desaccelera_cotxe1();
+        esc->desaccelera_cotxe(cotxe);
         acceleracio_lliberada_cotxe_1 = false;
     }else if(!acceleracio_lliberada_cotxe_1){
         acceleracio_lliberada_cotxe_1 = true;
-        esc->llibera_acceleracio_cotxe1();
+        esc->llibera_acceleracio_cotxe(cotxe);
     }
 
     if (pulsaciones.contains(Qt::Key_A)){
-        esc->gira_esquerra_cotxe1();
+        esc->gira_esquerra_cotxe(cotxe);
         gir_lliberat_cotxe_1 = false;
     }else if(pulsaciones.contains(Qt::Key_D)){
-        esc->gira_dreta_cotxe1();
+        esc->gira_dreta_cotxe(cotxe);
         gir_lliberat_cotxe_1 = false;
     }else if(!gir_lliberat_cotxe_1){
         gir_lliberat_cotxe_1 = true;
-        esc->llibera_gir_cotxe1();
+        esc->llibera_gir_cotxe(cotxe);
     }
 
+
+
+/*
+
+    cotxe = 1;
+
+    if (pulsaciones.contains(Qt::Key_Up)){
+        esc->accelera_cotxe(cotxe);
+        acceleracio_lliberada_cotxe_2 = false;
+    }else if (pulsaciones.contains(Qt::Key_Down)){
+        esc->desaccelera_cotxe(cotxe);
+        acceleracio_lliberada_cotxe_2 = false;
+    }else if(!acceleracio_lliberada_cotxe_2){
+        acceleracio_lliberada_cotxe_2 = true;
+        esc->llibera_acceleracio_cotxe(cotxe);
+    }
+
+    if (pulsaciones.contains(Qt::Key_Left)){
+        esc->gira_esquerra_cotxe(cotxe);
+        gir_lliberat_cotxe_2 = false;
+    }else if(pulsaciones.contains(Qt::Key_Right)){
+        esc->gira_dreta_cotxe(cotxe);
+        gir_lliberat_cotxe_2 = false;
+    }else if(!gir_lliberat_cotxe_2){
+        gir_lliberat_cotxe_2 = true;
+        esc->llibera_gir_cotxe(cotxe);
+    }
+
+*/
     esc->temps();
     updateGL();
 }

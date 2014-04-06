@@ -5,6 +5,7 @@ using namespace std;
 escena::escena()
 
 {
+
     // Capsa minima contenidora provisional: S'ha de fer un recorregut dels objectes de l'escenes
     capsaMinima.pmin[0] = -25;
     capsaMinima.pmin[1] = -25;
@@ -108,44 +109,85 @@ void escena::reset() {
     this->CapsaMinCont3DEscena();
 
     //inicio la camera
-    // HAY QUE CAMBIAR LOS DOS PRIMEROS PARAMETROS
-    // POR LOS VALORES DEL VIEWPORT SACADOS DEL GLWIDGET
+
     cameraPanoramica->ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
 
 }
 
-void escena::accelera_cotxe1(){
-    if(cotxe_1!=NULL){
-        cotxe_1->forward();
-    }
-}
-void escena::desaccelera_cotxe1(){
-    if(cotxe_1!=NULL){
-        cotxe_1->backward();
-    }
+void escena::accelera_cotxe(int num){
+     Cotxe * cotxe;
+     if(num == 0)
+         cotxe = cotxe_1;
+     else if(num == 1)
+         cotxe = cotxe_2;
+
+     if(cotxe != NULL)
+        cotxe->forward();
 }
 
-void escena::gira_dreta_cotxe1(){
-    if(cotxe_1!=NULL){
-        cotxe_1->turnright();
-    }
+void escena::desaccelera_cotxe(int num){
+    Cotxe * cotxe;
+    if(num == 0)
+        cotxe = cotxe_1;
+    else if(num == 1)
+        cotxe = cotxe_2;
+
+
+    if(cotxe != NULL)
+        cotxe->backward();
+
 }
 
-void escena::gira_esquerra_cotxe1(){
-    if(cotxe_1!=NULL){
-        cotxe_1->turnleft();
-    }
-}
-void escena::llibera_gir_cotxe1(){
-    if(cotxe_1!=NULL){
-        cotxe_1->llibera_gir();
-    }
+void escena::gira_dreta_cotxe(int num){
+    Cotxe * cotxe;
+    if(num == 0)
+        cotxe = cotxe_1;
+    else if(num == 1)
+        cotxe = cotxe_2;
+
+
+    if(cotxe != NULL)
+        cotxe->turnright();
+
 }
 
-void escena::llibera_acceleracio_cotxe1(){
-    if(cotxe_1!=NULL){
-        cotxe_1->llibera_acceleracio();
-    }
+void escena::gira_esquerra_cotxe(int num){
+    Cotxe * cotxe;
+    if(num == 0)
+        cotxe = cotxe_1;
+    else if(num == 1)
+        cotxe = cotxe_2;
+
+
+    if(cotxe != NULL)
+        cotxe->turnleft();
+
+}
+
+void escena::llibera_gir_cotxe(int num){
+    Cotxe * cotxe;
+    if(num == 0)
+        cotxe = cotxe_1;
+    else if(num == 1)
+        cotxe = cotxe_2;
+
+
+    if(cotxe != NULL)
+        cotxe->llibera_gir();
+
+}
+
+void escena::llibera_acceleracio_cotxe(int num){
+    Cotxe * cotxe;
+    if(num == 0)
+        cotxe = cotxe_1;
+    else if(num == 1)
+        cotxe = cotxe_2;
+
+
+    if(cotxe != NULL)
+        cotxe->llibera_acceleracio();
+
 }
 /**
  * Retorna el punt y origen de l'escena
@@ -166,6 +208,11 @@ void escena::setWidthGLWidget(float w){
 
 void escena::setHeightGLWidget(float h){
     this->heightGLWidget = h;
+}
+
+void escena::setWidgetSize(float width, float height){
+    this->widthGLWidget = width;
+    this->heightGLWidget = height;
 }
 
 void escena::temps(){
