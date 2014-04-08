@@ -92,7 +92,7 @@ void escena::draw() {
         terra->draw();
 }
 
-void escena::reset() {
+void escena::reset(QGLShaderProgram *program) {
 
     // posem tots els element al origin
     float yorig = terra!=NULL ? terra->getYOrig() : 0;
@@ -110,7 +110,8 @@ void escena::reset() {
 
     //inicio la camera
 
-    cameraPanoramica->ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
+    cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
+    cameraPanoramica.toGPU(program);
 
 }
 

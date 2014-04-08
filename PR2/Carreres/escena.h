@@ -34,7 +34,7 @@ public:
     void aplicaTG(mat4 m);
 
     void aplicaTGCentrat(mat4 m);
-    void reset();
+    void reset(QGLShaderProgram *program);
 
     void draw();
     void CapsaMinCont3DEscena();
@@ -52,8 +52,8 @@ public:
 
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
-    Camera *cameraPanoramica;
-    Camera *cameraTerceraPersona;
+    Camera cameraPanoramica;
+    Camera cameraTerceraPersona;
 
     Terra *terra;
     void temps();

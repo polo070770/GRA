@@ -4,7 +4,7 @@ Camera::Camera()
 {
     // view system
     vs.vrp = vec4(0.0, 0.0, 0.0, 1.0); // view reference point
-    vs.obs = vec4(0.0, 0.0, 200.0, 1.0); // posicio de l'obs
+    vs.obs = vec4(0.0, 200.0, 0, 1.0); // posicio de l'obs
 
     // angles de gir del sistema de coordenades del obs
     vs.angx = 0;
@@ -35,12 +35,18 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     vs.vrp[1] = centre[1];
     vs.vrp[2] = centre[2];
 
+/*
+    vs.vrp[0] = 0;
+    vs.vrp[1] = 0;
+    vs.vrp[2] = 0;
+*/
     //capsa 2d del viewport
     //el view port sera el tamaño del glwidget, la ventana
     vp.a = a;
     vp.h = h;
     vp.pmin[0] = 0;
     vp.pmin[1] = 0;
+    vs.obs = CalculObs(vs.vrp, 500, vs.angx, vs.angy);
 
 }
 
@@ -50,12 +56,15 @@ void Camera::toGPU(QGLShaderProgram *program)
 {
  // CAL IMPLEMENTAR
 
+    this->setModelView(program, modView);
+    this->setProjection(program, proj);
+    /*
     model_view = program->uniformLocation("model_view");
     glUniformMatrix4fv(model_view, 1, GL_TRUE, modView);
 
     projection = program->uniformLocation("projection");
     glUniformMatrix4fv(projection, 1, GL_TRUE, proj);
-
+    */
 }
 
 
@@ -70,8 +79,11 @@ void Camera::CalculaMatriuModelView()
 
     // vec4 ang = vec4(vs.angx, vs.angy, vs.angz, 0.0);
 
-    vec4 upVector = vec4(0,1,0,1); // vista TOP
-    modView = LookAt(vs.obs, vs.vrp, upVector);
+    vec3 upVector = CalculVup(vs.angx, vs.angy, vs.angz);
+    vec4 upVector1 = vec4(upVector.x,upVector.y,upVector.z,0);
+
+
+    modView = LookAt(vs.obs, vs.vrp, upVector1);
 }
 
 void Camera::CalculaMatriuProjection()

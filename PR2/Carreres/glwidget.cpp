@@ -162,11 +162,11 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
 void GLWidget::newObjecte(Objecte * obj)
 {
-   // adaptaObjecteTamanyWidget(obj); // se supone que ya no es necesario
+    //adaptaObjecteTamanyWidget(obj); // se supone que ya no es necesario
     obj->toGPU(program);
     esc->addObjecte(obj);
-
-    updateGL(); // actualiza display
+    resetView();
+    //updateGL(); // actualiza display
 }
 
 void GLWidget::newObstacle(QString fichero, int nombre)
@@ -230,7 +230,7 @@ void GLWidget::resetView()
     yRot = 0;
     zRot = 0;
 
-    esc->reset();
+    esc->reset(program);
 
     // Metode a modificar per a adaptar tots els objectes de l'escena.
 
@@ -331,11 +331,11 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
     if (event->buttons() & Qt::LeftButton) {
 
-        //setXRotation(xRot + 8 * dy);
-        //setYRotation(yRot + 8 * dx);
+        setXRotation(xRot + 8 * dy);
+        setYRotation(yRot + 8 * dx);
     } else if (event->buttons() & Qt::RightButton) {
-        //setYRotation(xRot + 8 * dx);
-        //setZRotation(zRot + 8 * dy);
+        setYRotation(xRot + 8 * dx);
+        setZRotation(zRot + 8 * dy);
     }
     lastPos = event->pos();
 }
@@ -436,7 +436,7 @@ void GLWidget::accions_timer(){
 
 
 
-/*
+
 
     cotxe = 1;
 
@@ -462,7 +462,7 @@ void GLWidget::accions_timer(){
         esc->llibera_gir_cotxe(cotxe);
     }
 
-*/
+
     esc->temps();
     updateGL();
 }
