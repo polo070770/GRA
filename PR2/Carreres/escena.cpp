@@ -106,12 +106,12 @@ void escena::reset(QGLShaderProgram *program) {
         terra->make();
 
     //calculo la capsa minima
-    this->CapsaMinCont3DEscena();
+    //this->CapsaMinCont3DEscena();
 
     //inicio la camera
 
-    cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
-    cameraPanoramica.toGPU(program);
+    //cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
+    //cameraPanoramica.toGPU(program);
 
 }
 

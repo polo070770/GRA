@@ -162,11 +162,11 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
 void GLWidget::newObjecte(Objecte * obj)
 {
-    //adaptaObjecteTamanyWidget(obj); // se supone que ya no es necesario
+    adaptaObjecteTamanyWidget(obj); // se supone que ya no es necesario
     obj->toGPU(program);
     esc->addObjecte(obj);
-    resetView();
-    //updateGL(); // actualiza display
+    //resetView();
+    updateGL(); // actualiza display
 }
 
 void GLWidget::newObstacle(QString fichero, int nombre)
@@ -234,7 +234,7 @@ void GLWidget::resetView()
 
     // Metode a modificar per a adaptar tots els objectes de l'escena.
 
-    /*
+
     vector <Cotxe *> listado_cotxes = esc->getCotxes();
 
     for(int i = 0; i < listado_cotxes.size(); i++){
@@ -250,7 +250,7 @@ void GLWidget::resetView()
 
     if (esc->terra != NULL)
         adaptaObjecteTamanyWidget(esc->terra);
-    */
+
     updateGL();
 }
 
