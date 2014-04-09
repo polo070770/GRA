@@ -2,9 +2,10 @@
 
 Camera::Camera()
 {
+
     // view system
     vs.vrp = vec4(0.0, 0.0, 0.0, 1.0); // view reference point
-    vs.obs = vec4(0.0, 200.0, 0, 1.0); // posicio de l'obs
+    vs.obs = vec4(0.0, 0.0, 50.0, 1.0); // posicio de l'obs
 
     // angles de gir del sistema de coordenades del obs
     vs.angx = 0;
@@ -17,12 +18,15 @@ Camera::Camera()
     vp.pmin[0] = 0;
     vp.pmin[1] = 0;
 
-    piram.proj = PARALLELA;
+    piram.proj = PERSPECTIVA;
     piram.d = 100;
+
+    CalculaMatriuModelView();
 }
 
 void Camera::ini(int a, int h, Capsa3D capsaMinima)
 {
+    /*
     // Calcul del vrp com el centre de la capsa minima contenedora 3D
     // CAL IMPLEMENTAR
     // CODI A MODIFICAR
@@ -30,23 +34,35 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     // view system, view reference point
     // lo que quiero mirar, mirare en el centro
     // de la escena
+
+
+
+   // vs.vrp[0] = 0;
+    //vs.vrp[1] = 0;
+    //vs.vrp[2] = 0;
+
+
+    //capsa 2d del viewport
+    //el view port sera el tamaño del glwidget, la ventana
+
+    vs.obs = CalculObs(vs.vrp, 500, vs.angx, vs.angy);
+    CalculaMatriuModelView();
+
+    */
+
+    vp.a = capsaMinima.a;
+    vp.h = capsaMinima.h;
+    vp.pmin[0] = 0;
+    vp.pmin[1] = 0;
+
     vec3 centre = calculCentreCapsa(capsaMinima);
     vs.vrp[0] = centre[0];
     vs.vrp[1] = centre[1];
     vs.vrp[2] = centre[2];
 
-/*
-    vs.vrp[0] = 0;
-    vs.vrp[1] = 0;
-    vs.vrp[2] = 0;
-*/
-    //capsa 2d del viewport
-    //el view port sera el tamaño del glwidget, la ventana
-    vp.a = a;
-    vp.h = h;
-    vp.pmin[0] = 0;
-    vp.pmin[1] = 0;
-    vs.obs = CalculObs(vs.vrp, 500, vs.angx, vs.angy);
+    CalculaMatriuModelView();
+    CalculaMatriuProjection();
+
 
 }
 
@@ -75,15 +91,20 @@ void Camera::toGPU(QGLShaderProgram *program)
 void Camera::CalculaMatriuModelView()
 {
     // CAL IMPLEMENTAR
-    // modView = identity();
+    mat4 vrp_origen = Translate(-vs.vrp);
+    vec4 d = vec4(0.0,0.0,50.0, 0.0);
 
+    modView = Translate(-d) * RotateZ(-vs.angz) * RotateY(0) * RotateX(-vs.angx) * vrp_origen;
+    //modView = identity();
+    //modView *=Translate(0.0,0.0,-10);
     // vec4 ang = vec4(vs.angx, vs.angy, vs.angz, 0.0);
-
+/*
     vec3 upVector = CalculVup(vs.angx, vs.angy, vs.angz);
     vec4 upVector1 = vec4(upVector.x,upVector.y,upVector.z,0);
 
 
     modView = LookAt(vs.obs, vs.vrp, upVector1);
+    */
 }
 
 void Camera::CalculaMatriuProjection()
@@ -105,7 +126,7 @@ void Camera::CalculaMatriuProjection()
     // de profundidad: near y far
     // se definen con dant y dpost, atributos de piram
 
-    proj = Ortho(0.0, 50.0, 0.0, 50.0, piram.dant, piram.dpost);
+    proj = Ortho(vp.pmin[0], vp.a, vp.pmin[1], vp.h, piram.dant, piram.dpost);
 
 }
 

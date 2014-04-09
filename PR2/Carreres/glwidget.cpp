@@ -230,8 +230,6 @@ void GLWidget::resetView()
     yRot = 0;
     zRot = 0;
 
-    esc->reset(program);
-
     // Metode a modificar per a adaptar tots els objectes de l'escena.
 
 
@@ -250,6 +248,8 @@ void GLWidget::resetView()
 
     if (esc->terra != NULL)
         adaptaObjecteTamanyWidget(esc->terra);
+
+    esc->reset(program);
 
     updateGL();
 }
@@ -433,9 +433,6 @@ void GLWidget::accions_timer(){
         gir_lliberat_cotxe_1 = true;
         esc->llibera_gir_cotxe(cotxe);
     }
-
-
-
 
 
     cotxe = 1;

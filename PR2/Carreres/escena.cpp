@@ -110,8 +110,8 @@ void escena::reset(QGLShaderProgram *program) {
 
     //inicio la camera
 
-    //cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
-    //cameraPanoramica.toGPU(program);
+    cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
+    cameraPanoramica.toGPU(program);
 
 }
 
