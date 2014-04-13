@@ -80,13 +80,19 @@ public:
 
     void rotate(Capsa3D c);
     void pan();
-    void zoom();
+    void zoom(double dy);
 
     VisuSystem vs;      /* Sistema de visualitzacio  */
     PiramProj piram;    /* Piramide de visualitzacio */
     Capsa2D wd;	      /* Window                    */
     Capsa2D vp;       /* Viewport                  */
 
+    void setAngX_Vup(double delta);
+    void setAngY_Vup(double delta);
+    void setAngZ_Vup(double delta);
+
+    void panning_2D_X(double delta);
+    void panning_2D_Y(double delta);
 
 private:
     void VertexCapsa3D(Capsa3D capsaMinima, vec4 vaux[8]);

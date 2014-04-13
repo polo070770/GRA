@@ -34,7 +34,7 @@ public:
     void aplicaTG(mat4 m);
 
     void aplicaTGCentrat(mat4 m);
-    void reset(QGLShaderProgram *program);
+    void reset();
 
     void draw();
     void CapsaMinCont3DEscena();
@@ -47,8 +47,6 @@ public:
     void gira_esquerra_cotxe(int num);
     void llibera_gir_cotxe(int num);
     void llibera_acceleracio_cotxe(int num);
-
-
 
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
@@ -67,6 +65,16 @@ public:
     void setWidthGLWidget(float w);
     void setHeightGLWidget(float h);
 
+    void camera_toGPU(QGLShaderProgram *program);
+
+    void mou_EixXCamera(int angle);
+    void mou_EixYCamera(int angle);
+    void mou_EixZCamera(int angle);
+
+    void zoom_camera(double z);
+
+    void panning_dx(double delta);
+    void panning_dy(double delta);
 
 private:
     float widthGLWidget;

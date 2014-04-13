@@ -10,9 +10,9 @@ escena::escena()
     capsaMinima.pmin[0] = -25;
     capsaMinima.pmin[1] = -25;
     capsaMinima.pmin[2] = -25;
-    capsaMinima.a = 25;
-    capsaMinima.h = 25;
-    capsaMinima.p = 25;
+    capsaMinima.a = 50;
+    capsaMinima.h = 50;
+    capsaMinima.p = 50;
 
     terra = NULL;
     cotxe_1 = NULL;
@@ -57,7 +57,6 @@ void escena::CapsaMinCont3DEscena()
         this->capsaMinima = cotxe_1->calculCapsa3D();
     }
 
-
 }
 
 void escena::aplicaTG(mat4 m) {
@@ -92,7 +91,7 @@ void escena::draw() {
         terra->draw();
 }
 
-void escena::reset(QGLShaderProgram *program) {
+void escena::reset() {
 
     // posem tots els element al origin
     float yorig = terra!=NULL ? terra->getYOrig() : 0;
@@ -106,13 +105,15 @@ void escena::reset(QGLShaderProgram *program) {
         terra->make();
 
     //calculo la capsa minima
-    //this->CapsaMinCont3DEscena();
+    this->CapsaMinCont3DEscena();
 
     //inicio la camera
-
     cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
-    cameraPanoramica.toGPU(program);
 
+}
+
+void escena::camera_toGPU(QGLShaderProgram *program){
+    cameraPanoramica.toGPU(program);
 }
 
 void escena::accelera_cotxe(int num){
@@ -172,7 +173,6 @@ void escena::llibera_gir_cotxe(int num){
     else if(num == 1)
         cotxe = cotxe_2;
 
-
     if(cotxe != NULL)
         cotxe->llibera_gir();
 
@@ -214,6 +214,31 @@ void escena::setHeightGLWidget(float h){
 void escena::setWidgetSize(float width, float height){
     this->widthGLWidget = width;
     this->heightGLWidget = height;
+}
+
+void escena::mou_EixXCamera(int angle){
+    cameraPanoramica.setAngX_Vup(angle);
+
+}
+void escena::mou_EixYCamera(int angle){
+    cameraPanoramica.setAngY_Vup(angle);
+
+}
+void escena::mou_EixZCamera(int angle){
+    cameraPanoramica.setAngZ_Vup(angle);
+
+}
+
+void escena::zoom_camera(double dy){
+    cameraPanoramica.zoom(dy);
+}
+
+void escena::panning_dx(double delta){
+    cameraPanoramica.panning_2D_X(delta);
+}
+
+void escena::panning_dy(double delta){
+    cameraPanoramica.panning_2D_Y(delta);
 }
 
 void escena::temps(){

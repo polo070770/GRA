@@ -23,7 +23,6 @@ Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble
     yRot = giry;
     zRot = girz;
 
-
     nom = n;
     Index = 0;
 
@@ -47,7 +46,7 @@ Objecte::~Objecte()
  * @param factor
  */
 void Objecte:: escalarFrom1(float factor){
-    cout << "escalo objecte a " << factor << endl;
+
     Capsa3D capsa = calculCapsa3D();
 
     float max = capsa.a;
@@ -62,6 +61,7 @@ void Objecte:: escalarFrom1(float factor){
     mat4 transform = Scale(max,max,max);
 
     aplicaTGCentrat(transform);
+
     // calculem la nova capsa
     calculCapsa3D();
 
@@ -99,8 +99,13 @@ Capsa3D Objecte::calculCapsa3D()
     return capsa;
 }
 
-
-
+point4 Objecte::calculCentre(){
+    centre.x = capsa.pmin.x + (capsa.a / 2);
+    centre.y = capsa.pmin.y + (capsa.h / 2);
+    centre.z = capsa.pmin.z + (capsa.p / 2);
+    centre.w = 1.0;
+    return centre;
+}
 
 void Objecte::aplicaTG(mat4 m)
 {
@@ -130,15 +135,6 @@ void Objecte::aplicaTGPoints(mat4 m)
     }
 
     delete transformed_points;
-}
-
-
-point4 Objecte::calculCentre(){
-    centre.x = capsa.pmin.x + (capsa.a / 2);
-    centre.y = capsa.pmin.y + (capsa.h / 2);
-    centre.z = capsa.pmin.z + (capsa.p / 2);
-    centre.w = 1.0;
-    return centre;
 }
 
 void Objecte::aplicaTGCentrat(mat4 m){
@@ -211,8 +207,6 @@ void Objecte::make(){
     };
     // Recorregut de totes les cares per a posar-les en les estructures de la GPU
     // Cal recorrer l'estructura de l'objecte per a pintar les seves cares
-
-    float llargadaMax = 0;
 
     Index = 0;
 
@@ -340,8 +334,8 @@ void Objecte::readObj(QString filename)
             }
 
             //free(words);
-            }
         }
+    }
 }
 
 

@@ -13,9 +13,6 @@ GLWidget::GLWidget(QWidget *parent)
     setFocusPolicy( Qt::StrongFocus );
     esc = new escena();
 
-
-
-
     xRot = 0;
     yRot = 0;
     zRot = 0;
@@ -41,8 +38,10 @@ GLWidget::GLWidget(QWidget *parent)
     gir_lliberat_cotxe_2 = false;
 
     // cambiamos los valores del tamaño en la escena
-    esc->setWidthGLWidget(this->size().width());
-    esc->setHeightGLWidget(this->size().height());
+    int w = this->size().width();
+    int h = this->size().height();
+    esc->setWidthGLWidget(w);
+    esc->setHeightGLWidget(h);
 }
 
 GLWidget::~GLWidget()
@@ -59,9 +58,9 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
         GLenum       type;
         GLchar*      source;
     }  shaders[2] = {
-        { vShaderFile, GL_VERTEX_SHADER, NULL },
-        { fShaderFile, GL_FRAGMENT_SHADER, NULL }
-    };
+    { vShaderFile, GL_VERTEX_SHADER, NULL },
+    { fShaderFile, GL_FRAGMENT_SHADER, NULL }
+};
 
     QGLShader *vshader = new QGLShader(QGLShader::Vertex, this);
     QGLShader *fshader = new QGLShader(QGLShader::Fragment, this);
@@ -130,8 +129,6 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
     float factorAdapta = 2. / 50; // longitud real de la escena / longitud logica de la escena
 
-    cout << "escalo objecte a " << factorAdapta << endl;
-
     point4 centre = obj->calculCentre();
 
     mat4 traslada_centre = Translate(-centre);
@@ -146,26 +143,17 @@ void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj) {
 
     mat4 transformAdapta = traslada_relatiu * escala * traslada_centre;
 
-    if (dynamic_cast<Cotxe*>(obj)){
-
-        // Si es un coche el objeto a adaptar, se ha de llamar a su propio
-        // aplica TG para que lo aplique a sus componentes
-        ((Cotxe*) obj)->aplicaTG(transformAdapta);
-
-    }else{
-
-        obj->aplicaTG(transformAdapta);
-
-    }
+    // Atencion aqui llega un Objecte, que puede ser obstacle, cotxe, terra
+    // depende cual, llamara a su propio aplicaTG o al de Objecte
+    obj->aplicaTG(transformAdapta);
 
 }
 
 void GLWidget::newObjecte(Objecte * obj)
 {
-    adaptaObjecteTamanyWidget(obj); // se supone que ya no es necesario
+    //adaptaObjecteTamanyWidget(obj); // se supone que ya no es necesario
     obj->toGPU(program);
     esc->addObjecte(obj);
-    //resetView();
     updateGL(); // actualiza display
 }
 
@@ -232,7 +220,6 @@ void GLWidget::resetView()
 
     // Metode a modificar per a adaptar tots els objectes de l'escena.
 
-
     vector <Cotxe *> listado_cotxes = esc->getCotxes();
 
     for(int i = 0; i < listado_cotxes.size(); i++){
@@ -249,8 +236,8 @@ void GLWidget::resetView()
     if (esc->terra != NULL)
         adaptaObjecteTamanyWidget(esc->terra);
 
-    esc->reset(program);
-
+    esc->reset();
+    esc->camera_toGPU(program);
     updateGL();
 }
 
@@ -263,21 +250,20 @@ void GLWidget::paintGL()
     qNormalizeAngle(yRot);
     qNormalizeAngle(zRot);
 
-    mat4 transform = ( RotateX( xRot / 16.0 ) *
-                       RotateY( yRot / 16.0 ) *
-                       RotateZ( zRot / 16.0 ) );
+    //    mat4 transform = ( RotateX( xRot / 16.0 ) *
+    //                       RotateY( yRot / 16.0 ) *
+    //                       RotateZ( zRot / 16.0 ) );
 
-    esc->aplicaTGCentrat(transform);
+    //    esc->aplicaTGCentrat(transform);
+
+    esc->camera_toGPU(program);
     esc->draw();
-
 }
 
 void GLWidget::resizeGL(int width, int height)
 {
     int side = qMin(width, height);
 
-    //esc->setWidthGLWidget(this->size().width());
-    //esc->setHeightGLWidget(this->size().height());
     esc->setWidgetSize(this->size().width(), this->size().height());
 
     glViewport((width - side) / 2, (height - side) / 2, side, side);
@@ -294,20 +280,20 @@ void GLWidget::resizeGL(int width, int height)
 
 void GLWidget::setXRotation(int angle)
 {
+
     qNormalizeAngle(angle);
-    if (angle != xRot) {
-        xRot = angle;
-        updateGL();
-    }
+    esc->mou_EixXCamera(angle);
+    updateGL();
+
 }
 
 void GLWidget::setYRotation(int angle)
 {
+
     qNormalizeAngle(angle);
-    if (angle != yRot) {
-        yRot = angle;
-        updateGL();
-    }
+    esc->mou_EixYCamera(angle);
+    updateGL();
+
 }
 
 void GLWidget::setZRotation(int angle)
@@ -317,6 +303,33 @@ void GLWidget::setZRotation(int angle)
         zRot = angle;
         updateGL();
     }
+}
+
+void GLWidget::zoom(double in, int dy){
+
+    esc->zoom_camera(in * abs(dy));
+
+    updateGL();
+}
+
+void GLWidget::pan(int dx, int dy){
+
+    if (dx > 0){
+        // RIGHT PANNING
+        esc->panning_dx(0.25);
+    }else if(dx < 0){
+        // LEFT PANNING
+        esc->panning_dx(-0.25);
+    }
+
+    if (dy > 0){
+        // UP PANNING
+        esc->panning_dy(0.25);
+    }else if(dy < 0){
+        // DOWN PANNING
+        esc->panning_dy(-0.25);
+    }
+
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
@@ -330,13 +343,26 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     int dy = event->y() - lastPos.y();
 
     if (event->buttons() & Qt::LeftButton) {
-
-        setXRotation(xRot + 8 * dy);
-        setYRotation(yRot + 8 * dx);
-    } else if (event->buttons() & Qt::RightButton) {
+        // Es canvien els angles de visio de la camera segons el desplacament
+        // Si hi ha un desplacament en X del viewport, es canviara l angle Y
+        // Si hi ha un desplacament en Y del viewport, es canviara l angle X
         setYRotation(xRot + 8 * dx);
-        setZRotation(zRot + 8 * dy);
+        setXRotation(yRot + 8 * dy);
+
+    } else if (event->buttons() & Qt::RightButton) {
+
+        // panning
+        pan(dx, dy);
+
+    } else if (event->buttons() & Qt::MidButton) {
+
+        // zoom
+        if (lastPos.y() > event->y())
+            zoom(-0.05, dy);
+        else
+            zoom(0.05, dy);
     }
+
     lastPos = event->pos();
 }
 

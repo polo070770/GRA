@@ -43,6 +43,10 @@ protected:
     void setYRotation(int angle);
     void setZRotation(int angle);
 
+    void pan(int dx, int dy);
+
+    void zoom(double in, int dy);
+
 private:
     escena *esc;
 
@@ -78,6 +82,7 @@ private:
 
     // Metode per adaptar l'escena al tamany del widget
     void adaptaObjecteTamanyWidget(Objecte *obj);
+
 private slots:
     //controla accions a partir del timer
     void accions_timer();

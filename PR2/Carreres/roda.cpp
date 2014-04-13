@@ -20,7 +20,6 @@ Roda::Roda(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
 
 }
 
-
 void Roda::aplicaTGCentrat(mat4 m){
     // calculamos el centro
     calculCapsa3D();
@@ -28,7 +27,6 @@ void Roda::aplicaTGCentrat(mat4 m){
 
     // tenim en conte que es posible que les rodes estiguin rotades respecte les y
     mat4 transform_centrada = ( Translate(centre) * RotateY(angle_gir) * m * RotateY(-angle_gir) * Translate(-centre) );
-
 
     // aplicmos las transformaciones
     aplicaTG(transform_centrada);

@@ -77,7 +77,7 @@ public:
     virtual point4 calculCentre();
 
     // Aplica una TG qualsevol a un objecte
-    void aplicaTG(mat4 m);
+    virtual void aplicaTG(mat4 m);
     void aplicaTGPoints(mat4 m);
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);

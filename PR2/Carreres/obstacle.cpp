@@ -17,7 +17,7 @@ Obstacle::Obstacle(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     zRot = girz;
     readObj(n);
 
-   make();
+    make();
 
 }
 
@@ -26,19 +26,13 @@ void Obstacle::make(){
     //cridem al make del pare
     Objecte::make();
 
-    escalarFrom1(tam); // escalem l'obstacle a mida
-    // calculem la nova capsa
-    calculCapsa3D();
+    escalarFrom1(this->tam); // escalem l'obstacle a mida
 
     //centre del cotxe
     point4 centre = calculCentre();
 
-    // el movem al centre i despres al desti
-    mat4 transform = Translate(-centre);
-    // apliquem la transformacio, no cal que sigui centrada
-    this->aplicaTG(transform);
-    // calculem la nova capsa
-    calculCapsa3D();
+    // apliquem la transformacio al centre, no cal que sigui centrada
+    this->aplicaTG(Translate(-centre));
 
     //movem l'objecte al desti
     //invertimos la direccion
