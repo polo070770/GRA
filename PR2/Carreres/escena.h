@@ -51,8 +51,9 @@ public:
 
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
-    Camera cameraPanoramica;
-    Camera cameraTerceraPersona;
+    Camera camera;
+    //Camera cameraPanoramica;
+    //Camera cameraTerceraPersona;
 
     Terra *terra;
     void temps();
@@ -77,11 +78,12 @@ public:
     void panning_dx(double delta);
     void panning_dy(double delta);
 
-    void resetCameraPanoramica();
+    void resetCameraTop();
     void initLookAtCotxe();
-
+    void initLookAtCockpit();
 private:
     bool terceraPersona;
+    bool primeraPersona;
     float widthGLWidget;
     float heightGLWidget;
 

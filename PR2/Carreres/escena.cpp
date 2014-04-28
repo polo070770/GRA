@@ -21,6 +21,7 @@ escena::escena()
     widthGLWidget = 50.0;
     heightGLWidget = 50.0;
     terceraPersona = false;
+    primeraPersona = false;
 
 }
 
@@ -158,14 +159,13 @@ void escena::reset() {
     //calculo la capsa minima
     this->CapsaMinCont3DEscena();
 
-    terceraPersona = false;
     //inicio la camera
-    resetCameraPanoramica();
+    resetCameraTop();
 
 }
 
 void escena::camera_toGPU(QGLShaderProgram *program){
-    cameraPanoramica.toGPU(program);
+    camera.toGPU(program);
 }
 
 void escena::accelera_cotxe(int num){
@@ -267,51 +267,68 @@ void escena::setWidgetSize(float width, float height){
     this->widthGLWidget = width;
     this->heightGLWidget = height;
 
-    cameraPanoramica.setViewport(0,0,width, height);
+    camera.setViewport(0,0,width, height);
 }
 
 void escena::mou_EixXCamera(int angle){
-    cameraPanoramica.setAngX_Vup(angle);
+    camera.setAngX_Vup(angle);
 
 }
 void escena::mou_EixYCamera(int angle){
-    cameraPanoramica.setAngY_Vup(angle);
+    camera.setAngY_Vup(angle);
 
 }
 void escena::mou_EixZCamera(int angle){
-    cameraPanoramica.setAngZ_Vup(angle);
+    camera.setAngZ_Vup(angle);
 
 }
 
 void escena::zoom_camera(double dy){
-    cameraPanoramica.zoom(dy);
+    camera.zoom(dy);
 }
 
 void escena::panning_dx(double delta){
-    cameraPanoramica.panning_2D_X(delta);
+    camera.panning_2D_X(delta);
 }
 
 void escena::panning_dy(double delta){
-    cameraPanoramica.panning_2D_Y(delta);
+    camera.panning_2D_Y(delta);
 }
 
 void escena::temps(){
     cotxes.temps();
     if(terceraPersona){
-        cameraPanoramica.actualitzaCameraThirdPerson(cotxe_1->calculCapsa3D());
+        camera.actualitzaCameraThirdPerson(cotxe_1->calculCapsa3D());
+    }else if(primeraPersona){
+        camera.actualitzaCameraCockpit(cotxe_1->calculCapsa3D());
     }
 }
 
-void escena::resetCameraPanoramica(){
-    cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
-    //cameraPanoramica.resetPanoramica(this->capsaMinima);
+void escena::resetCameraTop(){
+    terceraPersona = false;
+    primeraPersona = false;
+    camera.ini(this->widthGLWidget, this->heightGLWidget,
+                         this->capsaMinima, this->terceraPersona);
+    camera.resetTopView();
 
 }
 void escena::initLookAtCotxe(){
     if(cotxe_1 != NULL){
         terceraPersona = true;
-        cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->cotxe_1->calculCapsa3D());
-        cameraPanoramica.resetLookCotxe(this->cotxe_1->calculCapsa3D());
+        primeraPersona = false;
+        camera.ini(this->widthGLWidget, this->heightGLWidget,
+                             this->cotxe_1->calculCapsa3D(), this->terceraPersona);
+        camera.resetLookCotxe(this->cotxe_1->calculCapsa3D());
+    }
+}
+
+void escena::initLookAtCockpit(){
+    if(cotxe_1 != NULL){
+        terceraPersona = false;
+        primeraPersona = true;
+        camera.ini(this->widthGLWidget, this->heightGLWidget,
+                             this->cotxe_1->calculCapsa3D(), this->primeraPersona);
+        camera.resetLookCockpit(this->cotxe_1->calculCapsa3D());
     }
 }
 

@@ -50,7 +50,7 @@ public:
     explicit Camera();
     ~Camera() {}
 
-    void ini(int a, int h, Capsa3D c);
+    void ini(int a, int h, Capsa3D c, bool person);
 
     void toGPU(QGLShaderProgram *program);
 
@@ -61,6 +61,7 @@ public:
     void CalculWindowAmbRetallat();
 
     vec4 CalculObs(vec4 vrp, double d, double angx, double angy);
+    vec4 CalculObs2(vec4 obs, double d, double angx, double angy);
     vec3 CalculVup(double angx, double angy, double angz);
 
     void CreaMatSiv(mat4 &MSIV);
@@ -87,9 +88,11 @@ public:
     Capsa2D wd;	      /* Window                    */
     Capsa2D vp;       /* Viewport                  */
 
-    void resetPanoramica(Capsa3D capsaMon);
+    void resetTopView();
     void resetLookCotxe(Capsa3D capsaCotxe);
+    void resetLookCockpit(Capsa3D capsaCotxe);
     void actualitzaCameraThirdPerson(Capsa3D capsaCotxe);
+    void actualitzaCameraCockpit(Capsa3D capsaCotxe);
     void setAngX_Vup(double delta);
     void setAngY_Vup(double delta);
     void setAngZ_Vup(double delta);
@@ -98,6 +101,7 @@ public:
     void panning_2D_Y(double delta);
 
 private:
+    bool person;
     void VertexCapsa3D(Capsa3D capsaMinima, vec4 vaux[8]);
     vec3 calculCentreCapsa(Capsa3D capsa);
 

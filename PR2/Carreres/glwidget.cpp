@@ -393,6 +393,9 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Escape:
         pulsaciones.insert((Qt::Key_Escape));
         break;
+    case Qt::Key_1:
+        pulsaciones.insert((Qt::Key_1));
+        break;
     }
 
 }
@@ -488,6 +491,10 @@ void GLWidget::accions_timer(){
     if(pulsaciones.contains(Qt::Key_Escape)){
         esc->initLookAtCotxe();
         pulsaciones.remove(Qt::Key_Escape);
+    }
+    if(pulsaciones.contains(Qt::Key_1)){
+        esc->initLookAtCockpit();
+        pulsaciones.remove(Qt::Key_1);
     }
     esc->temps();
     updateGL();

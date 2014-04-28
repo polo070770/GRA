@@ -25,8 +25,9 @@ Camera::Camera()
     CalculaMatriuProjection();
 }
 
-void Camera::ini(int a, int h, Capsa3D capsaMinima)
+void Camera::ini(int a, int h, Capsa3D capsaMinima, bool person)
 {
+    this->person = person;
     // CAL IMPLEMENTAR
     // CODI A MODIFICAR
 
@@ -34,14 +35,19 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     vec3 centre = calculCentreCapsa(capsaMinima);
 
     // view reference point
-    vs.vrp[0] = centre[0];
-    vs.vrp[1] = centre[1];
-    vs.vrp[2] = centre[2];
+    // miramos al centro de la caja
+    vs.vrp.x = centre.x;
+    vs.vrp.y = centre.y;
+    vs.vrp.z = centre.z;
 
-    // angulo de vision de la camara
-    vs.angx = -45;
-    vs.angy = 90;
-    vs.angz = 0;
+    if(!person){
+        piram.proj = PARALLELA;
+    }else{
+        piram.proj = PERSPECTIVA;
+    }
+
+
+
 
     /*
 
@@ -53,14 +59,9 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
                                       -----
     */
 
-    piram.d = 1; ; //distancia observador a pla proj
 
-    // rango de muestreo, entre 0.1 y 100.0
-    piram.dant = 1;
-    piram.dpost = 100;
 
-    piram.alfav = 90;
-    piram.alfah = 120;
+
 
     // VIEWPORT
     // A viewport defines in normalized coordinates a rectangular area
@@ -78,6 +79,11 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     // or smaller than the actual range of data values, depending on
     // whether we want to show all of the data or only part of the data
     CalculWindow(capsaMinima);
+    AjustaAspectRatioWd();
+    //wd.a = capsaMinima.a;
+    //wd.h = capsaMinima.h;
+    //wd.pmin.x = capsaMinima.pmin.x;
+    //wd.pmin.y = capsaMinima.pmin.y;
 
     // A window and a viewport are related by the linear transformation
     // that maps the window onto the viewport. A line segment in the
@@ -89,34 +95,126 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
 }
 
 /**
- *funcio que posa la camara a panoramica inicial
+ *funcio que posa la camara a mode top view
  */
-void Camera::resetPanoramica(Capsa3D capsaMon){
+void Camera::resetTopView(){
 
-    vs.angy = 90;
-    vs.obs.y = capsaMon.h;
+    // definicio top view
+    vs.angx = -90;
+    vs.angy = 0;
+    vs.angz = 0;
+
+    piram.d = 100;  //distancia observador a pla proj
+    // rango de muestreo, entre 0.1 y 100.0
+    piram.dant = 1;
+    piram.dpost = 200;
+
+    piram.alfav = 45;
+    piram.alfah = 45;
+
+
 
     CalculaMatriuModelView();
+    CalculaMatriuProjection();
 }
 
+/**
+  funcio que configura la camara pera a veure en tercera persona
+ * @brief Camera::resetLookCotxe
+ * @param capsaCotxe
+ */
 void Camera::resetLookCotxe(Capsa3D capsaCotxe){
 
-    vs.angx = -45;
-    vs.angy = 90;
+    piram.d = 2 ; //distancia observador a pla proj
+    // rango de muestreo, entre 0.1 y 100.0
+    piram.dant = 3;
+    piram.dpost = 500;
 
-    CalculaMatriuModelView();
+    piram.alfav = 45;
+    piram.alfah = 45;
+
+
+
+    CalculWindow(capsaCotxe);
+    CalculaMatriuProjection();
 }
 
+void Camera::resetLookCockpit(Capsa3D capsaCotxe){
+    double cockpit_camera_offset = 1.5;
+    double cockpit_viewer_offset = 0.4;
+    vec3 centre = calculCentreCapsa(capsaCotxe);
+
+    piram.d = 0 ; //distancia observador a pla proj
+    // rango de muestreo, entre 3 y 500
+    piram.dant = cockpit_camera_offset; // situamos el plano anterior justo donde esta el piloto
+    piram.dpost = 500;
+
+    piram.alfav = 120;
+    piram.alfah = 120;
+
+
+    // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
+    // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
+    vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
+    vs.obs.z = centre.z ;
+    vs.obs.y = capsaCotxe.pmin.y + (3.5 * (capsaCotxe.h / 5));
+
+    // miramos al infinito centrado a nivel de suelo
+    vs.vrp.x = capsaCotxe.pmin.x - 20;
+    vs.vrp.y = capsaCotxe.pmin.y;
+    vs.vrp.z = centre.z;
+
+
+
+    CalculWindow(capsaCotxe);
+    CalculaMatriuProjection();
+
+}
+
+/**
+ *funcio que actualitza les dades de la camara en tercera persona
+ * @brief Camera::actualitzaCameraThirdPerson
+ * @param capsaCotxe
+ */
 void Camera::actualitzaCameraThirdPerson(Capsa3D capsaCotxe){
 
     vec3 centre = calculCentreCapsa(capsaCotxe);
 
-    vs.vrp = vec4(centre.x, centre.y, centre.z, 1.0);
+    // colocamos al observador un poco mas atras del coche, ligeramente por encima y centrado en z
+    vs.obs.x = centre.x + (capsaCotxe.a * 2);
+    vs.obs.z = centre.z ;
+    vs.obs.y = centre.y + (capsaCotxe.h * 2.5);
+
+    // miramos a la parte delantera inferior centrada en z
+    vs.vrp.x = capsaCotxe.pmin.x;
+    vs.vrp.y = capsaCotxe.pmin.y;
+    vs.vrp.z = centre.z;
 
     CalculaMatriuModelView();
 
 }
 
+void Camera::actualitzaCameraCockpit(Capsa3D capsaCotxe){
+
+
+    double cockpit_camera_offset = 1.5;
+    double cockpit_viewer_offset = 0.4;
+    vec3 centre = calculCentreCapsa(capsaCotxe);
+
+    // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
+    // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
+    vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
+    vs.obs.z = centre.z ;
+    vs.obs.y = capsaCotxe.pmin.y + (3.5 * (capsaCotxe.h / 5));
+
+    // miramos al infinito centrado a nivel de suelo
+    vs.vrp.x = capsaCotxe.pmin.x - 20;
+    vs.vrp.y = capsaCotxe.pmin.y;
+    vs.vrp.z = centre.z;
+
+    CalculaMatriuModelView();
+
+}
 void Camera::toGPU(QGLShaderProgram *program)
 {
     // CAL IMPLEMENTAR
@@ -135,7 +233,8 @@ void Camera::CalculaMatriuModelView()
     // cameraTarget = vs.vrp, where you want to look at, in world space
 
     // posicio de l'observador
-    vs.obs = CalculObs(vs.vrp, piram.d, vs.angx, vs.angy);
+    if(!person)
+        vs.obs = CalculObs(vs.vrp, piram.d, vs.angx, vs.angy);
 
     // verticalitat de la camera
     vec3 vup = CalculVup(0.0, 0.0, 0.0);
@@ -166,9 +265,13 @@ void Camera::CalculaMatriuProjection()
     right = wd.pmin.x + wd.a;
     bottom = wd.pmin.y;
     top = wd.pmin.y + wd.h;
+    if(!person){
+        proj = Ortho(left, right, bottom, top, piram.dant, piram.dpost);
+    }else{
+        proj = Frustum(left, right, bottom, top, piram.dant, piram.dpost);
+    }
 
-    //proj = Ortho(left, right, bottom, top, piram.dant, piram.dpost);
-    proj = Frustum(left, right, bottom, top, piram.dant, piram.dpost);
+
     //printm(proj);fflush(stdout);
 
 }
@@ -355,7 +458,7 @@ void Camera::CalculWindow( Capsa3D c)
     }
     wd = CapsaMinCont2DXYVert(vaux2, 8);
 
-    AmpliaWindow(0.2);      /* marges del 20%  */
+    //AmpliaWindow(0.2);      /* marges del 20%  */
     AjustaAspectRatioWd();
 
 }
@@ -473,6 +576,33 @@ vec4 Camera::CalculObs(vec4 vrp, double d, double angx, double angy)
 
 }
 
+vec4 Camera::CalculObs2(vec4 obs, double d, double angx, double angy)
+{
+    vec4 obs2;
+    vec3 v;
+    double norma;
+
+    /* Calcul del vector de visio a partir dels angles */
+
+    v[0] = sin (PI*angy/180.) * cos (PI*angx/180.);
+    v[2] = cos (PI*angy/180.) * cos (PI*angx/180.);
+    v[1]= - sin (PI*angx/180.);
+
+    norma = sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2]);
+
+    v[0] = v[0]/norma;
+    v[1] = v[1]/norma;
+    v[2] = v[2]/norma;
+
+
+    obs2[0] = obs[0] + v[0] *d;
+    obs2[1] = obs[1] + v[1] *d;
+    obs2[2] = obs[2] + v[2] *d;
+    obs2[3] = 1.0;
+
+    return(obs2);
+
+}
 
 vec3 Camera::CalculVup(double angx, double angy, double angz)
 {
