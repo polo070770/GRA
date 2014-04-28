@@ -46,12 +46,15 @@ private:
     void moviment();
     void avansar_rodes();
     void girar_rodes_davanteres();
+    void girar_cotxe(float angle);
     static const int NumVerticesF = 100000;
     static const int NumCares = 300000;
     static const int MAX_VELOCITAT = 330;
     static const int MIN_VELOCITAT = -50;
-    static const float FACTOR_ROSAMENT = 2.9;
-    static const float FACTOR_VELOCITAT = 0.002;
+    //static const float FACTOR_ROSAMENT = 2.9;
+    //static const float FACTOR_VELOCITAT = 0.002;
+    float FACTOR_ROSAMENT;
+    float FACTOR_VELOCITAT;
     static const float MAX_ANGLE = 40.0;
     static const float MIN_ANGLE = -40.0;
     static const float FACTOR_MOTLLA_DIRECCIO = 2.5;

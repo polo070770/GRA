@@ -87,6 +87,9 @@ public:
     Capsa2D wd;	      /* Window                    */
     Capsa2D vp;       /* Viewport                  */
 
+    void resetPanoramica(Capsa3D capsaMon);
+    void resetLookCotxe(Capsa3D capsaCotxe);
+    void actualitzaCameraThirdPerson(Capsa3D capsaCotxe);
     void setAngX_Vup(double delta);
     void setAngY_Vup(double delta);
     void setAngZ_Vup(double delta);

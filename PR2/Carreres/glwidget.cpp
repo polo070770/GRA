@@ -2,7 +2,7 @@
 #include <QtOpenGL>
 #include <QSet>
 #include <math.h>
-
+#include <stdlib.h>     /* srand, rand */
 #include "glwidget.h"
 //#include <QGlobal.h>
 #include <QTime>
@@ -170,9 +170,13 @@ void GLWidget::newObstacle(QString fichero, int nombre)
     xorig = 0;
     zorig = 0;
     mida = 1;
-    //TODO bucle para añadir el resto de obstaculos en posiciones aleatorias
-    obj = new Obstacle(fichero, mida, xorig, yorig, zorig, 0., 0., 0.);
-    newObjecte(obj);
+    for(int i = 0; i < nombre; i++ ){
+        xorig = (rand() % 10) - 5;
+        zorig = (rand() % 10) - 5;
+        obj = new Obstacle(fichero, mida, xorig, yorig, zorig, 0., 0., 0.);
+        newObjecte(obj);
+    }
+
 
 }
 
@@ -283,7 +287,7 @@ void GLWidget::setXRotation(int angle)
 
     qNormalizeAngle(angle);
     esc->mou_EixXCamera(angle);
-    updateGL();
+    //updateGL();
 
 }
 
@@ -292,7 +296,7 @@ void GLWidget::setYRotation(int angle)
 
     qNormalizeAngle(angle);
     esc->mou_EixYCamera(angle);
-    updateGL();
+    //updateGL();
 
 }
 
@@ -301,15 +305,15 @@ void GLWidget::setZRotation(int angle)
     qNormalizeAngle(angle);
     if (angle != zRot) {
         zRot = angle;
-        updateGL();
+        //updateGL();
     }
 }
 
 void GLWidget::zoom(double in, int dy){
-
+    cout << "in : " << in << " dy : " << dy <<endl;
     esc->zoom_camera(in * abs(dy));
 
-    updateGL();
+    //updateGL();
 }
 
 void GLWidget::pan(int dx, int dy){
@@ -395,13 +399,16 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_D:
         pulsaciones.insert((Qt::Key_D));
         break;
+    case Qt::Key_Escape:
+        pulsaciones.insert((Qt::Key_Escape));
+        break;
     }
 
 }
 
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-    cout << "release" << endl;
+    //cout << "release" << endl;
     //AQUEST METODE TE UN FUNCIONAMENT EXTRANY
 
     // Metode a implementar
@@ -485,7 +492,12 @@ void GLWidget::accions_timer(){
         esc->llibera_gir_cotxe(cotxe);
     }
 
+    //activem la vista en tercera
 
+    if(pulsaciones.contains(Qt::Key_Escape)){
+        esc->initLookAtCotxe();
+        pulsaciones.remove(Qt::Key_Escape);
+    }
     esc->temps();
     updateGL();
 }

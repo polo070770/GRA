@@ -42,7 +42,8 @@ void Terra::make()
 
     // generacio de la geometria dels triangles per a visualitzar-lo
     Index = 0;
-    quad(3,2,1,0); // cara con la normal hacia arriba
+    //quad(3,2,1,0); // cara con la normal hacia arriba
+    quad(0,1,2,3); // cara con la normal hacia arriba
 
     escalarFrom1(1); // escalem el terra a 1
 

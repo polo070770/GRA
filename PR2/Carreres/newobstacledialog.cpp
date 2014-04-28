@@ -7,6 +7,7 @@ NewObstacleDialog::NewObstacleDialog(QWidget *parent) :
     ui(new Ui::NewObstacleDialog)
 {
     ui->setupUi(this);
+    ui->nombre->setPlainText(QString("5"));
     connect(this, SIGNAL(accepted()), this, SLOT(emitAccepted()));
 }
 

@@ -6,6 +6,12 @@ NewCotxeDialog::NewCotxeDialog(QWidget *parent) :
     ui(new Ui::NewCotxeDialog)
 {
     ui->setupUi(this);
+    ui->escala->setPlainText(QString("2"));
+    ui->x->setPlainText(QString("0"));
+    ui->z->setPlainText(QString("0"));
+    ui->xdirector->setPlainText(QString("-1"));
+    ui->ydirector->setPlainText(QString("0"));
+    ui->zdirector->setPlainText(QString("0"));
     connect(this, SIGNAL(accepted()), this, SLOT(emitAccepted()));
 }
 

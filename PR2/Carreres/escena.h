@@ -38,7 +38,7 @@ public:
 
     void draw();
     void CapsaMinCont3DEscena();
-
+    Capsa3D addCapsaMinima(Capsa3D capsaBase, Capsa3D novaCapsa);
     float getYOrig();
 
     void accelera_cotxe(int num);
@@ -47,6 +47,7 @@ public:
     void gira_esquerra_cotxe(int num);
     void llibera_gir_cotxe(int num);
     void llibera_acceleracio_cotxe(int num);
+
 
     // Capsa contenedora de l'escena
     Capsa3D capsaMinima;
@@ -76,7 +77,11 @@ public:
     void panning_dx(double delta);
     void panning_dy(double delta);
 
+    void resetCameraPanoramica();
+    void initLookAtCotxe();
+
 private:
+    bool terceraPersona;
     float widthGLWidget;
     float heightGLWidget;
 

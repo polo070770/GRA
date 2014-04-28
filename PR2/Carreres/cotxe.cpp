@@ -41,6 +41,9 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     xRot = girx;
     yRot = giry;
     zRot = girz;
+    FACTOR_ROSAMENT = 2.9;
+    FACTOR_VELOCITAT = 0.002;
+
 
     this->direction[0] = xdir;
     this->direction[1] = ydir;
@@ -148,6 +151,7 @@ void Cotxe::make(){
     girant = 0;
     reset_rodes = 0;
 
+    this->direction = vec4(-1.0,0.0,0.0,0.0);
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->make();
     }
@@ -163,6 +167,7 @@ void Cotxe::make(){
     //movem l'objecte al desti
     //invertimos la direccion
     // tambe serviria l'altura
+    this->calculCapsa3D();
     float y_desti = yorig + (-capsa.pmin.y);
     point4 desti = point4(capsa.pmin.x, y_desti, capsa.pmin.z, 1.0); // vector destino
     this->aplicaTG(Translate(desti));
@@ -267,6 +272,7 @@ void Cotxe::turnleft(){
     if(girant == 0){
         angle_gir = 1 * MIN_ANGLE;
         this->girar_rodes_davanteres();
+        //this->girar_cotxe(MIN_ANGLE);
         girant = 1;
     }
 }
@@ -275,10 +281,22 @@ void Cotxe::turnright(){
     if(girant == 0){
         angle_gir = 1 * MAX_ANGLE;
         this->girar_rodes_davanteres();
+        //this->girar_cotxe(MAX_ANGLE);
         girant = 1;
     }
 }
 
+void Cotxe::girar_cotxe(float angle){
+
+
+    vec4 nova  = (RotateY(angle * velocitat * 0.1) * this->direction);
+    this->aplicaTGCentrat(RotateY(angle * velocitat * 0.1));
+    this->direction[0] = nova.x;
+    this->direction[1] = nova.y;
+    this->direction[2] = nova.z;
+    this->direction[3] = nova.w;
+
+}
 void Cotxe::temps(){
 
 

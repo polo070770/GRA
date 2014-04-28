@@ -21,7 +21,9 @@ public:
     void draw();
     void reset(float yorig);
     void temps();
+
 private:
+
     vector<Cotxe * > listado; // lo llamamos listado y no vector para evitar problemas de nombres
     vector<Cotxe *>::iterator iterador;
 };

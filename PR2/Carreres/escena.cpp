@@ -20,6 +20,7 @@ escena::escena()
 
     widthGLWidget = 50.0;
     heightGLWidget = 50.0;
+    terceraPersona = false;
 
 }
 
@@ -46,6 +47,7 @@ void escena::addObjecte(Objecte *obj) {
 
     if (dynamic_cast<Terra*>(obj))
         this->terra = (Terra*)obj;
+    reset();
 }
 
 
@@ -56,6 +58,54 @@ void escena::CapsaMinCont3DEscena()
     if(cotxe_1 != NULL){
         this->capsaMinima = cotxe_1->calculCapsa3D();
     }
+
+    if(cotxe_2 != NULL){
+        this->capsaMinima = addCapsaMinima(this->capsaMinima, cotxe_2->calculCapsa3D());
+    }
+    if(terra != NULL){
+        this->capsaMinima = addCapsaMinima(this->capsaMinima, terra->calculCapsa3D());
+    }
+    this->capsaMinima = addCapsaMinima(this->capsaMinima, obstacles.getCapsa3D());
+    /*
+    float factor;
+    if(this->heightGLWidget > this->widthGLWidget){
+        factor = this->heightGLWidget / this->widthGLWidget;
+        this->capsaMinima.h *= factor;
+
+    }else if(this->widthGLWidget > this->heightGLWidget){
+        factor = this->widthGLWidget / this->heightGLWidget;
+        this->capsaMinima.a *= factor;
+    }else{
+        factor = 1;
+
+    }
+    */
+
+}
+
+/*
+ *funcion que añade una capsa minima a otra y la devuelve
+ */
+Capsa3D escena::addCapsaMinima(Capsa3D capsaBase, Capsa3D novaCapsa){
+
+    vec3  pmax;
+
+    pmax.x = capsaBase.pmin.x + capsaBase.a;
+    pmax.y = capsaBase.pmin.y + capsaBase.h;
+    pmax.z = capsaBase.pmin.z + capsaBase.p;
+
+    if(novaCapsa.pmin.x < capsaBase.pmin.x) capsaBase.pmin.x = novaCapsa.pmin.x;
+    if(novaCapsa.pmin.y < capsaBase.pmin.y) capsaBase.pmin.y = novaCapsa.pmin.y;
+    if(novaCapsa.pmin.z < capsaBase.pmin.z) capsaBase.pmin.z = novaCapsa.pmin.z;
+
+    if(novaCapsa.pmin.x + novaCapsa.a > pmax.x) pmax.x = novaCapsa.pmin.x + novaCapsa.a;
+    if(novaCapsa.pmin.y + novaCapsa.h > pmax.y) pmax.y = novaCapsa.pmin.y + novaCapsa.h;
+    if(novaCapsa.pmin.z + novaCapsa.p > pmax.z) pmax.z = novaCapsa.pmin.z + novaCapsa.p;
+
+    capsaBase.a = pmax.x - capsaBase.pmin.x;
+    capsaBase.h = pmax.y - capsaBase.pmin.y;
+    capsaBase.p = pmax.z - capsaBase.pmin.z;
+    return capsaBase;
 
 }
 
@@ -107,8 +157,10 @@ void escena::reset() {
     //calculo la capsa minima
     this->CapsaMinCont3DEscena();
 
+    terceraPersona = false;
     //inicio la camera
-    cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
+    resetCameraPanoramica();
+
 
 }
 
@@ -214,6 +266,8 @@ void escena::setHeightGLWidget(float h){
 void escena::setWidgetSize(float width, float height){
     this->widthGLWidget = width;
     this->heightGLWidget = height;
+
+    cameraPanoramica.setViewport(0,0,width, height);
 }
 
 void escena::mou_EixXCamera(int angle){
@@ -243,6 +297,22 @@ void escena::panning_dy(double delta){
 
 void escena::temps(){
     cotxes.temps();
+    if(terceraPersona){
+        cameraPanoramica.actualitzaCameraThirdPerson(cotxe_1->calculCapsa3D());
+    }
+}
+
+void escena::resetCameraPanoramica(){
+    cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
+    cameraPanoramica.resetPanoramica(this->capsaMinima);
+
+}
+void escena::initLookAtCotxe(){
+    if(cotxe_1 != NULL){
+        terceraPersona = true;
+        cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->cotxe_1->calculCapsa3D());
+        cameraPanoramica.resetLookCotxe(this->capsaMinima);
+    }
 }
 
 vector<Cotxe *> escena::getCotxes(){

@@ -36,13 +36,27 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     vs.vrp[0] = centre[0];
     vs.vrp[1] = centre[1];
     vs.vrp[2] = centre[2];
+    vs.angx = 0;
+    vs.angy = 0;
+    vs.angz = 0;
+
+
+
+
+    piram.d =0.5; //distancia observador a pla proj
+
+    // rango de muestreo, entre 0.1 y 100.0
+    //piram.dant = 0.1;
+    piram.dant = 0.1;
+    piram.dpost = 100;
+
 
     // VIEWPORT
     // A viewport defines in normalized coordinates a rectangular area
     // on the display device where the image of the data appears.
     // We can have our stuff take up the entire display device or
     // show it in only a portion, say the upper-right part.
-    // el view port sera el tamaño del glwidget, la ventana
+    // el view port sera el tamaño del glwidget, la ventana por defecto inicial es
     // a -> 640p de GLWdiget
     // h -> 480p de GLWdiget
     setViewport(0, 0, a, h);
@@ -54,6 +68,7 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     // whether we want to show all of the data or only part of the data
     CalculWindow(capsaMinima);
 
+
     // A window and a viewport are related by the linear transformation
     // that maps the window onto the viewport. A line segment in the
     // the window is mapped to a line segment in the viewport such the relative
@@ -64,6 +79,44 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
 
 }
 
+/**
+ *funcio que posa la camara a panoramica inicial
+ */
+void Camera::resetPanoramica(Capsa3D capsaMon){
+    setAngX_Vup(-90);
+    vs.obs.y = capsaMon.h;
+}
+
+
+void Camera::resetLookCotxe(Capsa3D capsaCotxe){
+
+    setAngY_Vup(90);
+    setAngX_Vup(-15);
+    vs.obs.y = capsaCotxe.h;
+    vs.obs.z = capsaCotxe.p * 1.5;
+    zoom(-0.93);
+ /*
+    vs.obs.x = capsaCotxe.pmin.x - (capsaCotxe.p / 2);
+    vs.obs.y = capsaCotxe.pmin.y + (capsaCotxe.h * 1.5);
+    vs.obs.z = capsaCotxe.pmin.z - (capsaCotxe.a);
+
+    vs.vrp.x = capsaCotxe.pmin.x + capsaCotxe.p ;
+    vs.vrp.y = capsaCotxe.pmin.y + (capsaCotxe.h / 2);
+    vs.vrp.z = capsaCotxe.pmin.z + capsaCotxe.a;
+
+*/
+    //tAngX_Vup(-90);
+    //vs.obs.y = h;
+    //setAngY_Vup(-90);
+
+}
+
+void Camera::actualitzaCameraThirdPerson(Capsa3D capsaCotxe){
+    vs.obs.y = capsaCotxe.h;
+    vs.obs.z = capsaCotxe.p * 1.5;
+
+
+}
 void Camera::toGPU(QGLShaderProgram *program)
 {
     // CAL IMPLEMENTAR
@@ -83,7 +136,7 @@ void Camera::CalculaMatriuModelView()
     // cameraTarget = vs.vrp, where you want to look at, in world space
 
     // posicio de l'observador
-    vs.obs = CalculObs(vs.vrp, 50.0, vs.angx, vs.angy);
+    vs.obs = CalculObs(vs.vrp, piram.d, vs.angx, vs.angy);
 
     // verticalitat de la camera
     vec3 vup = CalculVup(0.0, 0.0, 0.0);
@@ -97,11 +150,11 @@ void Camera::CalculaMatriuProjection()
 {
     // CAL IMPLEMENTAR
 
-    piram.d = 100; //distancia observador a pla proj
+//    piram.d = 100; //distancia observador a pla proj
 
-    // rango de mostreo, entre 0.1 y 100.0
-    piram.dant = 0.1;
-    piram.dpost = 100.0;
+    // rango de muestreo, entre 0.1 y 100.0
+//    piram.dant = 0.1;
+//    piram.dpost = 100.0;
 
     CalculAngleOberturaVertical(); // obertura en vertical
     CalculAngleOberturaHoritzontal(); // obertura en horizontal
@@ -113,8 +166,13 @@ void Camera::CalculaMatriuProjection()
     // top = 0, altura termina en y = 50
     // de profundidad: near y far
     // se definen con dant y dpost, atributos de piram
-
-    proj = Ortho(wd.pmin[0], wd.a, wd.pmin[1], wd.h, piram.dant, piram.dpost);
+    GLfloat left, right, bottom, top;
+    left = wd.pmin.x;
+    right = wd.pmin.x + wd.a;
+    bottom = wd.pmin.y;
+    top = wd.pmin.y + wd.h;
+    //proj = Ortho(left, right, bottom, top, piram.dant, piram.dpost);
+    proj = Frustum(left, right, bottom, top, piram.dant, piram.dpost);
     //printm(proj);fflush(stdout);
 
 }
@@ -146,19 +204,24 @@ void Camera::setAngZ_Vup(double delta){
 
 void Camera::panning_2D_X(double delta){
     vs.vrp.x += delta;
+    wd.pmin.x += delta;
+    //wd.a += delta;
     CalculaMatriuModelView();
     CalculaMatriuProjection();
 }
 
 void Camera::panning_2D_Y(double delta){
     vs.vrp.y += delta;
+    wd.pmin.y += delta;
+    //wd.h += delta;
     CalculaMatriuModelView();
     CalculaMatriuProjection();
 }
 
 void Camera::zoom(double dy){
+    cout << " dy : " << dy << endl;
     AmpliaWindow(dy);
-    CalculaMatriuModelView();
+    //CalculaMatriuModelView(); // no es necesari tocar la model view al fer zoom
     CalculaMatriuProjection();
 }
 

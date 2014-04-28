@@ -37,6 +37,7 @@ void Obstacle::make(){
     //movem l'objecte al desti
     //invertimos la direccion
     // tambe serviria l'altura
+    this->calculCapsa3D();
     float y_desti = yorig + (-capsa.pmin.y);
     point4 desti = point4(xorig * 1, y_desti,zorig * 1 ,0); // vector destino
     this->aplicaTG(Translate(desti));
