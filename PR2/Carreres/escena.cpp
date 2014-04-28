@@ -161,7 +161,6 @@ void escena::reset() {
     //inicio la camera
     resetCameraPanoramica();
 
-
 }
 
 void escena::camera_toGPU(QGLShaderProgram *program){
@@ -311,7 +310,7 @@ void escena::initLookAtCotxe(){
     if(cotxe_1 != NULL){
         terceraPersona = true;
         cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->cotxe_1->calculCapsa3D());
-        cameraPanoramica.resetLookCotxe(this->capsaMinima);
+        cameraPanoramica.resetLookCotxe(this->cotxe_1->calculCapsa3D());
     }
 }
 

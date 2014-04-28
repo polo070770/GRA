@@ -36,20 +36,16 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     vs.vrp[0] = centre[0];
     vs.vrp[1] = centre[1];
     vs.vrp[2] = centre[2];
+
     vs.angx = 0;
     vs.angy = 0;
     vs.angz = 0;
 
-
-
-
-    piram.d =0.5; //distancia observador a pla proj
+    piram.d = 0.5; //distancia observador a pla proj
 
     // rango de muestreo, entre 0.1 y 100.0
-    //piram.dant = 0.1;
     piram.dant = 0.1;
     piram.dpost = 100;
-
 
     // VIEWPORT
     // A viewport defines in normalized coordinates a rectangular area
@@ -67,7 +63,6 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     // or smaller than the actual range of data values, depending on
     // whether we want to show all of the data or only part of the data
     CalculWindow(capsaMinima);
-
 
     // A window and a viewport are related by the linear transformation
     // that maps the window onto the viewport. A line segment in the
@@ -87,14 +82,17 @@ void Camera::resetPanoramica(Capsa3D capsaMon){
     vs.obs.y = capsaMon.h;
 }
 
-
 void Camera::resetLookCotxe(Capsa3D capsaCotxe){
 
     setAngY_Vup(90);
     setAngX_Vup(-15);
-    vs.obs.y = capsaCotxe.h;
-    vs.obs.z = capsaCotxe.p * 1.5;
-    zoom(-0.93);
+
+    //vs.obs.y = capsaCotxe.h;
+    //vs.obs.z = capsaCotxe.p * 1.5;
+
+    vs.obs = CalculObs(vs.vrp, piram.d, 90, -15);
+
+    //zoom(-0.93);
  /*
     vs.obs.x = capsaCotxe.pmin.x - (capsaCotxe.p / 2);
     vs.obs.y = capsaCotxe.pmin.y + (capsaCotxe.h * 1.5);
@@ -109,18 +107,21 @@ void Camera::resetLookCotxe(Capsa3D capsaCotxe){
     //vs.obs.y = h;
     //setAngY_Vup(-90);
 
+    CalculaMatriuModelView();
+    CalculaMatriuProjection();
+
 }
 
 void Camera::actualitzaCameraThirdPerson(Capsa3D capsaCotxe){
     vs.obs.y = capsaCotxe.h;
     vs.obs.z = capsaCotxe.p * 1.5;
-
-
+    CalculaMatriuModelView();
+    CalculaMatriuProjection();
 }
+
 void Camera::toGPU(QGLShaderProgram *program)
 {
     // CAL IMPLEMENTAR
-
     this->setModelView(program, modView);
     this->setProjection(program, proj);
 
@@ -166,6 +167,7 @@ void Camera::CalculaMatriuProjection()
     // top = 0, altura termina en y = 50
     // de profundidad: near y far
     // se definen con dant y dpost, atributos de piram
+
     GLfloat left, right, bottom, top;
     left = wd.pmin.x;
     right = wd.pmin.x + wd.a;
@@ -203,29 +205,26 @@ void Camera::setAngZ_Vup(double delta){
 }
 
 void Camera::panning_2D_X(double delta){
-    vs.vrp.x += delta;
+
     wd.pmin.x += delta;
-    //wd.a += delta;
     CalculaMatriuModelView();
     CalculaMatriuProjection();
+
 }
 
 void Camera::panning_2D_Y(double delta){
-    vs.vrp.y += delta;
+
     wd.pmin.y += delta;
-    //wd.h += delta;
     CalculaMatriuModelView();
     CalculaMatriuProjection();
+
 }
 
 void Camera::zoom(double dy){
-    cout << " dy : " << dy << endl;
+    //cout << " dy : " << dy << endl;
     AmpliaWindow(dy);
-    //CalculaMatriuModelView(); // no es necesari tocar la model view al fer zoom
     CalculaMatriuProjection();
 }
-
-
 
 void Camera::setViewport(int x, int y, int a, int h)
 {

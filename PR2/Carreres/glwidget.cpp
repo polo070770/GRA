@@ -284,20 +284,14 @@ void GLWidget::resizeGL(int width, int height)
 
 void GLWidget::setXRotation(int angle)
 {
-
     qNormalizeAngle(angle);
     esc->mou_EixXCamera(angle);
-    //updateGL();
-
 }
 
 void GLWidget::setYRotation(int angle)
 {
-
     qNormalizeAngle(angle);
     esc->mou_EixYCamera(angle);
-    //updateGL();
-
 }
 
 void GLWidget::setZRotation(int angle)
@@ -305,15 +299,12 @@ void GLWidget::setZRotation(int angle)
     qNormalizeAngle(angle);
     if (angle != zRot) {
         zRot = angle;
-        //updateGL();
     }
 }
 
 void GLWidget::zoom(double in, int dy){
-    cout << "in : " << in << " dy : " << dy <<endl;
+    //cout << "in : " << in << " dy : " << dy <<endl;
     esc->zoom_camera(in * abs(dy));
-
-    //updateGL();
 }
 
 void GLWidget::pan(int dx, int dy){
