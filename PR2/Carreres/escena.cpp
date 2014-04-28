@@ -47,6 +47,7 @@ void escena::addObjecte(Objecte *obj) {
 
     if (dynamic_cast<Terra*>(obj))
         this->terra = (Terra*)obj;
+
     reset();
 }
 
@@ -303,7 +304,7 @@ void escena::temps(){
 
 void escena::resetCameraPanoramica(){
     cameraPanoramica.ini(this->widthGLWidget, this->heightGLWidget, this->capsaMinima);
-    cameraPanoramica.resetPanoramica(this->capsaMinima);
+    //cameraPanoramica.resetPanoramica(this->capsaMinima);
 
 }
 void escena::initLookAtCotxe(){

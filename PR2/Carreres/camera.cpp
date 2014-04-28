@@ -5,7 +5,7 @@ Camera::Camera()
 
     // view system
     vs.vrp = vec4(0.0, 0.0, 0.0, 1.0); // view reference point
-    vs.obs = vec4(0.0, 0.0, 50.0, 1.0); // posicio de l'obs
+    vs.obs = vec4(0.0, 0.0, 0.0, 1.0); // punt posicio de l'obs
 
     // angles de gir del sistema de coordenades del obs
     vs.angx = 0;
@@ -15,13 +15,14 @@ Camera::Camera()
     //capsa 2d del viewport
     vp.a = 600;
     vp.h = 600;
-    vp.pmin[0] = 0;
-    vp.pmin[1] = 0;
+    vp.pmin.x = 0;
+    vp.pmin.y = 0;
 
     piram.proj = PERSPECTIVA;
     piram.d = 100;
 
     CalculaMatriuModelView();
+    CalculaMatriuProjection();
 }
 
 void Camera::ini(int a, int h, Capsa3D capsaMinima)
@@ -37,15 +38,29 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     vs.vrp[1] = centre[1];
     vs.vrp[2] = centre[2];
 
-    vs.angx = 0;
-    vs.angy = 0;
+    // angulo de vision de la camara
+    vs.angx = -45;
+    vs.angy = 90;
     vs.angz = 0;
 
-    piram.d = 0.5; //distancia observador a pla proj
+    /*
+
+            (piram.dant) -----        -----
+    P(x,y,z) ----------> |   |        |   |
+    (cotxe)              -----        |   |
+    piram.d      (piram.dpost)        |   |
+             ------------------------>|   |
+                                      -----
+    */
+
+    piram.d = 1; ; //distancia observador a pla proj
 
     // rango de muestreo, entre 0.1 y 100.0
-    piram.dant = 0.1;
+    piram.dant = 1;
     piram.dpost = 100;
+
+    piram.alfav = 90;
+    piram.alfah = 120;
 
     // VIEWPORT
     // A viewport defines in normalized coordinates a rectangular area
@@ -71,52 +86,35 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
 
     CalculaMatriuModelView();
     CalculaMatriuProjection();
-
 }
 
 /**
  *funcio que posa la camara a panoramica inicial
  */
 void Camera::resetPanoramica(Capsa3D capsaMon){
-    setAngX_Vup(-90);
+
+    vs.angy = 90;
     vs.obs.y = capsaMon.h;
+
+    CalculaMatriuModelView();
 }
 
 void Camera::resetLookCotxe(Capsa3D capsaCotxe){
 
-    setAngY_Vup(90);
-    setAngX_Vup(-15);
-
-    //vs.obs.y = capsaCotxe.h;
-    //vs.obs.z = capsaCotxe.p * 1.5;
-
-    vs.obs = CalculObs(vs.vrp, piram.d, 90, -15);
-
-    //zoom(-0.93);
- /*
-    vs.obs.x = capsaCotxe.pmin.x - (capsaCotxe.p / 2);
-    vs.obs.y = capsaCotxe.pmin.y + (capsaCotxe.h * 1.5);
-    vs.obs.z = capsaCotxe.pmin.z - (capsaCotxe.a);
-
-    vs.vrp.x = capsaCotxe.pmin.x + capsaCotxe.p ;
-    vs.vrp.y = capsaCotxe.pmin.y + (capsaCotxe.h / 2);
-    vs.vrp.z = capsaCotxe.pmin.z + capsaCotxe.a;
-
-*/
-    //tAngX_Vup(-90);
-    //vs.obs.y = h;
-    //setAngY_Vup(-90);
+    vs.angx = -45;
+    vs.angy = 90;
 
     CalculaMatriuModelView();
-    CalculaMatriuProjection();
-
 }
 
 void Camera::actualitzaCameraThirdPerson(Capsa3D capsaCotxe){
-    vs.obs.y = capsaCotxe.h;
-    vs.obs.z = capsaCotxe.p * 1.5;
+
+    vec3 centre = calculCentreCapsa(capsaCotxe);
+
+    vs.vrp = vec4(centre.x, centre.y, centre.z, 1.0);
+
     CalculaMatriuModelView();
-    CalculaMatriuProjection();
+
 }
 
 void Camera::toGPU(QGLShaderProgram *program)
@@ -151,16 +149,11 @@ void Camera::CalculaMatriuProjection()
 {
     // CAL IMPLEMENTAR
 
-//    piram.d = 100; //distancia observador a pla proj
-
-    // rango de muestreo, entre 0.1 y 100.0
-//    piram.dant = 0.1;
-//    piram.dpost = 100.0;
-
-    CalculAngleOberturaVertical(); // obertura en vertical
-    CalculAngleOberturaHoritzontal(); // obertura en horizontal
+    //CalculAngleOberturaVertical(); // obertura en vertical
+    //CalculAngleOberturaHoritzontal(); // obertura en horizontal
 
     // Ortho (left, right, bottom, top, near, far)
+
     // left = 0, anchura empieza en x = 0
     // right = 50, anchura acaba en x = 50
     // bottom = 0, altura empieza en y = 0
@@ -173,6 +166,7 @@ void Camera::CalculaMatriuProjection()
     right = wd.pmin.x + wd.a;
     bottom = wd.pmin.y;
     top = wd.pmin.y + wd.h;
+
     //proj = Ortho(left, right, bottom, top, piram.dant, piram.dpost);
     proj = Frustum(left, right, bottom, top, piram.dant, piram.dpost);
     //printm(proj);fflush(stdout);
