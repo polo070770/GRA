@@ -18,6 +18,6 @@ OUT vec4 color;
 
 void main() 
 {
-  gl_Position = projection * model_view * vPosition;
+  gl_Position = projection * model_view * (vPosition / vPosition.w );
   color = vColor;
 } 

@@ -169,10 +169,10 @@ void GLWidget::newObstacle(QString fichero, int nombre)
     float  mida;
     xorig = 0;
     zorig = 0;
-    mida = 1;
+    mida = 2;
     for(int i = 0; i < nombre; i++ ){
-        xorig = (rand() % 10) - 5;
-        zorig = (rand() % 10) - 5;
+        xorig = (rand() % 40) - 20;
+        zorig = (rand() % 40) - 20;
         obj = new Obstacle(fichero, mida, xorig, yorig, zorig, 0., 0., 0.);
         newObjecte(obj);
     }
