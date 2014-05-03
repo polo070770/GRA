@@ -1,0 +1,261 @@
+# Blender MTL File: 'BMW-MikePan.blend'
+# Material Count: 25
+newmtl BMWBlack
+Ns 390.196078
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.300000 0.300000 0.300000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl BMWBlue
+Ns 390.196078
+Ka 0.000000 0.000000 0.000000
+Kd 0.047403 0.241055 0.629930
+Ks 0.300000 0.300000 0.300000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl BMWSilver
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.139176 0.139176 0.139176
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl BMWWhite
+Ns 390.196078
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.300000 0.300000 0.300000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl BlackPlastic
+Ns 17.647059
+Ka 0.000000 0.000000 0.000000
+Kd 0.005246 0.005246 0.005246
+Ks 0.253465 0.253465 0.253465
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl BlackPlasticGrill
+Ns 17.647059
+Ka 0.000000 0.000000 0.000000
+Kd 0.005246 0.005246 0.005246
+Ks 0.253465 0.253465 0.253465
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Brake_brake.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.041762 0.041762 0.041762
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd /home/hermetico/Desktop/webgl/demos261-1/Cycles-TestFiles/BMW-MikePan.blend/textures/brake.jpg
+
+
+newmtl Chrome
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl ChromeMatte
+Ns 27.450980
+Ka 0.000000 0.000000 0.000000
+Kd 0.136015 0.136015 0.136015
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl ChromeMatteDark
+Ns 60.784314
+Ka 0.000000 0.000000 0.000000
+Kd 0.031298 0.031298 0.031298
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Chrome_untitled
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd untitled
+
+
+newmtl Emit
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Glass_backwindow.png
+Ns 60.784314
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd /home/hermetico/Desktop/webgl/demos261-1/Cycles-TestFiles/BMW-MikePan.blend/textures/backwindow.png
+map_d /home/hermetico/Desktop/webgl/demos261-1/Cycles-TestFiles/BMW-MikePan.blend/textures/backwindow.png
+
+
+newmtl HeadLightAngelEye
+Ns 17.647059
+Ka 0.000000 0.000000 0.000000
+Kd 0.500000 0.373313 0.250000
+Ks 0.100000 0.100000 0.100000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl HeadLightGlass
+Ns 45.098039
+Ka 0.000000 0.000000 0.000000
+Kd 0.787412 0.861383 1.000000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 0.900000
+illum 2
+
+
+newmtl HeadlightChrome
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl HeadlightChrome.001
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl HeadlightGlass
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.416744 0.502810 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 0.100000
+illum 2
+
+
+newmtl HeadlightMatte
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 0.500000
+illum 2
+
+
+newmtl Interior
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.021907 0.021907 0.021907
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+
+
+newmtl Material.001_untitled
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd untitled
+
+
+newmtl Material.002_tailight.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.008831 0.000000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/hermetico/Desktop/webgl/demos261-1/Cycles-TestFiles/BMW-MikePan.blend/textures/tailight.jpg
+map_Bump /home/hermetico/Desktop/webgl/demos261-1/Cycles-TestFiles/BMW-MikePan.blend/textures/tailight.jpg
+
+
+newmtl Material.003
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl MatteBlack
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.042404 0.042404 0.042404
+Ks 0.010000 0.010000 0.010000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl TireRubber_sidewall.jpg
+Ns 37.254902
+Ka 0.000000 0.000000 0.000000
+Kd 0.030000 0.030000 0.030000
+Ks 0.400000 0.400000 0.400000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/hermetico/Desktop/webgl/demos261-1/Cycles-TestFiles/BMW-MikePan.blend/textures/sidewall.jpg
+map_Bump /home/hermetico/Desktop/webgl/demos261-1/Cycles-TestFiles/BMW-MikePan.blend/textures/sidewall.jpg
+
+

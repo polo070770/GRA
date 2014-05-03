@@ -13,3 +13,6 @@
 *.a
 #folders
 Carreres-b*/
+build-*/
+PR0/
+#
