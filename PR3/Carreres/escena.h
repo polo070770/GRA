@@ -21,7 +21,7 @@
 #include <cotxecontainer.h>
 #include <obstaclecontainer.h>
 #include <camera.h>
-
+#include <llum.h>
 using namespace std;
 
 class escena
@@ -68,6 +68,7 @@ public:
     void setHeightGLWidget(float h);
 
     void camera_toGPU(QGLShaderProgram *program);
+    void llum_toGPU(QGLShaderProgram *program);
 
     void mou_EixXCamera(int angle);
     void mou_EixYCamera(int angle);
@@ -82,6 +83,7 @@ public:
     void initLookAtCotxe();
     void initLookAtCockpit();
 private:
+    Llum *llum;
     bool terceraPersona;
     bool primeraPersona;
     float widthGLWidget;

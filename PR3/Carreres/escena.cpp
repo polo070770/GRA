@@ -22,6 +22,8 @@ escena::escena()
     heightGLWidget = 50.0;
     terceraPersona = false;
     primeraPersona = false;
+    llum = new Llum();
+    llum->ini(vec4(-1.0,-1.0,.0));
 
 }
 
@@ -167,7 +169,9 @@ void escena::reset() {
 void escena::camera_toGPU(QGLShaderProgram *program){
     camera.toGPU(program);
 }
-
+void escena::llum_toGPU(QGLShaderProgram *program){
+    llum->toGPU(program);
+}
 void escena::accelera_cotxe(int num){
      Cotxe * cotxe;
      if(num == 0)

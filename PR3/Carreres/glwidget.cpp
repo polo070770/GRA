@@ -261,6 +261,7 @@ void GLWidget::paintGL()
     //    esc->aplicaTGCentrat(transform);
 
     esc->camera_toGPU(program);
+    esc->llum_toGPU(program);
     esc->draw();
 }
 

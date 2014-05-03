@@ -270,7 +270,7 @@ void Cotxe::backward(){
 
 void Cotxe::turnleft(){
     if(girant == 0){
-        angle_gir = 1 * MIN_ANGLE;
+        angle_gir = 1 * MAX_ANGLE;
         this->girar_rodes_davanteres();
         //this->girar_cotxe(MIN_ANGLE);
         girant = 1;
@@ -279,7 +279,7 @@ void Cotxe::turnleft(){
 
 void Cotxe::turnright(){
     if(girant == 0){
-        angle_gir = 1 * MAX_ANGLE;
+        angle_gir = 1 * MIN_ANGLE;
         this->girar_rodes_davanteres();
         //this->girar_cotxe(MAX_ANGLE);
         girant = 1;

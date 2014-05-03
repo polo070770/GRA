@@ -24,8 +24,9 @@ Terra::Terra(float amplaria, float profunditat, float y):Objecte(NumVerticesF)
     // RGBA colors
     vertex_colors[0] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
     vertex_colors[1] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-    vertex_colors[2] =    color4( 1.0, 0.0, 0.0, 1.0 );  // red
-    vertex_colors[3] =    color4( 1.0, 0.0, 0.0, 1.0 );  // red
+    vertex_colors[2] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
+    vertex_colors[3] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
+    //vertex_colors[3] =    color4( 1.0, 0.0, 0.0, 1.0 );  // red
 
 
     make();
@@ -65,27 +66,34 @@ void Terra::make()
  */
 
 void Terra::quad( int a, int b, int c, int d ){
+    vec4 normal = vec4(vec3(.0,1.0,.0));
 
+    normals[Index] = normal;
     colors[Index] = vertex_colors[a];
     points[Index] = vertices[a];
     Index++;
 
+    normals[Index] = normal;
     colors[Index] = vertex_colors[b];
     points[Index] = vertices[b];
     Index++;
 
+    normals[Index] = normal;
     colors[Index] = vertex_colors[c];
     points[Index] = vertices[c];
     Index++;
 
+    normals[Index] = normal;
     colors[Index] = vertex_colors[a];
     points[Index] = vertices[a];
     Index++;
 
+    normals[Index] = normal;
     colors[Index] = vertex_colors[c];
     points[Index] = vertices[c];
     Index++;
 
+    normals[Index] = normal;
     colors[Index] = vertex_colors[d];
     points[Index] = vertices[d];
     Index++;

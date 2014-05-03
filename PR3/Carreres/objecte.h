@@ -41,6 +41,8 @@ protected:
     int     numPoints;
     point4 *points;
     color4 *colors;
+    vec4 *normals; // a la gpu necesitem les normals
+
     int Index; // index de control del numero de vertexs a posar a la GPU
     virtual void escalarFrom1(float factor);
 
