@@ -119,6 +119,17 @@ void Objecte::aplicaTG(mat4 m)
 
 }
 
+void Objecte::aplicaTGAndNormalize(mat4 m)
+{
+    aplicaTGPointsAndNormals(m);
+
+    // Actualitzacio del vertex array per a preparar per pintar
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
+                     &points[0] );
+    //actualitzacion de les normals
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
+                     &normals[0] );
+}
 
 void Objecte::aplicaTGPoints(mat4 m)
 {
@@ -139,6 +150,31 @@ void Objecte::aplicaTGPoints(mat4 m)
     delete transformed_points;
 }
 
+void Objecte::aplicaTGPointsAndNormals(mat4 m)
+{
+    point4  *transformed_points = new point4[Index];
+    vec4 *transformed_normals = new vec4[Index];
+
+    for ( int i = 0; i < Index; ++i ) {
+        transformed_points[i] = m * points[i];
+        transformed_normals[i] = m * normals[i];
+    }
+
+    transformed_points = &transformed_points[0];
+    points = &points[0];
+    transformed_normals = &transformed_normals[0];
+    normals = &normals[0];
+
+    for ( int i = 0; i < Index; ++i )
+    {
+        points[i] = transformed_points[i];
+        normals[i] = transformed_normals[i];
+    }
+
+    delete transformed_points;
+    delete transformed_normals;
+}
+
 void Objecte::aplicaTGCentrat(mat4 m){
     // calculamos el centro
     calculCapsa3D();
@@ -154,6 +190,20 @@ void Objecte::aplicaTGCentrat(mat4 m){
 
 }
 
+void Objecte::aplicaTGCentratNormals(mat4 m){
+    // calculamos el centro
+    calculCapsa3D();
+    point4 centre = calculCentre();
+
+    // montamos la matriz en orden inverso al que queremos aplicar las
+    // transformaciones
+    mat4 transform_centrada = ( Translate(centre) * m * Translate(-centre) );
+
+
+    // aplicmos las transformaciones
+    aplicaTGAndNormalize(transform_centrada);
+
+}
 void Objecte::toGPU(QGLShaderProgram *pr){
 
     program = pr;
@@ -238,6 +288,7 @@ void Objecte::make(){
             points[Index] = vertexs[cares[i].idxVertices[j]];
             colors[Index] = base_colors[i%4];
             //cada vertice tiene la misma normal que su cara
+
             normals[Index] = vec4(cares[i].normal);
             Index++;
         }
@@ -397,8 +448,5 @@ void Objecte::construeix_cara ( char **words, int nwords, Objecte*objActual, int
     face.color = vec4(1.0, 0.0, 0.0, 1.0);
     objActual->cares.push_back(face);
 }
-
-
-
 
 

@@ -29,7 +29,7 @@ void Roda::aplicaTGCentrat(mat4 m){
     mat4 transform_centrada = ( Translate(centre) * RotateY(angle_gir) * m * RotateY(-angle_gir) * Translate(-centre) );
 
     // aplicmos las transformaciones
-    aplicaTG(transform_centrada);
+    aplicaTGAndNormalize(transform_centrada);
 
 }
 
@@ -40,5 +40,6 @@ void Roda::reset_angle(){
 void Roda::fer_gir(float angle){
     angle_gir = angle;
     mat4 gir = RotateY(angle_gir);
-    this->aplicaTGCentrat(gir);
+    this->aplicaTGCentratNormals(gir);
 }
+

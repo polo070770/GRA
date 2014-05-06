@@ -66,7 +66,7 @@ void Terra::make()
  */
 
 void Terra::quad( int a, int b, int c, int d ){
-    vec4 normal = vec4(vec3(.0,1.0,.0));
+    vec4 normal = vec4(0.0, 1.0, 0.0, 0.0);
 
     normals[Index] = normal;
     colors[Index] = vertex_colors[a];

@@ -7,12 +7,16 @@
 #endif
 
 struct tipusLlum{
+    int tipus;
     vec4 Position;
     vec3 Direction;
     float Alpha;
     vec4 Ambient;
     vec4 Diffuse;
     vec4 Specular;
+    float Constant;
+    float Lineal;
+    float Cuadratica;
 
 };
 
@@ -34,8 +38,8 @@ void main()
 
 
   vec3 N = normalize(vNormal.xyz);
-  vec3 L = normalize(light.Position.xyz - (model_view * vPosition).xyz);
-  vec3 E = -normalize((model_view*vPosition).xyz);
+  vec3 L = normalize(light.Position.xyz - (vPosition).xyz);
+  vec3 E = -normalize((vPosition).xyz);
   vec3 H = normalize(L+E);
 
   float Kd = max(dot(L, N), 0.0);

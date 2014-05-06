@@ -207,7 +207,7 @@ void GLWidget::newCotxe(QString fichero, float xorig, float zorig, float mida, f
 void GLWidget::initializeGL()
 {
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
 
     std::cout<<"Estic inicialitzant el shaders"<<std::ends;
     initShadersGPU();

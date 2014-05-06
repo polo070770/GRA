@@ -1,0 +1,9 @@
+Abrimos y añadimos un coche, preferiblemente con los valores por defecto que aparecen.
+El coche se situa automaticamente en vista TOP, para reiniciar la vista top, se hace con el reset view del menu.
+Con el boton de la  rueda se hace zoom, con el boton izquierdo se mueve la cam y con el  boton derecho se hace un panning (falta mejorarlo).
+Con tecla ESC se situa en tercera persona y con la tecla 1 se situa en la vista cockpit(hay que hacer un poco de zoom  para acaba de verlo bien (pendiente de mejora))
+Cada vez que se añaden nuevos elementos a la escena se renicia la vista TOP.
+Se pueden añadir otro coche que se controlara con los botones normales de direccion( ya que el coche 1 va con las teclas wasd)
+Los obstaculos, como en la practica anterior, se escogen de la carpeta dataset(preferiblemente el obstaculo casa).
+
+EL coche por ahora no gira en eje Y :-(

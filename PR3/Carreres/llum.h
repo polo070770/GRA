@@ -29,7 +29,7 @@ public:
     Llum();
     void ini(vec3 direccio); //inicia una llum direccional
     void ini(vec4 posicio);  //inicia una llum puntual
-    void ini(vec3 direccio, float obertura); //inicia un focus (spotlight)
+    void ini(vec4 posicio, vec3 direccio, float obertura); //inicia un focus (spotlight)
     void toGPU(QGLShaderProgram *program);
 
 private:

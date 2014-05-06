@@ -14,11 +14,11 @@ public:
     void reset_angle();
     void fer_gir(float angle);
     void aplicaTGCentrat(mat4 m);
-private:
 
-static const int NumVerticesF = 100000;
-static const int NumCares = 300000;
-float angle_gir;
+private:
+    static const int NumVerticesF = 100000;
+    static const int NumCares = 300000;
+    float angle_gir;
 };
 
 #endif // RODA_H
