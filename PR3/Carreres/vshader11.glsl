@@ -21,7 +21,6 @@ struct tipusLlum{
 };
 
 IN vec4 vPosition;
-//IN vec4 vColor;
 IN vec4 vNormal;
 uniform tipusLlum light;
 uniform mat4 model_view;
@@ -32,24 +31,28 @@ OUT vec4 color;
 
 void main() 
 {
-  float brillo = 3;
-  vec4 ambient, diffuse, specular;
+  float E, IG;
+  vec3 ambient, diffuse, specular;
+  vec3 Kd, Ks, Ka;
+  E = 3;
+  IG = 0.01;
+  Kd = vec3(0.7,0.7,0.7);
+  Ks = vec3(0.7,0.7,0.7);
+  Ka = vec3(0.7,0.7,0.7);
+
   gl_Position = projection * model_view * (vPosition / vPosition.w );
 
 
   vec3 N = normalize(vNormal.xyz);
   vec3 L = normalize(light.Position.xyz - (vPosition).xyz);
-  vec3 E = -normalize((vPosition).xyz);
-  vec3 H = normalize(L+E);
-
-  float Kd = max(dot(L, N), 0.0);
-  float Ks = pow(max(dot(N, H), 0.0), brillo);
-
-  ambient = light.Ambient;
-  diffuse = Kd * light.Diffuse;
-  specular = max(pow(max(dot(N, H), 0.0), brillo) * light.Specular, 0.0);
+  vec3 V = max(dot(L, N), 0); // es el vector del rebot de la llum
+  vec3 H = normalize((L+V) / abs(L+V));
 
 
-  color = vec4((ambient + diffuse + specular).xyz, 1.0);
+  diffuse = light.Diffuse * Kd * dot(N, L);
+  specular = light.Specular * Ks* pow(dot(N, H), E);
+  ambient = light.Ambient * Ka;
 
+
+  color = vec4(( IG + ambient + diffuse + specular ).xyz, 1.0);
 } 

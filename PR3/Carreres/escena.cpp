@@ -25,6 +25,7 @@ escena::escena()
     llum = new Llum();
 
     llum->ini(vec4(0.0,10.0,0.0), vec3(0.0,-1.0,.0),30.0);
+    //llum->ini(vec4(0.0,10.0,0.0));
 
 }
 

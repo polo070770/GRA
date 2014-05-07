@@ -3,9 +3,9 @@
 Llum::Llum()
 {
     // valors experimentals
-    intensitat.ambient = vec4(0.2, 0.2, 0.2, 1.0);
-    intensitat.difusa = vec4(1.0, 0.8, 0.0, 1.0);
-    intensitat.especular = vec4(1.0, 1.0, 1.0, 1.0);
+    intensitat.ambient = vec4(0.5, 0.5, 0.5, 1.0);
+    intensitat.difusa = vec4(0.5, 0.5, 0.5, 1.0);
+    intensitat.especular = vec4(0.5, 0.5, 0.5, 1.0);
     atenuacio.constant = 0.5;
     atenuacio.lineal = 0.5;
     atenuacio.cuadratica = 0.5;

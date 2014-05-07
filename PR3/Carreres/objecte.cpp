@@ -126,9 +126,11 @@ void Objecte::aplicaTGAndNormalize(mat4 m)
     // Actualitzacio del vertex array per a preparar per pintar
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
                      &points[0] );
+
     //actualitzacion de les normals
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
                      &normals[0] );
+
 }
 
 void Objecte::aplicaTGPoints(mat4 m)
@@ -217,6 +219,7 @@ void Objecte::toGPU(QGLShaderProgram *pr){
      */
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(vec4) * Index,
                       NULL, GL_STATIC_DRAW );
+
     program->link();
 
     program->bind();
