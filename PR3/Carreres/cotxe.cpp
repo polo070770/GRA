@@ -55,6 +55,7 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     accelerant = 0;
     girant = 0;
     reset_rodes = 0;
+    angle_total = 0;
 
     carroseria = new Carrosseria(tam, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
     roda_dreta_davantera = new Roda(tam, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
@@ -150,6 +151,9 @@ void Cotxe::make(){
     accelerant = 0;
     girant = 0;
     reset_rodes = 0;
+    this->angle_total = 0; //ponemos el angulo a 0
+    this->actualitzaAngle(0); // actualizamos la info del angulo en las ruedas tmb
+
 
     this->direction = vec4(-1.0,0.0,0.0,0.0);
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
@@ -204,6 +208,8 @@ void Cotxe::aplicaTGPoints(mat4 trans){
 }
 
 void Cotxe::aplicaTGCentrat(mat4 trans){
+    //calculamos la caja del coche
+    calculCapsa3D();
     // calculamos el centro del coche
     point4 centre = calculCentre();
 
@@ -218,8 +224,13 @@ void Cotxe::aplicaTGCentrat(mat4 trans){
 
 void Cotxe::moviment(){
 
+    if(girant){
+        //cout << "girant" << endl;
+        this->girar_cotxe(angle_gir);
+    }
+
     point4 desti = point4(
-                this->direction[0] * velocitat * FACTOR_VELOCITAT,
+            this->direction[0] * velocitat * FACTOR_VELOCITAT,
             this->direction[1] * velocitat * FACTOR_VELOCITAT,
             this->direction[2] * velocitat * FACTOR_VELOCITAT,
             this->direction[3] * velocitat * FACTOR_VELOCITAT
@@ -272,7 +283,6 @@ void Cotxe::turnleft(){
     if(girant == 0){
         angle_gir = 1 * MAX_ANGLE;
         this->girar_rodes_davanteres();
-        //this->girar_cotxe(MIN_ANGLE);
         girant = 1;
     }
 }
@@ -281,16 +291,22 @@ void Cotxe::turnright(){
     if(girant == 0){
         angle_gir = 1 * MIN_ANGLE;
         this->girar_rodes_davanteres();
-        //this->girar_cotxe(MAX_ANGLE);
         girant = 1;
     }
 }
 
 void Cotxe::girar_cotxe(float angle){
 
+    int angle_resultant = angle  * FACTOR_ANGLE_GIR * velocitat * FACTOR_VELOCITAT;
+    // si hay velocidad damos añadimos un valor para evitar que no gire a velocidades bajas
+    if(velocitat * FACTOR_VELOCITAT > 0) angle_resultant += (angle/30);
+    else if(velocitat * FACTOR_VELOCITAT < 0 ) angle_resultant -= (angle/30);
 
-    vec4 nova  = (RotateY(angle * velocitat * 0.1) * this->direction);
-    this->aplicaTGCentrat(RotateY(angle * velocitat * 0.1));
+    this->actualitzaAngle(angle_resultant);
+
+    vec4 nova  = (RotateY(angle_resultant) * this->direction);
+
+    this->aplicaTGCentrat(RotateY(angle_resultant));
     this->direction[0] = nova.x;
     this->direction[1] = nova.y;
     this->direction[2] = nova.z;
@@ -298,6 +314,7 @@ void Cotxe::girar_cotxe(float angle){
 
 }
 void Cotxe::temps(){
+
 
 
     // si ja no estem girant fem un reset dels angles
@@ -442,4 +459,13 @@ void Cotxe::readObj(QString filename)
             //free(words);
         }
     }
+}
+void Cotxe::actualitzaAngle(int angle){
+    angle_total += angle;
+    if(angle_total > 360) angle_total -=360;
+    else if(angle_total < 0) angle_total +=360;
+    this->roda_esquerra_davantera->actualitzaAngleCotxe(this->angle_total);
+    this->roda_dreta_davantera->actualitzaAngleCotxe(this->angle_total);
+    this->roda_dreta_posterior->actualitzaAngleCotxe(this->angle_total);
+    this->roda_esquerra_posterior->actualitzaAngleCotxe(this->angle_total);
 }

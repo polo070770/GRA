@@ -152,7 +152,7 @@ void Camera::resetLookCockpit(Capsa3D capsaCotxe){
     piram.alfav = 120;
     piram.alfah = 120;
 
-
+/*
     // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
     // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
     vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
@@ -163,7 +163,7 @@ void Camera::resetLookCockpit(Capsa3D capsaCotxe){
     vs.vrp.x = capsaCotxe.pmin.x - 20;
     vs.vrp.y = capsaCotxe.pmin.y;
     vs.vrp.z = centre.z;
-/*
+*/
     //camara tv
     vs.obs.x = centre.x;
     vs.obs.z = 10 ;
@@ -173,7 +173,7 @@ void Camera::resetLookCockpit(Capsa3D capsaCotxe){
     vs.vrp.x = centre.x;
     vs.vrp.y = centre.y;
     vs.vrp.z = centre.z;
-*/
+
     CalculWindow(capsaCotxe);
     CalculaMatriuProjection();
 
@@ -211,7 +211,7 @@ void Camera::actualitzaCameraCockpit(Capsa3D capsaCotxe){
 
     // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
     // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
-
+ /*
     vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
     vs.obs.z = centre.z ;
     vs.obs.y = capsaCotxe.pmin.y + (3.5 * (capsaCotxe.h / 5));
@@ -220,12 +220,12 @@ void Camera::actualitzaCameraCockpit(Capsa3D capsaCotxe){
     vs.vrp.x = capsaCotxe.pmin.x - 20;
     vs.vrp.y = capsaCotxe.pmin.y;
     vs.vrp.z = centre.z;
- /*
+*/
     // miramos al centro del coche
     vs.vrp.x = centre.x;
     vs.vrp.y = centre.y;
     vs.vrp.z = centre.z;
-*/
+
     CalculaMatriuModelView();
 
 }

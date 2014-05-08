@@ -14,11 +14,13 @@ public:
     void reset_angle();
     void fer_gir(float angle);
     void aplicaTGCentrat(mat4 m);
+    void actualitzaAngleCotxe(int angle);
 
 private:
     static const int NumVerticesF = 100000;
     static const int NumCares = 300000;
     float angle_gir;
+    int angle_cotxe;
 };
 
 #endif // RODA_H

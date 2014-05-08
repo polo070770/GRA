@@ -17,6 +17,7 @@ Roda::Roda(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     yRot = ydir;
     zRot = zdir;
     angle_gir = 0.0;
+    angle_cotxe = 0;
 
 }
 
@@ -26,7 +27,7 @@ void Roda::aplicaTGCentrat(mat4 m){
     point4 centre = calculCentre();
 
     // tenim en conte que es posible que les rodes estiguin rotades respecte les y
-    mat4 transform_centrada = ( Translate(centre) * RotateY(angle_gir) * m * RotateY(-angle_gir) * Translate(-centre) );
+    mat4 transform_centrada = ( Translate(centre) * RotateY(angle_gir + angle_cotxe) * m * RotateY(-angle_gir - angle_cotxe) * Translate(-centre) );
 
     // aplicmos las transformaciones
     aplicaTGAndNormalize(transform_centrada);
@@ -43,3 +44,6 @@ void Roda::fer_gir(float angle){
     this->aplicaTGCentratNormals(gir);
 }
 
+void Roda::actualitzaAngleCotxe(int angle){
+    this->angle_cotxe = angle;
+}

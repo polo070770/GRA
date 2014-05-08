@@ -35,7 +35,7 @@ public:
     void llibera_gir();
 
 private:
-
+    void actualitzaAngle(int angle);
     vector<Objecte * > vector_fills;
     vector<Objecte *>::iterator fill_iter;
     Carrosseria *carroseria;
@@ -55,16 +55,17 @@ private:
     //static const float FACTOR_VELOCITAT = 0.002;
     float FACTOR_ROSAMENT;
     float FACTOR_VELOCITAT;
-    static const float MAX_ANGLE = 40.0;
-    static const float MIN_ANGLE = -40.0;
+    static const float MAX_ANGLE = 30.0;
+    static const float MIN_ANGLE = -30.0;
     static const float FACTOR_MOTLLA_DIRECCIO = 2.5;
-    static const float FACTOR_ANGLE_GIR = 4;
+    static const float FACTOR_ANGLE_GIR = 0.5;
     virtual void escalarFrom1(float factor);
     float velocitat;
     float angle_gir;
     int girant;
     int reset_rodes;
     int accelerant;
+    int angle_total;
 
 };
 
