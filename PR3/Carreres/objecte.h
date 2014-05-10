@@ -10,7 +10,8 @@
 
 
 #include <QGLShaderProgram>
-
+#include <conjuntmaterials.h>
+#include <material.h>
 typedef Common::vec4  color4;
 typedef Common::vec4  point4;
 
@@ -22,7 +23,8 @@ class Objecte : public QObject
 protected:
     QString nom; // nom del fitxer on esta el cotxe
     vector<Cara> cares; // cares de l'objecte
-
+    ConjuntMaterials materials;
+    Material *material;
 
     // Sistema de coordenades d'un objecte: punt origen i eixos de rotació
     GLfloat xorig, yorig, zorig;
@@ -68,6 +70,7 @@ public:
     // make(): omple l'estructura de points i colors de l'objecte, inicialitza NumVertices
     // Si l'objecte es construeix procedimentalment es sobrecarrega el make
     virtual void make();
+    virtual void aplicaNormals();
 
     // Pas generic de vertexs i colors a la GPU
     virtual void toGPU(QGLShaderProgram *p);
@@ -82,7 +85,7 @@ public:
     virtual void aplicaTG(mat4 m);
     virtual void aplicaTGAndNormalize(mat4 m);
     void aplicaTGPoints(mat4 m);
-    void aplicaTGPointsAndNormals(mat4 m);
+    //void aplicaTGPointsAndNormals(mat4 m);
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);
     void aplicaTGCentratNormals(mat4 m);

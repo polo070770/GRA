@@ -242,6 +242,7 @@ void GLWidget::resetView()
 
     esc->reset();
     esc->camera_toGPU(program);
+    esc->llum_toGPU(program);
     updateGL();
 }
 
@@ -261,7 +262,7 @@ void GLWidget::paintGL()
     //    esc->aplicaTGCentrat(transform);
 
     esc->camera_toGPU(program);
-    esc->llum_toGPU(program);
+    esc->llum_toGPU(program); //las luces se crean al principio
     esc->draw();
 }
 

@@ -15,7 +15,7 @@ OUT vec4 color;
 
 /* Definicio dels tipus de llum */
 const int PUNTUAL =  0;
-const int DIRECCINAL = 1;
+const int DIRECCIONAL = 1;
 const int SPOT = 2;
 
 /* definicio de l'estructura de les dades de la llum */
@@ -33,10 +33,23 @@ struct tipusLlum{
     float Cuadratica;
 
 };
+
+/* definicio de l'estructura per als materials */
+
+struct tipusMaterial{
+    vec4 Ambient;
+    vec4 Diffuse;
+    vec4 Specular;
+    float Shinines;
+
+};
+
 /* uniforms */
+uniform tipusMaterial material;
 uniform tipusLlum light;
 uniform mat4 model_view;
 uniform mat4 projection;
+uniform float ambientGlobal;
 
 
 
@@ -44,21 +57,9 @@ uniform mat4 projection;
 
 void main(){
   vec3 ambient, diffuse, specular;
-  ///----------EXPERIMENTALS
-  /* valores expermimentales del material */
-  vec4 Kd, Ks, Ka;
-  Kd = vec4(0.9, 0.9, 0.9, 1.0); // difusa
-  Ks = vec4(0.9, 0.9, 0.9, 1.0); // specular
-  Ka = vec4(0.9, 0.9, 0.9, 1.0); // ambient
-  float E = 5.0; //shinines
-
-
-  /* valor experimental intensidad global */
-  float IG = 0.1;
-
   gl_Position = projection * model_view * (vPosition / vPosition.w );
 
-  if(light.tipus == PUNTUAL){
+  if(light.tipus == PUNTUAL || light.tipus == DIRECCIONAL){
       vec3 N = normalize(vNormal.xyz);  // la normal del vertice, pasada por normalize para ser uniforme
       vec3 L = normalize((light.Position - vPosition).xyz); // el vector unitario desde el punto a la luz
       vec3 R = max(dot(L, N), 0.0); // es el vector del rebot de la llum , si es negativo pasa a ser 0
@@ -69,15 +70,17 @@ void main(){
 
 
       // la difusa es el producto de V por la difusa de la luz y la difusa del mterial
-      diffuse =  R * (light.Diffuse * Kd);
+      diffuse =  R * (light.Diffuse * material.Diffuse);
 
       // la especular es el dot de N y H elevado a E por el producto de la especular de la luz
       // y del material, evitamos que sea un valor negativo
-      specular = max(pow(dot(N, H), E) * (light.Specular * Ks), 0.0);
+      specular = max(pow(dot(N, H), material.Shinines) * (light.Specular * material.Specular), 0.0);
 
       // producto de light ambient y la reflectividad del material
-      ambient = light.Ambient * Ka;
+      ambient = light.Ambient * material.Ambient;
 }
 
-  color = vec4( min(IG + ambient + diffuse + specular, 1.0).xyz, 1.0);
+
+  //color = vec4( (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
+  color = material.Diffuse;
 } 

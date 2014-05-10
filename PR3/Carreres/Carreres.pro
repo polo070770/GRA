@@ -32,7 +32,10 @@ SOURCES += main.cpp\
     obstacle.cpp \
     camera.cpp \
     trajectoria.cpp \
-    llum.cpp
+    llum.cpp \
+    material.cpp \
+    conjuntllums.cpp \
+    conjuntmaterials.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -55,7 +58,10 @@ HEADERS  += mainwindow.h \
     obstacle.h \
     camera.h \
     trajectoria.h \
-    llum.h
+    llum.h \
+    material.h \
+    conjuntllums.h \
+    conjuntmaterials.h
 
 FORMS    += mainwindow.ui \
     newcotxedialog.ui \

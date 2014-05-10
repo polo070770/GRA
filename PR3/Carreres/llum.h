@@ -27,6 +27,8 @@ class Llum
 {
 public:
     Llum();
+    Intensitat intensitat;
+    Atenuacio atenuacio;
     void ini(vec3 direccio); //inicia una llum direccional
     void ini(vec4 posicio);  //inicia una llum puntual
     void ini(vec4 posicio, vec3 direccio, float obertura); //inicia un focus (spotlight)
@@ -37,8 +39,7 @@ private:
     vec4 posicio;
     vec3 direccio;
     float obertura;
-    Intensitat intensitat;
-    Atenuacio atenuacio;
+
 
 
 

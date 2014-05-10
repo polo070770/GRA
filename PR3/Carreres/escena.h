@@ -21,6 +21,7 @@
 #include <cotxecontainer.h>
 #include <obstaclecontainer.h>
 #include <camera.h>
+#include <conjuntllums.h>
 #include <llum.h>
 using namespace std;
 
@@ -83,7 +84,6 @@ public:
     void initLookAtCotxe();
     void initLookAtCockpit();
 private:
-    Llum *llum;
     bool terceraPersona;
     bool primeraPersona;
     float widthGLWidget;
@@ -93,7 +93,8 @@ private:
     Cotxe *cotxe_2;
     CotxeContainer cotxes;
     ObstacleContainer obstacles;
-
+    ConjuntLlums llums;
+    void crearLlumsEscena();
 };
 
 

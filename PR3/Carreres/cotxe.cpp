@@ -41,7 +41,7 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     xRot = girx;
     yRot = giry;
     zRot = girz;
-    FACTOR_ROSAMENT = 2.9;
+    FACTOR_ROSAMENT = 1.5;
     FACTOR_VELOCITAT = 0.002;
 
 

@@ -22,10 +22,9 @@ escena::escena()
     heightGLWidget = 50.0;
     terceraPersona = false;
     primeraPersona = false;
-    llum = new Llum();
+    crearLlumsEscena();
 
-    //llum->ini(vec4(0.0,10.0,0.0), vec3(0.0,-1.0,.0),30.0);
-    llum->ini(vec4(0.0,10.0,0.0));
+
 
 }
 
@@ -172,7 +171,8 @@ void escena::camera_toGPU(QGLShaderProgram *program){
     camera.toGPU(program);
 }
 void escena::llum_toGPU(QGLShaderProgram *program){
-    llum->toGPU(program);
+    llums.setAmbientToGPU(program);
+    llums.toGPU(program);
 }
 void escena::accelera_cotxe(int num){
      Cotxe * cotxe;
@@ -344,4 +344,23 @@ vector<Cotxe *> escena::getCotxes(){
 
 vector<Obstacle *> escena::getObstacles(){
     return obstacles.getListado();
+}
+
+void escena::crearLlumsEscena(){
+    //creamos la intensidad Global
+    llums.ambientGlobal = 0.05;
+    //creamos una luz blanca
+    Llum* llum = new Llum();
+    llum->ini(vec3(0.0,-1.0,.0));
+    //llum->ini(vec4(0.0,10.0,0.0));
+    llum->intensitat.difusa = vec4(0.9, 0.9, 0.9, 1.0);
+    llum->intensitat.especular = vec4(0.5, 0.5, 0.5, 1.0);
+    llum->intensitat.ambient = vec4(0.1, 0.1, 0.1, 1.0);
+    llum->atenuacio.constant = 0.5;
+    llum->atenuacio.lineal = 0.5;
+    llum->atenuacio.cuadratica = 0.5;
+    llums.add(llum);
+    //llum->ini(vec4(0.0,10.0,0.0), vec3(0.0,-1.0,.0),30.0);
+
+    //llum->ini(vec4(0.0,10.0,0.0));
 }

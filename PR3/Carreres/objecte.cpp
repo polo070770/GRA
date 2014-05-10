@@ -39,6 +39,7 @@ Objecte::~Objecte()
 {
     delete points;
     delete colors;
+    delete normals;
 }
 
 /**
@@ -117,11 +118,12 @@ void Objecte::aplicaTG(mat4 m)
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
                      &points[0] );
 
+
 }
 
 void Objecte::aplicaTGAndNormalize(mat4 m)
 {
-    aplicaTGPointsAndNormals(m);
+    //aplicaTGPointsAndNormals(m);
 
     // Actualitzacio del vertex array per a preparar per pintar
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
@@ -132,7 +134,7 @@ void Objecte::aplicaTGAndNormalize(mat4 m)
                      &normals[0] );
 
 }
-
+/*
 void Objecte::aplicaTGPoints(mat4 m)
 {
     point4  *transformed_points = new point4[Index];
@@ -151,15 +153,17 @@ void Objecte::aplicaTGPoints(mat4 m)
 
     delete transformed_points;
 }
+*/
 
-void Objecte::aplicaTGPointsAndNormals(mat4 m)
+void Objecte::aplicaTGPoints(mat4 m)
 {
     point4  *transformed_points = new point4[Index];
     vec4 *transformed_normals = new vec4[Index];
 
     for ( int i = 0; i < Index; ++i ) {
         transformed_points[i] = m * points[i];
-        transformed_normals[i] = m * normals[i];
+        //transformed_normals[i] = m * normals[i];
+        transformed_normals[i] = normals[i];
     }
 
     transformed_points = &transformed_points[0];
@@ -176,7 +180,6 @@ void Objecte::aplicaTGPointsAndNormals(mat4 m)
     delete transformed_points;
     delete transformed_normals;
 }
-
 void Objecte::aplicaTGCentrat(mat4 m){
     // calculamos el centro
     calculCapsa3D();
@@ -208,7 +211,11 @@ void Objecte::aplicaTGCentratNormals(mat4 m){
 }
 void Objecte::toGPU(QGLShaderProgram *pr){
 
+
+
     program = pr;
+
+    this->material->toGPU(program); //??
 
     std::cout<<"Passo les dades de l'objecte a la GPU\n";
 
@@ -224,6 +231,8 @@ void Objecte::toGPU(QGLShaderProgram *pr){
 
     program->bind();
     glEnable( GL_DEPTH_TEST );
+
+
 }
 
 // Pintat en la GPU.
@@ -298,6 +307,21 @@ void Objecte::make(){
     }
 
     // S'ha de dimensionar uniformement l'objecte a la capsa de l'escena i s'ha posicionar en el lloc corresponent
+}
+
+void Objecte::aplicaNormals(){
+    Index = 0;
+
+    for(unsigned int i=0; i<cares.size(); i++)
+    {
+        // calculamos las normal de las caras
+        cares[i].calculaNormal(vertexs);
+        for(unsigned int j=0; j<cares[i].idxVertices.size(); j++){
+            normals[Index] = vec4(cares[i].normal);
+            Index++;
+        }
+    }
+
 }
 
 float Objecte::getYOrig() {
