@@ -7,10 +7,10 @@ ConjuntMaterials::ConjuntMaterials(){
 void ConjuntMaterials::crearConjuntMaterials(){
     //creem la carrosseria
     Material *carrosseria = new Material("Carrosseria");
-    carrosseria->coefEspecular = 100.0;
-    carrosseria->intensitat.difusa = vec4(0.8, 0.8, 0.8 , 1.0);
-    carrosseria->intensitat.ambient = vec4(0.06, 0.0, 0.0 , 1.0);
-    carrosseria->intensitat.especular = vec4(0.47, 0.4, 0.4, 1.0);
+    carrosseria->coefEspecular = 0.5;
+    carrosseria->intensitat.difusa = vec4(0.8, 0.0, 0.0 , 1.0);
+    carrosseria->intensitat.ambient = vec4(0.2, 0.0, 0.0 , 1.0);
+    carrosseria->intensitat.especular = vec4(0.9, 0.1, 0.1, 1.0);
     conjunt[CARROSSERIA] = carrosseria;
 
     //creem la roda

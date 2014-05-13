@@ -15,7 +15,7 @@ void Material::toGPU(QGLShaderProgram *program){
 
 
     gl_ld_material.ambient = program->uniformLocation("material.Ambient");
-    gl_ld_material.difusa = program->uniformLocation("material.Difusse");
+    gl_ld_material.difusa = program->uniformLocation("material.Diffuse");
     gl_ld_material.especular = program->uniformLocation("material.Specular");
     gl_ld_material.shinines = program->uniformLocation("material.Shinines");
 

@@ -215,8 +215,6 @@ void Objecte::toGPU(QGLShaderProgram *pr){
 
     program = pr;
 
-    this->material->toGPU(program); //??
-
     std::cout<<"Passo les dades de l'objecte a la GPU\n";
 
     glGenBuffers( 1, &buffer );
@@ -262,6 +260,8 @@ void Objecte::draw()
     program->enableAttributeArray(normalLocation);
     program->setAttributeBuffer("vNormal", GL_FLOAT, sizeof(vec4) * Index, 4);
 
+    //enviamos los materiales
+    this->material->toGPU(program);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
     glDrawArrays( GL_TRIANGLES, 0, Index );

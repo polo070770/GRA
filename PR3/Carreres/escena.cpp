@@ -352,7 +352,7 @@ void escena::crearLlumsEscena(){
     //creamos una luz blanca
     Llum* llum = new Llum();
     llum->ini(vec3(0.0,-1.0,.0));
-    //llum->ini(vec4(0.0,10.0,0.0));
+    //llum->ini(vec4(0.0,3.0,0.0));
     llum->intensitat.difusa = vec4(0.9, 0.9, 0.9, 1.0);
     llum->intensitat.especular = vec4(0.5, 0.5, 0.5, 1.0);
     llum->intensitat.ambient = vec4(0.1, 0.1, 0.1, 1.0);

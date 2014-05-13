@@ -56,31 +56,38 @@ uniform float ambientGlobal;
 
 
 void main(){
-  vec3 ambient, diffuse, specular;
-  gl_Position = projection * model_view * (vPosition / vPosition.w );
 
-  if(light.tipus == PUNTUAL || light.tipus == DIRECCIONAL){
-      vec3 N = normalize(vNormal.xyz);  // la normal del vertice, pasada por normalize para ser uniforme
-      vec3 L = normalize((light.Position - vPosition).xyz); // el vector unitario desde el punto a la luz
-      vec3 R = max(dot(L, N), 0.0); // es el vector del rebot de la llum , si es negativo pasa a ser 0
-      vec3 V = -normalize((model_view * vPosition).xyz ); // el vector desde el punt fins al viewer
-      vec3 H = normalize((L+V) / abs(L+V)); // the halway, o l'optimitzacio de Blinn
-      //vec3 H = normalize((L+V).xyz); // the halway, o l'optimitzacio de Blinn
+    vec3 ambient, diffuse, specular, N, V, L, H, R;
+    gl_Position = projection * model_view * (vPosition / vPosition.w );
 
 
+    N = normalize(vNormal.xyz);  // la normal del vertice, pasada por normalize para ser uniforme
 
-      // la difusa es el producto de V por la difusa de la luz y la difusa del mterial
-      diffuse =  R * (light.Diffuse * material.Diffuse);
+    V = -normalize((model_view * vPosition).xyz ); // el vector desde el punt fins al viewer
 
-      // la especular es el dot de N y H elevado a E por el producto de la especular de la luz
-      // y del material, evitamos que sea un valor negativo
-      specular = max(pow(dot(N, H), material.Shinines) * (light.Specular * material.Specular), 0.0);
+    //vec3 H = normalize((L+V).xyz); // the halway, o l'optimitzacio de Blinn
 
-      // producto de light ambient y la reflectividad del material
-      ambient = light.Ambient * material.Ambient;
-}
+    if(light.tipus == PUNTUAL){
+        L = normalize((light.Position - vPosition).xyz); // el vector unitario desde el punto a la luz
+    }else if(light.tipus == DIRECCIONAL){
+        //vec3 L = normalize(light.Direction.xyz); // el vector unitario desde el punto a la luz
+        L = dot(reflect(-light.Direction, N), V);
+
+    }
+    H = normalize((L+V) / abs(L+V)); // the halway, o l'optimitzacio de Blinn
+    R = max(dot(L, N), 0.0); // es el vector del rebot de la llum , si es negativo pasa a ser 0
 
 
-  //color = vec4( (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
-  color = material.Diffuse;
+    // la difusa es el producto de V por la difusa de la luz y la difusa del mterial
+    diffuse =  R * (light.Diffuse * material.Diffuse);
+
+    // la especular es el dot de N y H elevado a E por el producto de la especular de la luz
+    // y del material, evitamos que sea un valor negativo
+    specular = (light.Specular * material.Specular) * max(pow(dot(N, H), material.Shinines) , 0.0);
+
+    // producto de light ambient y la reflectividad del material
+    ambient = light.Ambient * material.Ambient;
+
+    color = vec4( (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
+    //color = material.Diffuse;
 } 
