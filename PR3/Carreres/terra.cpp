@@ -14,7 +14,6 @@ Terra::Terra(float amplaria, float profunditat, float y):Objecte(NumVerticesF)
     yRot = 0;
     zRot = 0;
 
-
     vertices[0] = point4( 1., yorig, 1., 1.0 );
     vertices[1] = point4( 1., yorig, -1., 1.0 );
 
@@ -22,21 +21,17 @@ Terra::Terra(float amplaria, float profunditat, float y):Objecte(NumVerticesF)
     vertices[3] = point4( -1., yorig, 1., 1.0 );
 
     // RGBA colors
-    vertex_colors[0] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-    vertex_colors[1] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-    vertex_colors[2] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-    vertex_colors[3] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-    //vertex_colors[3] =    color4( 1.0, 0.0, 0.0, 1.0 );  // red
-
+//    vertex_colors[0] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
+//    vertex_colors[1] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
+//    vertex_colors[2] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
+//    vertex_colors[3] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
 
     make();
+
+    this->material = materials.get(TERRA);
 }
 
-
-
-
 // Realitzacio de la geometria del cub en una genList o en el vertex array, segons el que visualitzem
-
 void Terra::make()
 {
     //std::cout<<"Estic en el make del terra\n";
@@ -59,42 +54,35 @@ void Terra::make()
 
 }
 
-
 /*
  *Generamos dos triangulos por cara y asignamos los colores
  *
  */
-
 void Terra::quad( int a, int b, int c, int d ){
+
     vec4 normal = vec4(0.0, 1.0, 0.0, 0.0);
 
     normals[Index] = normal;
-    colors[Index] = vertex_colors[a];
     points[Index] = vertices[a];
     Index++;
 
     normals[Index] = normal;
-    colors[Index] = vertex_colors[b];
     points[Index] = vertices[b];
     Index++;
 
     normals[Index] = normal;
-    colors[Index] = vertex_colors[c];
     points[Index] = vertices[c];
     Index++;
 
     normals[Index] = normal;
-    colors[Index] = vertex_colors[a];
     points[Index] = vertices[a];
     Index++;
 
     normals[Index] = normal;
-    colors[Index] = vertex_colors[c];
     points[Index] = vertices[c];
     Index++;
 
     normals[Index] = normal;
-    colors[Index] = vertex_colors[d];
     points[Index] = vertices[d];
     Index++;
 

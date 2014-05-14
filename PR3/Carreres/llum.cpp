@@ -2,24 +2,29 @@
 
 Llum::Llum(){
 }
+
 /**
  * Inicia una llum direccional
  * @brief Llum::ini
  * @param direccio
  */
 void Llum::ini(vec3 direccio){
+    cout << "LLUM DIRECCIONAL" << endl;
     this->tipus = DIRECCIONAL;
     this->direccio = direccio;
 }
+
 /**
  * Inicia una llum puntual
  * @brief Llum::ini
  * @param posicio
  */
 void Llum::ini(vec4 posicio){
+    cout << "LLUM PUNTUAL" << endl;
     this->tipus = PUNTUAL;
     this->posicio = posicio;
 }
+
 /**
  * Inicia una llum focal(spotlight)
  * @brief Llum::ini
@@ -32,9 +37,7 @@ void Llum::ini(vec4 posicio, vec3 direccio, float obertura){
     this->obertura = obertura;
 }
 
-
 void Llum::toGPU(QGLShaderProgram *program){
-
 
     struct{
         GLuint tipus;
@@ -49,6 +52,7 @@ void Llum::toGPU(QGLShaderProgram *program){
         GLuint cuadratica;
 
     }gl_ld_Llum;
+
     gl_ld_Llum.tipus = program->uniformLocation("light.Tipus");
     gl_ld_Llum.posicio = program->uniformLocation("light.Position");
     gl_ld_Llum.direccio = program->uniformLocation("light.Direction");

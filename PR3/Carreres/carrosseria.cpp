@@ -16,5 +16,6 @@ Carrosseria::Carrosseria(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     xRot = xdir;
     yRot = ydir;
     zRot = zdir;
+
     this->material = materials.get(CARROSSERIA);
 }

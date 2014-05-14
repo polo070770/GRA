@@ -7,6 +7,10 @@ NewTerraDialog::NewTerraDialog(QWidget *parent) :
     ui(new Ui::NewTerraDialog)
 {
     ui->setupUi(this);
+    ui->amplaria->setPlainText(QString("25"));
+    ui->profunditat->setPlainText(QString("25"));
+    ui->y->setPlainText(QString("0"));
+
     connect(this, SIGNAL(accepted()), this, SLOT(emitAccepted()));
 }
 

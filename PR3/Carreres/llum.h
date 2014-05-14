@@ -23,6 +23,7 @@ typedef struct{
 } Atenuacio;
 
 using namespace std;
+
 class Llum
 {
 public:
@@ -39,9 +40,6 @@ private:
     vec4 posicio;
     vec3 direccio;
     float obertura;
-
-
-
 
 };
 

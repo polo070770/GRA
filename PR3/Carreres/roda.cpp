@@ -7,8 +7,6 @@ Roda::Roda(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
 
     tam = mida;
 
-    //std::cout<< "Estic en el constructor parametritzat de la roda" << endl;
-
     xorig = x0;
     yorig = y0;
     zorig = z0;
@@ -18,7 +16,7 @@ Roda::Roda(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     zRot = zdir;
     angle_gir = 0.0;
     angle_cotxe = 0;
-    //this->material = materials.get(CARROSSERIA);
+
     this->material = materials.get(RODA);
 }
 

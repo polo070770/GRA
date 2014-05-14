@@ -24,8 +24,6 @@ escena::escena()
     primeraPersona = false;
     crearLlumsEscena();
 
-
-
 }
 
 
@@ -139,7 +137,6 @@ void escena::aplicaTGCentrat(mat4 m) {
 void escena::draw() {
 
     // Metode a modificar
-
     cotxes.draw();
     obstacles.draw();
     if (terra!=NULL)
@@ -170,6 +167,7 @@ void escena::reset() {
 void escena::camera_toGPU(QGLShaderProgram *program){
     camera.toGPU(program);
 }
+
 void escena::llum_toGPU(QGLShaderProgram *program){
     llums.setAmbientToGPU(program);
     llums.toGPU(program);
@@ -248,6 +246,7 @@ void escena::llibera_acceleracio_cotxe(int num){
         cotxe->llibera_acceleracio();
 
 }
+
 /**
  * Retorna el punt y origen de l'escena
  * @brief escena::getYOrig
@@ -347,20 +346,30 @@ vector<Obstacle *> escena::getObstacles(){
 }
 
 void escena::crearLlumsEscena(){
+
+
+//    Para la luz, los números corresponden al porcentaje de intensidad para cada color. Si los R, G, B son
+//    todos uno es una luz blanca lo más brillante posible. Si los tres son 0.5 el color es todavía
+//    blanco pero de intensidad media, de forma que aparece gris. Si R y G son 1 y B es 0
+//    (completamente roja y verde sin azul), la luz aparece amarilla.
+
     //creamos la intensidad Global
-    llums.ambientGlobal = 0.05;
+    llums.ambientGlobal = 0.0;
+
     //creamos una luz blanca
     Llum* llum = new Llum();
-    llum->ini(vec3(0.0,-1.0,.0));
-    //llum->ini(vec4(0.0,3.0,0.0));
-    llum->intensitat.difusa = vec4(0.9, 0.9, 0.9, 1.0);
-    llum->intensitat.especular = vec4(0.5, 0.5, 0.5, 1.0);
-    llum->intensitat.ambient = vec4(0.1, 0.1, 0.1, 1.0);
-    llum->atenuacio.constant = 0.5;
-    llum->atenuacio.lineal = 0.5;
-    llum->atenuacio.cuadratica = 0.5;
-    llums.add(llum);
-    //llum->ini(vec4(0.0,10.0,0.0), vec3(0.0,-1.0,.0),30.0);
+    llum->ini(vec3(0.0, -1.0, 0.0)); // direccional
+    //llum->ini(vec4(0.0,1.0,0.0,0.0)); // puntual
+    llum->intensitat.difusa = vec4(1.0, 1.0, 1.0, 1.0); // intensidad RGBA que una fuente de luz añade a la escena
+    llum->intensitat.especular = vec4(1.0, 1.0, 1.0, 1.0); // provoca el brillo puntual del objeto
+    llum->intensitat.ambient = vec4(0.0, 0.0, 0.0, 1.0);
 
+    llum->atenuacio.constant = 0.01;
+    llum->atenuacio.lineal = 0.01;
+    llum->atenuacio.cuadratica = 0.01;
+
+    llums.add(llum);
+
+    //llum->ini(vec4(0.0,10.0,0.0), vec3(0.0,-1.0,.0),30.0);
     //llum->ini(vec4(0.0,10.0,0.0));
 }

@@ -55,11 +55,19 @@ void MainWindow::acceptedNewTerra(float amplaria, float profunditat, float y)
 
 void MainWindow::acceptedNewCotxe(float escala, float x, float z, float xdirector, float ydirector, float zdirector)
 {
-    QString fileName = QFileDialog::getOpenFileName(this);
-    if (!fileName.isNull())
-        this->glWidget->newCotxe(fileName, x, z, escala, xdirector, ydirector, zdirector);
-}
+    int debug = 1;
 
+    if (debug){
+
+        this->glWidget->newCotxe("/home/maikel/git/GRA/PR3/Carreres/dataSet/ferrariParts.obj", x, z, escala, xdirector, ydirector, zdirector);
+    }else{
+
+        QString fileName = QFileDialog::getOpenFileName(this);
+        if (!fileName.isNull())
+            this->glWidget->newCotxe(fileName, x, z, escala, xdirector, ydirector, zdirector);
+    }
+
+}
 
 void MainWindow::resetView()
 {

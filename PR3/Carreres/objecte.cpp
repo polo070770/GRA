@@ -6,14 +6,14 @@ Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
 {
     std::cout<< "Estic en el constructor default\n";
     points = new point4[npoints];
-    colors = new color4[npoints];
+//    colors = new color4[npoints];
     normals = new vec4[npoints];
 }
 
 Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble y0, GLdouble z0, double girx, double giry, double girz) : numPoints(npoints)
 {
     points = new point4[npoints];
-    colors = new color4[npoints];
+//    colors = new color4[npoints];
     normals = new vec4[npoints];
     tam = tamanio;
     //std::cout<< "Estic en el constructor parametritzat de l'objecte";
@@ -34,11 +34,10 @@ Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble
 
 }
 
-
 Objecte::~Objecte()
 {
     delete points;
-    delete colors;
+//    delete colors;
     delete normals;
 }
 
@@ -118,6 +117,8 @@ void Objecte::aplicaTG(mat4 m)
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
                      &points[0] );
 
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
+                     &normals[0] );
 
 }
 
@@ -134,26 +135,6 @@ void Objecte::aplicaTGAndNormalize(mat4 m)
                      &normals[0] );
 
 }
-/*
-void Objecte::aplicaTGPoints(mat4 m)
-{
-    point4  *transformed_points = new point4[Index];
-
-    for ( int i = 0; i < Index; ++i ) {
-        transformed_points[i] = m * points[i];
-    }
-
-    transformed_points = &transformed_points[0];
-    points = &points[0];
-
-    for ( int i = 0; i < Index; ++i )
-    {
-        points[i] = transformed_points[i];
-    }
-
-    delete transformed_points;
-}
-*/
 
 void Objecte::aplicaTGPoints(mat4 m)
 {
@@ -189,8 +170,7 @@ void Objecte::aplicaTGCentrat(mat4 m){
     // transformaciones
     mat4 transform_centrada = ( Translate(centre) * m * Translate(-centre) );
 
-
-    // aplicmos las transformaciones
+    // aplicamos las transformaciones
     aplicaTG(transform_centrada);
 
 }
@@ -204,14 +184,12 @@ void Objecte::aplicaTGCentratNormals(mat4 m){
     // transformaciones
     mat4 transform_centrada = ( Translate(centre) * m * Translate(-centre) );
 
-
     // aplicmos las transformaciones
     aplicaTGAndNormalize(transform_centrada);
 
 }
+
 void Objecte::toGPU(QGLShaderProgram *pr){
-
-
 
     program = pr;
 
@@ -229,7 +207,6 @@ void Objecte::toGPU(QGLShaderProgram *pr){
 
     program->bind();
     glEnable( GL_DEPTH_TEST );
-
 
 }
 
@@ -279,12 +256,12 @@ void Objecte::make(){
     };
     */
 
-    static vec3  base_colors[] = {
-        vec3( 1.0, 0.0, 0.0 ),
-        vec3( 1.0, 0.0, 0.0 ),
-        vec3( 1.0, 0.0, 0.0 ),
-        vec3( 1.0, 0.0, 0.0 )
-    };
+//    static vec3  base_colors[] = {
+//        vec3( 1.0, 0.0, 0.0 ),
+//        vec3( 1.0, 0.0, 0.0 ),
+//        vec3( 1.0, 0.0, 0.0 ),
+//        vec3( 1.0, 0.0, 0.0 )
+//    };
 
     // Recorregut de totes les cares per a posar-les en les estructures de la GPU
     // Cal recorrer l'estructura de l'objecte per a pintar les seves cares
@@ -298,7 +275,7 @@ void Objecte::make(){
         for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
         {
             points[Index] = vertexs[cares[i].idxVertices[j]];
-            colors[Index] = base_colors[i%4];
+//            colors[Index] = base_colors[i%4];
             //cada vertice tiene la misma normal que su cara
 
             normals[Index] = vec4(cares[i].normal);
@@ -335,13 +312,6 @@ void Objecte::setYorig(float orig){
 // Llegeix un fitxer .obj
 //  Si el fitxer referencia fitxers de materials (.mtl), encara no es llegeixen
 //  Tots els elements del fitxer es llegeixen com a un unic objecte.
-//
-
-// Llegeix un fitxer .obj
-//  Si el fitxer referencia fitxers de materials (.mtl), tambe es llegeixen.
-//  Tots els elements del fitxer es llegeixen com a un unic objecte.
-//
-
 void Objecte::readObj(QString filename)
 {
 

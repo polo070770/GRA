@@ -177,7 +177,6 @@ void GLWidget::newObstacle(QString fichero, int nombre)
         newObjecte(obj);
     }
 
-
 }
 
 void GLWidget::newTerra(float amplaria, float profunditat, float y)

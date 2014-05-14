@@ -41,9 +41,9 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     xRot = girx;
     yRot = giry;
     zRot = girz;
+
     FACTOR_ROSAMENT = 1.5;
     FACTOR_VELOCITAT = 0.002;
-
 
     this->direction[0] = xdir;
     this->direction[1] = ydir;
@@ -74,7 +74,6 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     this->make();
 
 }
-
 
 Capsa3D Cotxe::calculCapsa3D()
 {

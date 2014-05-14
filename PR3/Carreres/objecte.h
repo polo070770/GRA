@@ -34,7 +34,6 @@ protected:
 
     GLfloat tam; // Escala de l'objecte aplicada al fitxer d'entrada
 
-
     // Programa de shaders de la GPU
     QGLShaderProgram *program;
     GLuint buffer; // Buffer de comunicacio amb la GPU
@@ -42,7 +41,7 @@ protected:
     // Estructures de vertexs i colors per passar a la GPU
     int     numPoints;
     point4 *points;
-    color4 *colors;
+//    color4 *colors;
     vec4 *normals; // a la gpu necesitem les normals
 
     int Index; // index de control del numero de vertexs a posar a la GPU
