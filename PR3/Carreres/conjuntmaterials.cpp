@@ -12,7 +12,7 @@ void ConjuntMaterials::crearConjuntMaterials(){
     // la verde, y ninguna de la luz azul.
 
     // Ambiente: Componente que refleja la luz independientemente de la dirección que venga
-    // Difusa: Componente del material que refleja la luz independientemente de donde venga
+    // Difusa: Componente que refleja según la dirección de procedencia de la luz.
     // Especular: Componente que refleja la luz especular provoca el efecto brillo
 
 
@@ -33,10 +33,10 @@ void ConjuntMaterials::crearConjuntMaterials(){
     conjunt[RODA] = roda;
 
     Material *terra = new Material("Terra");
-    terra->coefEspecular = 0.05;
-    terra->intensitat.difusa = vec4(0.05, 0.05, 0.05, 1.0);
-    terra->intensitat.ambient = vec4(0.02, 0.02, 0.02, 1.0);
-    terra->intensitat.especular = vec4(0.9, 0.9, 0.9, 1.0);
+    terra->coefEspecular = 0.7;
+    terra->intensitat.difusa = vec4(0.8, 0.0, 0.0, 1.0);
+    terra->intensitat.ambient = vec4(0.2, 0.0, 0.0, 1.0);
+    terra->intensitat.especular = vec4(0.9, 0.1, 0.1, 1.0);
     conjunt[TERRA] = terra;
 
 

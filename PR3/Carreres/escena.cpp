@@ -358,15 +358,15 @@ void escena::crearLlumsEscena(){
 
     //creamos una luz blanca
     Llum* llum = new Llum();
-    llum->ini(vec3(0.0, -1.0, 0.0)); // direccional
-    //llum->ini(vec4(0.0,1.0,0.0,0.0)); // puntual
+    //llum->ini(vec3(0.0, -1.0, 0.0)); // direccional
+    llum->ini(vec4(0.0,3.0,0.0,0.0)); // puntual
     llum->intensitat.difusa = vec4(1.0, 1.0, 1.0, 1.0); // intensidad RGBA que una fuente de luz añade a la escena
     llum->intensitat.especular = vec4(1.0, 1.0, 1.0, 1.0); // provoca el brillo puntual del objeto
     llum->intensitat.ambient = vec4(0.0, 0.0, 0.0, 1.0);
 
-    llum->atenuacio.constant = 0.01;
-    llum->atenuacio.lineal = 0.01;
-    llum->atenuacio.cuadratica = 0.01;
+    llum->atenuacio.constant = 0.5;
+    llum->atenuacio.lineal = 0.5;
+    llum->atenuacio.cuadratica = 0.5;
 
     llums.add(llum);
 

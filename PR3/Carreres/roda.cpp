@@ -17,7 +17,7 @@ Roda::Roda(GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     angle_gir = 0.0;
     angle_cotxe = 0;
 
-    this->material = materials.get(RODA);
+    this->material = materials.get(CARROSSERIA);
 }
 
 void Roda::aplicaTGCentrat(mat4 m){
@@ -30,6 +30,7 @@ void Roda::aplicaTGCentrat(mat4 m){
 
     // aplicmos las transformaciones
     aplicaTG(transform_centrada);
+    aplicaTGNormals(m);
 
 }
 
@@ -41,6 +42,7 @@ void Roda::fer_gir(float angle){
     angle_gir = angle;
     mat4 gir = RotateY(angle_gir);
     this->aplicaTGCentrat(gir);
+    aplicaTGNormals(gir);
 }
 
 void Roda::actualitzaAngleCotxe(int angle){

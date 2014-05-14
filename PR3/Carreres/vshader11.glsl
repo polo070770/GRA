@@ -52,11 +52,15 @@ void main(){
 
     vec3 ambient, diffuse, specular, N, V, L, H, R;
 
+    float a, b, c;
+
+    float att = 1.0;
+
     gl_Position = projection * model_view * (vPosition / vPosition.w );
 
     N = normalize(vNormal.xyz);  // la normal del vertice, pasada por normalize para ser uniforme
 
-    V = -normalize((model_view * vPosition).xyz); // el vector desde el punt fins al viewer
+    V = normalize((model_view * vPosition).xyz); // el vector desde el punt fins al viewer
 
     //vec3 H = normalize((L+V).xyz); // the halway, o l'optimitzacio de Blinn
 
@@ -66,8 +70,14 @@ void main(){
 
     }else if(light.Tipus == DIRECCIONAL){
 
-        L = normalize(light.Direction.xyz); // el vector unitario desde el punto a la luz
+        L = normalize(-light.Direction.xyz); // el vector unitario desde el punto a la luz
         //L = dot(reflect(-light.Direction, N), V);
+
+        a = light.Cuadratica * pow(length(light.Position - vPosition), 2.0);
+        b = light.Lineal * length(light.Position - vPosition.xyz);
+        c = light.Constant;
+
+        att = 1.0 /(a + b + c);
 
     }
 
@@ -83,14 +93,6 @@ void main(){
 
     // producto de light ambient y la reflectividad del material
     ambient = light.Ambient.xyz * material.Ambient.xyz;
-
-    float att, a, b, c;
-
-    a = light.Cuadratica * pow(length(light.Direction.xyz), 2.0);
-    b = light.Lineal * length(light.Direction.xyz);
-    c = light.Constant;
-
-    att = 1.0 /(a + b + c);
 
     color = vec4( att * (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
 

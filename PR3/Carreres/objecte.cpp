@@ -117,24 +117,39 @@ void Objecte::aplicaTG(mat4 m)
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
                      &points[0] );
 
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
-                     &normals[0] );
+//    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
+//                     &normals[0] );
 
 }
-
-void Objecte::aplicaTGAndNormalize(mat4 m)
+void Objecte::aplicaTGNormals(mat4 m)
 {
-    //aplicaTGPointsAndNormals(m);
+    vec4 *transformed_normals = new vec4[Index];
 
-    // Actualitzacio del vertex array per a preparar per pintar
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
-                     &points[0] );
+    for ( int i = 0; i < Index; ++i ) {
 
-    //actualitzacion de les normals
+        transformed_normals[i] = m * normals[i] ;
+
+    }
+
+
+    transformed_normals = &transformed_normals[0];
+    normals = &normals[0];
+
+    for ( int i = 0; i < Index; ++i )
+    {
+
+        normals[i] = transformed_normals[i];
+    }
+
+
+    delete transformed_normals;
+
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
-                     &normals[0] );
+                    &normals[0] );
 
 }
+
+
 
 void Objecte::aplicaTGPoints(mat4 m)
 {
@@ -175,19 +190,7 @@ void Objecte::aplicaTGCentrat(mat4 m){
 
 }
 
-void Objecte::aplicaTGCentratNormals(mat4 m){
-    // calculamos el centro
-    calculCapsa3D();
-    point4 centre = calculCentre();
 
-    // montamos la matriz en orden inverso al que queremos aplicar las
-    // transformaciones
-    mat4 transform_centrada = ( Translate(centre) * m * Translate(-centre) );
-
-    // aplicmos las transformaciones
-    aplicaTGAndNormalize(transform_centrada);
-
-}
 
 void Objecte::toGPU(QGLShaderProgram *pr){
 

@@ -82,12 +82,11 @@ public:
 
     // Aplica una TG qualsevol a un objecte
     virtual void aplicaTG(mat4 m);
-    virtual void aplicaTGAndNormalize(mat4 m);
+    virtual void aplicaTGNormals(mat4 m);
     void aplicaTGPoints(mat4 m);
-    //void aplicaTGPointsAndNormals(mat4 m);
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);
-    void aplicaTGCentratNormals(mat4 m);
+
 
 
 
