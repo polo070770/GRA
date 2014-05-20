@@ -55,7 +55,7 @@ void Terra::make()
 }
 
 /*
- *Generamos dos triangulos por cara y asignamos los colores
+ *Generamos dos triangulos por cara
  *
  */
 void Terra::quad( int a, int b, int c, int d ){

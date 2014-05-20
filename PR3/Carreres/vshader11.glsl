@@ -70,11 +70,12 @@ void main(){
 
     }else if(light.Tipus == DIRECCIONAL){
 
-        L = normalize(-light.Direction.xyz); // el vector unitario desde el punto a la luz
+        L = normalize(light.Direction.xyz); // el vector unitario desde el punto a la luz
         //L = dot(reflect(-light.Direction, N), V);
+        //L = normalize(-(light.Position - vPosition).xyz); // el vector unitario desde el punto a la luz
 
         a = light.Cuadratica * pow(length(light.Position - vPosition), 2.0);
-        b = light.Lineal * length(light.Position - vPosition.xyz);
+        b = light.Lineal * length(light.Position.xyz - vPosition.xyz);
         c = light.Constant;
 
         att = 1.0 /(a + b + c);
@@ -82,10 +83,11 @@ void main(){
     }
 
     H = normalize((L+V) / length(L+V)); // the halway, o l'optimitzacio de Blinn
+
     //R = max(dot(L, N), 0.0); es el vector del rebot de la llum , si es negativo pasa a ser 0
 
     // la difusa es el producto de V por la difusa de la luz y la difusa del mterial
-    diffuse = max(dot(L, N), 0.0) * (light.Diffuse.xyz * material.Diffuse.xyz);
+    diffuse = (light.Diffuse.xyz * material.Diffuse.xyz) * max(dot(L, N), 0.0);
 
     // la especular es el dot de N y H elevado a E por el producto de la especular de la luz
     // y del material, evitamos que sea un valor negativo

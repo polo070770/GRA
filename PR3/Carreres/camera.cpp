@@ -202,29 +202,31 @@ void Camera::actualitzaCameraThirdPerson(Capsa3D capsaCotxe){
 
 }
 
-void Camera::actualitzaCameraCockpit(Capsa3D capsaCotxe){
+void Camera::actualitzaCameraCockpit(Capsa3D capsaCotxe, vec4 direction){
 
 
     double cockpit_camera_offset = 1.5;
     double cockpit_viewer_offset = 0.4;
+
     vec3 centre = calculCentreCapsa(capsaCotxe);
 
     // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
     // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
- /*
+
     vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
     vs.obs.z = centre.z ;
     vs.obs.y = capsaCotxe.pmin.y + (3.5 * (capsaCotxe.h / 5));
-
+/*
     // miramos al infinito centrado a nivel de suelo
     vs.vrp.x = capsaCotxe.pmin.x - 20;
     vs.vrp.y = capsaCotxe.pmin.y;
     vs.vrp.z = centre.z;
 */
     // miramos al centro del coche
-    vs.vrp.x = centre.x;
+    vs.vrp.x = centre.x * direction.x;
     vs.vrp.y = centre.y;
-    vs.vrp.z = centre.z;
+    vs.vrp.z = centre.z * direction.z;
+
 
     CalculaMatriuModelView();
 

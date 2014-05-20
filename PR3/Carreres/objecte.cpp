@@ -250,21 +250,6 @@ void Objecte::draw()
 }
 
 void Objecte::make(){
-    /*
-    static vec3  base_colors[] = {
-        vec3( 1.0, 0.0, 0.0 ),
-        vec3( 0.0, 1.0, 0.0 ),
-        vec3( 0.0, 0.0, 1.0 ),
-        vec3( 1.0, 1.0, 0.0 )
-    };
-    */
-
-//    static vec3  base_colors[] = {
-//        vec3( 1.0, 0.0, 0.0 ),
-//        vec3( 1.0, 0.0, 0.0 ),
-//        vec3( 1.0, 0.0, 0.0 ),
-//        vec3( 1.0, 0.0, 0.0 )
-//    };
 
     // Recorregut de totes les cares per a posar-les en les estructures de la GPU
     // Cal recorrer l'estructura de l'objecte per a pintar les seves cares
@@ -278,7 +263,7 @@ void Objecte::make(){
         for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
         {
             points[Index] = vertexs[cares[i].idxVertices[j]];
-//            colors[Index] = base_colors[i%4];
+            //colors[Index] = base_colors[i%4];
             //cada vertice tiene la misma normal que su cara
 
             normals[Index] = vec4(cares[i].normal);

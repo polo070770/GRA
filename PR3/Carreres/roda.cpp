@@ -25,12 +25,15 @@ void Roda::aplicaTGCentrat(mat4 m){
     calculCapsa3D();
     point4 centre = calculCentre();
 
+    mat4 m1 = RotateY(-angle_gir - angle_cotxe);
+    mat4 m2 = RotateY(angle_gir + angle_cotxe);
+
     // tenim en conte que es posible que les rodes estiguin rotades respecte les y
-    mat4 transform_centrada = ( Translate(centre) * RotateY(angle_gir + angle_cotxe) * m * RotateY(-angle_gir - angle_cotxe) * Translate(-centre) );
+    mat4 transform_centrada = ( Translate(centre) * m2 * m * m1 * Translate(-centre) );
 
     // aplicmos las transformaciones
     aplicaTG(transform_centrada);
-    aplicaTGNormals(m);
+    aplicaTGNormals(m2 * m * m1);
 
 }
 
@@ -42,7 +45,7 @@ void Roda::fer_gir(float angle){
     angle_gir = angle;
     mat4 gir = RotateY(angle_gir);
     this->aplicaTGCentrat(gir);
-    aplicaTGNormals(gir);
+    //aplicaTGNormals(gir);
 }
 
 void Roda::actualitzaAngleCotxe(int angle){

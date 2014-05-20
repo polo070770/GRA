@@ -254,7 +254,6 @@ void Cotxe::girar_rodes_davanteres(){
     this->roda_dreta_davantera->fer_gir(angle_gir);
     this->roda_esquerra_davantera->fer_gir(angle_gir);
 
-
 }
 
 void Cotxe::forward(){

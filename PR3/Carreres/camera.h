@@ -92,7 +92,7 @@ public:
     void resetLookCotxe(Capsa3D capsaCotxe);
     void resetLookCockpit(Capsa3D capsaCotxe);
     void actualitzaCameraThirdPerson(Capsa3D capsaCotxe);
-    void actualitzaCameraCockpit(Capsa3D capsaCotxe);
+    void actualitzaCameraCockpit(Capsa3D capsaCotxe, vec4 direction);
     void setAngX_Vup(double delta);
     void setAngY_Vup(double delta);
     void setAngZ_Vup(double delta);

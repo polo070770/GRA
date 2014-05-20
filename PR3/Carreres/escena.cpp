@@ -204,9 +204,12 @@ void escena::gira_dreta_cotxe(int num){
         cotxe = cotxe_2;
 
 
-    if(cotxe != NULL)
+    if(cotxe != NULL){
+        if (primeraPersona){
+            mou_EixYCamera(100.0);
+        }
         cotxe->turnright();
-
+    }
 }
 
 void escena::gira_esquerra_cotxe(int num){
@@ -217,9 +220,12 @@ void escena::gira_esquerra_cotxe(int num){
         cotxe = cotxe_2;
 
 
-    if(cotxe != NULL)
+    if(cotxe != NULL){
+        if (primeraPersona){
+            cout << cotxe->direction << endl;
+        }
         cotxe->turnleft();
-
+    }
 }
 
 void escena::llibera_gir_cotxe(int num){
@@ -305,7 +311,7 @@ void escena::temps(){
     if(terceraPersona){
         camera.actualitzaCameraThirdPerson(cotxe_1->calculCapsa3D());
     }else if(primeraPersona){
-        camera.actualitzaCameraCockpit(cotxe_1->calculCapsa3D());
+        camera.actualitzaCameraCockpit(cotxe_1->calculCapsa3D(), cotxe_1->direction);
     }
 }
 
@@ -354,19 +360,19 @@ void escena::crearLlumsEscena(){
 //    (completamente roja y verde sin azul), la luz aparece amarilla.
 
     //creamos la intensidad Global
-    llums.ambientGlobal = 0.0;
+    llums.ambientGlobal = 0.05;
 
     //creamos una luz blanca
     Llum* llum = new Llum();
-    //llum->ini(vec3(0.0, -1.0, 0.0)); // direccional
-    llum->ini(vec4(0.0,3.0,0.0,0.0)); // puntual
+    llum->ini(vec3(0.0, -1.0, 0.0)); // direccional
+    //llum->ini(vec4(0.0, 10.0, 0.0, 0.0)); // puntual
     llum->intensitat.difusa = vec4(1.0, 1.0, 1.0, 1.0); // intensidad RGBA que una fuente de luz añade a la escena
     llum->intensitat.especular = vec4(1.0, 1.0, 1.0, 1.0); // provoca el brillo puntual del objeto
     llum->intensitat.ambient = vec4(0.0, 0.0, 0.0, 1.0);
 
-    llum->atenuacio.constant = 0.5;
-    llum->atenuacio.lineal = 0.5;
-    llum->atenuacio.cuadratica = 0.5;
+    llum->atenuacio.constant = 1.5;
+    llum->atenuacio.lineal = 0.0;
+    llum->atenuacio.cuadratica = 0.0;
 
     llums.add(llum);
 

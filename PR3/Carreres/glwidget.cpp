@@ -342,8 +342,11 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         // Es canvien els angles de visio de la camera segons el desplacament
         // Si hi ha un desplacament en X del viewport, es canviara l angle Y
         // Si hi ha un desplacament en Y del viewport, es canviara l angle X
-        setYRotation(xRot + 8 * dx);
-        setXRotation(yRot + 8 * dy);
+        setYRotation( 8 * dx);
+        setXRotation( 8 * dy);
+
+        cout << dx << endl;
+        cout << dy << endl;
 
     } else if (event->buttons() & Qt::RightButton) {
 
