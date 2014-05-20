@@ -33,6 +33,7 @@ public:
     void temps();
     void llibera_acceleracio();
     void llibera_gir();
+    int getAnglePosicional();
 
 private:
     void actualitzaAngle(int angle);
@@ -47,6 +48,7 @@ private:
     void avansar_rodes();
     void girar_rodes_davanteres();
     void girar_cotxe(float angle);
+
     static const int NumVerticesF = 100000;
     static const int NumCares = 300000;
     static const int MAX_VELOCITAT = 330;

@@ -55,7 +55,7 @@ void MainWindow::acceptedNewTerra(float amplaria, float profunditat, float y)
 
 void MainWindow::acceptedNewCotxe(float escala, float x, float z, float xdirector, float ydirector, float zdirector)
 {
-    int debug = 1;
+    int debug = 0;
 
     if (debug){
 

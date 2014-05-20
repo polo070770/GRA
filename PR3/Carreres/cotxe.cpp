@@ -467,3 +467,7 @@ void Cotxe::actualitzaAngle(int angle){
     this->roda_dreta_posterior->actualitzaAngleCotxe(this->angle_total);
     this->roda_esquerra_posterior->actualitzaAngleCotxe(this->angle_total);
 }
+
+int Cotxe::getAnglePosicional(){
+    return this->angle_total;
+}

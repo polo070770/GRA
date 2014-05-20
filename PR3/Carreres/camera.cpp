@@ -124,19 +124,16 @@ void Camera::resetTopView(){
  * @param capsaCotxe
  */
 void Camera::resetLookCotxe(Capsa3D capsaCotxe){
+    vec3 centre = calculCentreCapsa(capsaCotxe);
+    angle_cotxe = 0;
+    piram.d = 2;
+    vs.angx = -15;
+    vs.angy = 90;
+    vs.vrp = vec4(centre.x, centre.y, centre.z, 1.0);
+    CalculaMatriuModelView();
 
-    piram.d = 2 ; //distancia observador a pla proj
-    // rango de muestreo, entre 0.1 y 100.0
-    piram.dant = 3;
-    piram.dpost = 500;
+    this->third = true; // ponemos person a false para que haga calculobs
 
-    piram.alfav = 45;
-    piram.alfah = 45;
-
-
-
-    CalculWindow(capsaCotxe);
-    CalculaMatriuProjection();
 }
 
 void Camera::resetLookCockpit(Capsa3D capsaCotxe){
@@ -184,19 +181,22 @@ void Camera::resetLookCockpit(Capsa3D capsaCotxe){
  * @brief Camera::actualitzaCameraThirdPerson
  * @param capsaCotxe
  */
-void Camera::actualitzaCameraThirdPerson(Capsa3D capsaCotxe){
+void Camera::actualitzaCameraThirdPerson(Capsa3D capsaCotxe, int angle){
+    // si el angulo actual del cotxe es diferente al anterior
+    if(angle_cotxe > angle){
+        angle_cotxe = angle;
+        vs.angy = angle + 90;
+        if(vs.angy > 360) vs.angy-=360;
+        else if(vs.angy < 0) vs.angy += 360;
+    }else if(angle_cotxe < angle){
+        angle_cotxe = angle;
+        vs.angy = angle + 90 ;
+        if(vs.angy > 360) vs.angy-=360;
+        else if(vs.angy < 0) vs.angy += 360;
+    }
 
     vec3 centre = calculCentreCapsa(capsaCotxe);
-
-    // colocamos al observador un poco mas atras del coche, ligeramente por encima y centrado en z
-    vs.obs.x = centre.x + (capsaCotxe.a * 2);
-    vs.obs.z = centre.z ;
-    vs.obs.y = centre.y + (capsaCotxe.h * 2.5);
-
-    // miramos a la parte delantera inferior centrada en z
-    vs.vrp.x = capsaCotxe.pmin.x;
-    vs.vrp.y = capsaCotxe.pmin.y;
-    vs.vrp.z = centre.z;
+    vs.vrp = vec4(centre.x, centre.y, centre.z, 1.0);
 
     CalculaMatriuModelView();
 
@@ -212,11 +212,11 @@ void Camera::actualitzaCameraCockpit(Capsa3D capsaCotxe, vec4 direction){
 
     // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
     // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
-
+/*
     vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
     vs.obs.z = centre.z ;
     vs.obs.y = capsaCotxe.pmin.y + (3.5 * (capsaCotxe.h / 5));
-/*
+
     // miramos al infinito centrado a nivel de suelo
     vs.vrp.x = capsaCotxe.pmin.x - 20;
     vs.vrp.y = capsaCotxe.pmin.y;
@@ -249,7 +249,7 @@ void Camera::CalculaMatriuModelView()
     // cameraTarget = vs.vrp, where you want to look at, in world space
 
     // posicio de l'observador
-    if(!person)
+    if(!person || third)
         vs.obs = CalculObs(vs.vrp, piram.d, vs.angx, vs.angy);
 
     // verticalitat de la camera

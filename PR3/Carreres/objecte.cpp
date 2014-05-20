@@ -206,7 +206,7 @@ void Objecte::toGPU(QGLShaderProgram *pr){
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(vec4) * Index,
                       NULL, GL_STATIC_DRAW );
 
-    program->link();
+    //program->link();
 
     program->bind();
     glEnable( GL_DEPTH_TEST );

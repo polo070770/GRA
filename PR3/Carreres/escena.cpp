@@ -308,8 +308,11 @@ void escena::panning_dy(double delta){
 
 void escena::temps(){
     cotxes.temps();
+
     if(terceraPersona){
-        camera.actualitzaCameraThirdPerson(cotxe_1->calculCapsa3D());
+        int angle = cotxe_1->getAnglePosicional();
+        cout << "angle "<< angle << endl;
+        camera.actualitzaCameraThirdPerson(cotxe_1->calculCapsa3D(), angle);
     }else if(primeraPersona){
         camera.actualitzaCameraCockpit(cotxe_1->calculCapsa3D(), cotxe_1->direction);
     }

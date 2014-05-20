@@ -91,7 +91,7 @@ public:
     void resetTopView();
     void resetLookCotxe(Capsa3D capsaCotxe);
     void resetLookCockpit(Capsa3D capsaCotxe);
-    void actualitzaCameraThirdPerson(Capsa3D capsaCotxe);
+    void actualitzaCameraThirdPerson(Capsa3D capsaCotxe, int angleCotxe);
     void actualitzaCameraCockpit(Capsa3D capsaCotxe, vec4 direction);
     void setAngX_Vup(double delta);
     void setAngY_Vup(double delta);
@@ -101,7 +101,9 @@ public:
     void panning_2D_Y(double delta);
 
 private:
+    int angle_cotxe;
     bool person;
+    bool third;
     void VertexCapsa3D(Capsa3D capsaMinima, vec4 vaux[8]);
     vec3 calculCentreCapsa(Capsa3D capsa);
 
