@@ -20,10 +20,12 @@ public:
     void readObj(QString filename);
     void make();
     void aplicaTG(mat4 trans);
+    void aplicaTGRotate(mat4 trans);
     void draw();
     void toGPU(QGLShaderProgram *program);
     void aplicaTGPoints(mat4 mtrans);
     void aplicaTGCentrat(mat4 mtrans);
+    void aplicaTGCentratRotate(mat4 mtrans);
     void forward();
     void backward();
     void turnleft();

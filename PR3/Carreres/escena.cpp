@@ -5,7 +5,6 @@ using namespace std;
 escena::escena()
 
 {
-
     // Capsa minima contenidora provisional: S'ha de fer un recorregut dels objectes de l'escenes
     capsaMinima.pmin[0] = -25;
     capsaMinima.pmin[1] = -25;
@@ -22,8 +21,8 @@ escena::escena()
     heightGLWidget = 50.0;
     terceraPersona = false;
     primeraPersona = false;
-    crearLlumsEscena();
 
+    crearLlumsEscena();
 }
 
 
@@ -43,12 +42,12 @@ void escena::addObjecte(Objecte *obj) {
     }
 
     if (dynamic_cast<Obstacle*>(obj)){
-        //inserim el cotxe a la llista de cotxes
+        //inserim l'obstacle a la llista de obstacles
         obstacles.add((Obstacle*) obj);
     }
 
     if (dynamic_cast<Terra*>(obj))
-        this->terra = (Terra*)obj;
+        this->terra = (Terra*)obj;    
 
     reset();
 }
@@ -56,8 +55,6 @@ void escena::addObjecte(Objecte *obj) {
 
 void escena::CapsaMinCont3DEscena()
 {
-    // Metode a implementar
-    //de momento
     if(cotxe_1 != NULL){
         this->capsaMinima = cotxe_1->calculCapsa3D();
     }
@@ -69,20 +66,6 @@ void escena::CapsaMinCont3DEscena()
         this->capsaMinima = addCapsaMinima(this->capsaMinima, terra->calculCapsa3D());
     }
     this->capsaMinima = addCapsaMinima(this->capsaMinima, obstacles.getCapsa3D());
-    /*
-    float factor;
-    if(this->heightGLWidget > this->widthGLWidget){
-        factor = this->heightGLWidget / this->widthGLWidget;
-        this->capsaMinima.h *= factor;
-
-    }else if(this->widthGLWidget > this->heightGLWidget){
-        factor = this->widthGLWidget / this->heightGLWidget;
-        this->capsaMinima.a *= factor;
-    }else{
-        factor = 1;
-
-    }
-    */
 
 }
 
@@ -114,7 +97,6 @@ Capsa3D escena::addCapsaMinima(Capsa3D capsaBase, Capsa3D novaCapsa){
 
 void escena::aplicaTG(mat4 m) {
 
-    // Metode a modificar
     //apliquem a la llista de cotxes
     cotxes.aplicaTG(m);
     obstacles.aplicaTG(m);
@@ -125,7 +107,6 @@ void escena::aplicaTG(mat4 m) {
 
 void escena::aplicaTGCentrat(mat4 m) {
 
-    // Metode a modificar
     //apliquem a la llista de cotxes
     cotxes.aplicaTGCentrat(m);
     obstacles.aplicaTGCentrat(m);
@@ -136,7 +117,6 @@ void escena::aplicaTGCentrat(mat4 m) {
 
 void escena::draw() {
 
-    // Metode a modificar
     cotxes.draw();
     obstacles.draw();
     if (terra!=NULL)
@@ -153,8 +133,9 @@ void escena::reset() {
 
     obstacles.reset(yorig);
 
-    if (terra!=NULL)
-        terra->make();
+    if (terra!=NULL){
+        terra->init();
+    }
 
     //calculo la capsa minima
     this->CapsaMinCont3DEscena();
@@ -172,14 +153,15 @@ void escena::llum_toGPU(QGLShaderProgram *program){
     llums.setAmbientToGPU(program);
     llums.toGPU(program);
 }
-void escena::accelera_cotxe(int num){
-     Cotxe * cotxe;
-     if(num == 0)
-         cotxe = cotxe_1;
-     else if(num == 1)
-         cotxe = cotxe_2;
 
-     if(cotxe != NULL)
+void escena::accelera_cotxe(int num){
+    Cotxe * cotxe;
+    if(num == 0)
+        cotxe = cotxe_1;
+    else if(num == 1)
+        cotxe = cotxe_2;
+
+    if(cotxe != NULL)
         cotxe->forward();
 }
 
@@ -189,7 +171,6 @@ void escena::desaccelera_cotxe(int num){
         cotxe = cotxe_1;
     else if(num == 1)
         cotxe = cotxe_2;
-
 
     if(cotxe != NULL)
         cotxe->backward();
@@ -203,13 +184,9 @@ void escena::gira_dreta_cotxe(int num){
     else if(num == 1)
         cotxe = cotxe_2;
 
-
-    if(cotxe != NULL){
-        if (primeraPersona){
-            mou_EixYCamera(100.0);
-        }
+    if(cotxe != NULL)
         cotxe->turnright();
-    }
+
 }
 
 void escena::gira_esquerra_cotxe(int num){
@@ -219,13 +196,9 @@ void escena::gira_esquerra_cotxe(int num){
     else if(num == 1)
         cotxe = cotxe_2;
 
-
-    if(cotxe != NULL){
-        if (primeraPersona){
-            cout << cotxe->direction << endl;
-        }
+    if(cotxe != NULL)
         cotxe->turnleft();
-    }
+
 }
 
 void escena::llibera_gir_cotxe(int num){
@@ -311,7 +284,6 @@ void escena::temps(){
 
     if(terceraPersona){
         int angle = cotxe_1->getAnglePosicional();
-        cout << "angle "<< angle << endl;
         camera.actualitzaCameraThirdPerson(cotxe_1->calculCapsa3D(), angle);
     }else if(primeraPersona){
         camera.actualitzaCameraCockpit(cotxe_1->calculCapsa3D(), cotxe_1->direction);
@@ -322,16 +294,17 @@ void escena::resetCameraTop(){
     terceraPersona = false;
     primeraPersona = false;
     camera.ini(this->widthGLWidget, this->heightGLWidget,
-                         this->capsaMinima, this->terceraPersona);
+               this->capsaMinima, this->terceraPersona);
     camera.resetTopView();
 
 }
+
 void escena::initLookAtCotxe(){
     if(cotxe_1 != NULL){
         terceraPersona = true;
         primeraPersona = false;
         camera.ini(this->widthGLWidget, this->heightGLWidget,
-                             this->cotxe_1->calculCapsa3D(), this->terceraPersona);
+                   this->cotxe_1->calculCapsa3D(), this->terceraPersona);
         camera.resetLookCotxe(this->cotxe_1->calculCapsa3D());
     }
 }
@@ -341,7 +314,7 @@ void escena::initLookAtCockpit(){
         terceraPersona = false;
         primeraPersona = true;
         camera.ini(this->widthGLWidget, this->heightGLWidget,
-                             this->cotxe_1->calculCapsa3D(), this->primeraPersona);
+                   this->cotxe_1->calculCapsa3D(), this->primeraPersona);
         camera.resetLookCockpit(this->cotxe_1->calculCapsa3D());
     }
 }
@@ -356,29 +329,21 @@ vector<Obstacle *> escena::getObstacles(){
 
 void escena::crearLlumsEscena(){
 
-
-//    Para la luz, los números corresponden al porcentaje de intensidad para cada color. Si los R, G, B son
-//    todos uno es una luz blanca lo más brillante posible. Si los tres son 0.5 el color es todavía
-//    blanco pero de intensidad media, de forma que aparece gris. Si R y G son 1 y B es 0
-//    (completamente roja y verde sin azul), la luz aparece amarilla.
+    //    Para la luz, los números corresponden al porcentaje de intensidad para cada color. Si los R, G, B son
+    //    todos uno es una luz blanca lo más brillante posible. Si los tres son 0.5 el color es todavía
+    //    blanco pero de intensidad media, de forma que aparece gris. Si R y G son 1 y B es 0
+    //    (completamente roja y verde sin azul), la luz aparece amarilla.
 
     //creamos la intensidad Global
     llums.ambientGlobal = 0.05;
 
     //creamos una luz blanca
-    Llum* llum = new Llum();
-    llum->ini(vec3(0.0, -1.0, 0.0)); // direccional
-    //llum->ini(vec4(0.0, 10.0, 0.0, 0.0)); // puntual
-    llum->intensitat.difusa = vec4(1.0, 1.0, 1.0, 1.0); // intensidad RGBA que una fuente de luz añade a la escena
-    llum->intensitat.especular = vec4(1.0, 1.0, 1.0, 1.0); // provoca el brillo puntual del objeto
-    llum->intensitat.ambient = vec4(0.0, 0.0, 0.0, 1.0);
 
-    llum->atenuacio.constant = 1.5;
-    llum->atenuacio.lineal = 0.0;
-    llum->atenuacio.cuadratica = 0.0;
+    Llum* direccional = new Llum();
+    direccional->ini(vec3(0.0, -1.0, 0.0)); // direccional
+    llums.add(direccional);
 
-    llums.add(llum);
-
-    //llum->ini(vec4(0.0,10.0,0.0), vec3(0.0,-1.0,.0),30.0);
-    //llum->ini(vec4(0.0,10.0,0.0));
+//    Llum* puntual = new Llum();
+//    puntual->ini(vec4(0.0, 10.0, 0.0, 0.0)); // puntual
+//    llums.add(puntual);
 }

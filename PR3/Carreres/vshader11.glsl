@@ -48,54 +48,52 @@ uniform mat4 model_view;
 uniform mat4 projection;
 uniform float ambientGlobal;
 
+float attenuation();
+
 void main(){
 
-    vec3 ambient, diffuse, specular, N, V, L, H, R;
+    vec3 diffuse, ambient, specular, N, V, L, H;
 
-    float a, b, c;
+    gl_Position = projection * model_view * vPosition;
 
-    float att = 1.0;
+    // la normal del vertice, normalizada
+    N = normalize(vNormal.xyz);
 
-    gl_Position = projection * model_view * (vPosition / vPosition.w );
+    // el vector desde el punt fins al viewer
+    V = normalize((model_view * vPosition).xyz);
 
-    N = normalize(vNormal.xyz);  // la normal del vertice, pasada por normalize para ser uniforme
-
-    V = normalize((model_view * vPosition).xyz); // el vector desde el punt fins al viewer
-
-    //vec3 H = normalize((L+V).xyz); // the halway, o l'optimitzacio de Blinn
-
+    // el vector direccion desde el punto hasta la fuente de luz, normalizada
     if(light.Tipus == PUNTUAL){
-
-        L = normalize((light.Position - vPosition).xyz); // el vector unitario desde el punto a la luz
-
+        L = normalize((light.Position - vPosition).xyz);
     }else if(light.Tipus == DIRECCIONAL){
-
-        L = normalize(light.Direction.xyz); // el vector unitario desde el punto a la luz
-        //L = dot(reflect(-light.Direction, N), V);
-        //L = normalize(-(light.Position - vPosition).xyz); // el vector unitario desde el punto a la luz
-
-        a = light.Cuadratica * pow(length(light.Position - vPosition), 2.0);
-        b = light.Lineal * length(light.Position.xyz - vPosition.xyz);
-        c = light.Constant;
-
-        att = 1.0 /(a + b + c);
-
+        L = normalize(-light.Direction.xyz);
     }
 
-    H = normalize((L+V) / length(L+V)); // the halway, o l'optimitzacio de Blinn
+    // the halfway, o l'optimitzacio de Blinn
+    H = (L+V) / length(L+V);
 
-    //R = max(dot(L, N), 0.0); es el vector del rebot de la llum , si es negativo pasa a ser 0
-
-    // la difusa es el producto de V por la difusa de la luz y la difusa del mterial
+    // la difusa es el producto de la difusa de la luz por la difusa del material
     diffuse = (light.Diffuse.xyz * material.Diffuse.xyz) * max(dot(L, N), 0.0);
 
-    // la especular es el dot de N y H elevado a E por el producto de la especular de la luz
-    // y del material, evitamos que sea un valor negativo
+    // la especular es el producto del producto especular de la luz por el del material y  el dot de N y H elevado a E
     specular = (light.Specular.xyz * material.Specular.xyz) * max(pow(dot(N, H), material.Shinines) , 0.0);
 
-    // producto de light ambient y la reflectividad del material
+    // producto de light ambient y  ambient del material
     ambient = light.Ambient.xyz * material.Ambient.xyz;
 
-    color = vec4( att * (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
+    // al resultado final le aplicamos la atenuacion
+    color = vec4( attenuation() * (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
 
-} 
+}
+
+float attenuation(){
+    float a, b, c;
+    float distance = length((light.Position - vPosition).xyz);
+
+    a = light.Cuadratica * pow(length((light.Position - vPosition).xyz), 2.0);
+    b = light.Lineal * length((light.Position - vPosition).xyz);
+    c = light.Constant;
+
+    return (1.0 /(a + b + c));
+
+}

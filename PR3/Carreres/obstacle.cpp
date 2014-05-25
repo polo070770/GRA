@@ -15,16 +15,21 @@ Obstacle::Obstacle(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     xRot = girx;
     yRot = giry;
     zRot = girz;
+
     readObj(n);
 
-    make();
+    // transformacions necesaries a l'obstacle
+    init();
+
+    this->material = this->materials.get(OBSTACLE);
 
 }
 
-void Obstacle::make(){
+// Realitzacions de les transformacions necesaries demanades
+void Obstacle::init(){
 
-    //cridem al make del pare
-    Objecte::make();
+    //cridem al make
+    make();
 
     escalarFrom1(this->tam); // escalem l'obstacle a mida
 
@@ -35,11 +40,41 @@ void Obstacle::make(){
     this->aplicaTG(Translate(-centre));
 
     //movem l'objecte al desti
-    //invertimos la direccion
-    // tambe serviria l'altura
     this->calculCapsa3D();
-    float y_desti = yorig + (-capsa.pmin.y);
-    point4 desti = point4(xorig * 1, y_desti,zorig * 1 ,0); // vector destino
+    point4 desti = point4(xorig, yorig + (-capsa.pmin.y), zorig, 0.0); // vector destino
     this->aplicaTG(Translate(desti));
 
+}
+
+void Obstacle::make(){
+
+    Index=0;
+    vector <Cara *> points_cara;
+
+    for(unsigned int i=0; i<cares.size(); i++)
+    {
+        for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
+        {
+            points[Index] = vertexs[cares[i].idxVertices[j]];
+            points_cara.push_back(&cares[i]);
+            Index++;
+        }
+    }
+
+    Cara * face_j;
+
+    for(unsigned int i=0; i < Index; i++)
+    {
+        vec4 sum_normales = vec4(0.0, 0.0, 0.0, 1.0);
+        for(unsigned int j=0; j < Index; j++)
+        {
+            if (sameVector(points[i], points[j])){
+                face_j = (Cara *) points_cara[j];
+                face_j->calculaNormal(vertexs);
+                sum_normales.operator +=(face_j->normal);
+
+            }
+        }
+        normals[i] = (sum_normales) / length(sum_normales);
+    }
 }

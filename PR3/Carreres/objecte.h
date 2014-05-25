@@ -39,10 +39,9 @@ protected:
     GLuint buffer; // Buffer de comunicacio amb la GPU
 
     // Estructures de vertexs i colors per passar a la GPU
-    int     numPoints;
-    point4 *points;
-//    color4 *colors;
-    vec4 *normals; // a la gpu necesitem les normals
+    int numPoints;
+    point4 * points;
+    vec4 * normals; // a la gpu necesitem les normals
 
     int Index; // index de control del numero de vertexs a posar a la GPU
     virtual void escalarFrom1(float factor);
@@ -69,7 +68,6 @@ public:
     // make(): omple l'estructura de points i colors de l'objecte, inicialitza NumVertices
     // Si l'objecte es construeix procedimentalment es sobrecarrega el make
     virtual void make();
-    virtual void aplicaNormals();
 
     // Pas generic de vertexs i colors a la GPU
     virtual void toGPU(QGLShaderProgram *p);
@@ -82,10 +80,13 @@ public:
 
     // Aplica una TG qualsevol a un objecte
     virtual void aplicaTG(mat4 m);
+    void aplicaTGRotate(mat4 trans);
     virtual void aplicaTGNormals(mat4 m);
     void aplicaTGPoints(mat4 m);
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);
+
+    bool sameVector(vec4 u, vec4 v);
 
 
 

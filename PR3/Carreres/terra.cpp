@@ -20,32 +20,48 @@ Terra::Terra(float amplaria, float profunditat, float y):Objecte(NumVerticesF)
     vertices[2] = point4( -1., yorig, -1., 1.0 );
     vertices[3] = point4( -1., yorig, 1., 1.0 );
 
-    // RGBA colors
-//    vertex_colors[0] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-//    vertex_colors[1] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-//    vertex_colors[2] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
-//    vertex_colors[3] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
+    // afegim els vertexs creat al vector vertexs
+    vertexs.push_back(vertices[0]);
+    vertexs.push_back(vertices[1]);
+    vertexs.push_back(vertices[2]);
+    vertexs.push_back(vertices[3]);
 
-    make();
+    Index = 0;
+
+    // fem les dues cares
+    Cara cara1;
+    cara1.idxVertices.push_back(0);Index++;
+    cara1.idxVertices.push_back(1);Index++;
+    cara1.idxVertices.push_back(2);Index++;
+
+    Cara cara2;
+    cara2.idxVertices.push_back(0);Index++;
+    cara2.idxVertices.push_back(2);Index++;
+    cara2.idxVertices.push_back(3);Index++;
+
+    // afegim les cares al vector cares
+    cares.push_back(cara1);
+    cares.push_back(cara2);
+
+    // fem les transformacions
+    init();
 
     this->material = materials.get(TERRA);
 }
 
-// Realitzacio de la geometria del cub en una genList o en el vertex array, segons el que visualitzem
-void Terra::make()
+// Transformacions del terra segons lo demanat
+void Terra::init()
 {
-    //std::cout<<"Estic en el make del terra\n";
+    Objecte::make();
 
-    // generacio de la geometria dels triangles per a visualitzar-lo
-    Index = 0;
-    //quad(3,2,1,0); // cara con la normal hacia arriba
-    quad(0,1,2,3); // cara con la normal hacia arriba
+    calculCapsa3D();
+
+    float ancho = capsa.a * a;
+    float profunditat = capsa.p * p;
 
     escalarFrom1(1); // escalem el terra a 1
 
     // apliquem transformacio amb les dades rebudes per l'usuari
-    float ancho = capsa.a * a;
-    float profunditat = capsa.p * p;
 
     mat4 transform = Scale(ancho,1,profunditat);
 
@@ -54,36 +70,24 @@ void Terra::make()
 
 }
 
-/*
- *Generamos dos triangulos por cara
- *
- */
-void Terra::quad( int a, int b, int c, int d ){
+void Terra::make(){
 
-    vec4 normal = vec4(0.0, 1.0, 0.0, 0.0);
+    // Recorregut de totes les cares per a posar-les en les estructures de la GPU
+    // Cal recorrer l'estructura de l'objecte per a pintar les seves cares
 
-    normals[Index] = normal;
-    points[Index] = vertices[a];
-    Index++;
+    Index = 0;
 
-    normals[Index] = normal;
-    points[Index] = vertices[b];
-    Index++;
-
-    normals[Index] = normal;
-    points[Index] = vertices[c];
-    Index++;
-
-    normals[Index] = normal;
-    points[Index] = vertices[a];
-    Index++;
-
-    normals[Index] = normal;
-    points[Index] = vertices[c];
-    Index++;
-
-    normals[Index] = normal;
-    points[Index] = vertices[d];
-    Index++;
+    for(unsigned int i=0; i<cares.size(); i++)
+    {
+        // calculamos las normal de las caras
+        cares[i].calculaNormal(vertexs);
+        for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
+        {
+            //cada vertice tiene la misma normal que su cara
+            points[Index] = vertexs[cares[i].idxVertices[j]];
+            normals[Index] = vec4(cares[i].normal);
+            Index++;
+        }
+    }
 
 }

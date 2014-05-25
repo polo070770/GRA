@@ -11,15 +11,13 @@ public:
     Obstacle(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
              double girx, double giry, double girz);
     point4 direction;
+    void init();
     void make();
-
 
 private:
 
     static const int NumVerticesF = 1000000;
     static const int NumCares = 3000000;
-
-
 
 };
 

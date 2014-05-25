@@ -4,9 +4,11 @@ using namespace std;
 CotxeContainer::CotxeContainer()
 {
 }
+
 CotxeContainer::~CotxeContainer(){
     printf("DESTRUCTOR cotxe container!");
 }
+
 void CotxeContainer::add(Cotxe *cotxe){
     this->listado.push_back((Cotxe*)cotxe);
 }
@@ -38,9 +40,9 @@ void CotxeContainer::draw(){
 void CotxeContainer::reset(float yorig){
     for (iterador = this->listado.begin(); iterador < this->listado.end(); ++iterador) {
         if(*iterador!=NULL) {
-        (*iterador)->setYorig(yorig);
-        (*iterador)->make();
-     }
+            (*iterador)->setYorig(yorig);
+            (*iterador)->make();
+        }
     }
 }
 

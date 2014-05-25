@@ -1,6 +1,7 @@
 #include "obstaclecontainer.h"
 
 using namespace std;
+
 ObstacleContainer::ObstacleContainer()
 {
     this->capsaMin.a =0;
@@ -10,9 +11,11 @@ ObstacleContainer::ObstacleContainer()
     this->capsaMin.pmin.y = 0;
     this->capsaMin.pmin.z = 0;
 }
+
 ObstacleContainer::~ObstacleContainer(){
     printf("DESTRUCTOR cotxe container!");
 }
+
 void ObstacleContainer::add(Obstacle *obstacle){
     this->listado.push_back((Obstacle*)obstacle);
     this->addCapsaMinima(obstacle->calculCapsa3D());
@@ -40,10 +43,11 @@ void ObstacleContainer::reset(float yorig){
     for (iterador = this->listado.begin(); iterador < this->listado.end(); ++iterador) {
         if(*iterador!=NULL){
             (*iterador)->setYorig(yorig);
-            (*iterador)->make();
+            (*iterador)->init();
         }
     }
 }
+
 void ObstacleContainer::calculCapsa3D(){
 
 
@@ -81,6 +85,7 @@ Capsa3D ObstacleContainer::getCapsa3D(){
     Capsa3D capsa = this->capsaMin;
     return capsa;
 }
+
 vector<Obstacle * > ObstacleContainer::getListado(){
     return this->listado;
 }

@@ -13,6 +13,8 @@ public:
     point4 direction;
 
     void make();
+    void init();
+
 
 
 private:

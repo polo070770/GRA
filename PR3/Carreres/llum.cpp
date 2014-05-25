@@ -12,6 +12,14 @@ void Llum::ini(vec3 direccio){
     cout << "LLUM DIRECCIONAL" << endl;
     this->tipus = DIRECCIONAL;
     this->direccio = direccio;
+
+    this->intensitat.difusa = vec4(1.0, 1.0, 1.0, 1.0); // intensidad RGBA que una fuente de luz añade a la escena
+    this->intensitat.especular = vec4(1.0, 0.0, 0.0, 1.0); // provoca el brillo puntual del objeto
+    this->intensitat.ambient = vec4(0.0, 0.0, 0.0, 1.0);
+
+    this->atenuacio.constant = 0.0;
+    this->atenuacio.lineal = 0.0;
+    this->atenuacio.cuadratica = 0.006;
 }
 
 /**
@@ -23,6 +31,14 @@ void Llum::ini(vec4 posicio){
     cout << "LLUM PUNTUAL" << endl;
     this->tipus = PUNTUAL;
     this->posicio = posicio;
+
+    this->intensitat.difusa = vec4(1.0, 1.0, 1.0, 1.0); // intensidad RGBA que una fuente de luz añade a la escena
+    this->intensitat.especular = vec4(1.0, 1.0, 0.0, 1.0); // provoca el brillo puntual del objeto
+    this->intensitat.ambient = vec4(0.0, 0.0, 0.0, 1.0);
+
+    this->atenuacio.constant = 1.0;
+    this->atenuacio.lineal = 0.0014;
+    this->atenuacio.cuadratica = 0.000007;
 }
 
 /**

@@ -28,7 +28,6 @@ Cotxe::Cotxe(QString n) : Objecte(NumVerticesF)
 Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
              double girx, double giry, double girz,
              float xdir, float ydir, float zdir):Objecte(NumVerticesF){
-    std::cout<< "Estic en el constructor parametritzat del cotxe\n" << endl;
 
     nom = n;
     Index = 0;
@@ -63,11 +62,11 @@ Cotxe::Cotxe(QString n, GLfloat mida, GLfloat x0, GLfloat y0, GLfloat z0,
     roda_esquerra_davantera = new Roda(tam, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
     roda_esquerra_posterior = new Roda(tam, x0, y0, z0,girx, giry, girz, xdir, ydir, zdir);
 
-    this->vector_fills.push_back(roda_esquerra_posterior);
     this->vector_fills.push_back(roda_dreta_posterior);
-    this->vector_fills.push_back(roda_esquerra_davantera);
-    this->vector_fills.push_back(carroseria);
     this->vector_fills.push_back(roda_dreta_davantera);
+    this->vector_fills.push_back(carroseria);
+    this->vector_fills.push_back(roda_esquerra_posterior);
+    this->vector_fills.push_back(roda_esquerra_davantera);
 
     readObj(n);
 
@@ -150,11 +149,12 @@ void Cotxe::make(){
     accelerant = 0;
     girant = 0;
     reset_rodes = 0;
+
     this->angle_total = 0; //ponemos el angulo a 0
     this->actualitzaAngle(0); // actualizamos la info del angulo en las ruedas tmb
 
+    this->direction = vec4(-1.0, 0.0, 0.0, 0.0);
 
-    this->direction = vec4(-1.0,0.0,0.0,0.0);
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->make();
     }
@@ -167,12 +167,10 @@ void Cotxe::make(){
     // apliquem la transformacio al centre, no cal que sigui centrada
     this->aplicaTG(Translate(-centre));
 
-    //movem l'objecte al desti
-    //invertimos la direccion
-    // tambe serviria l'altura
+    //movem l'objecte al desti proposat per l'usuari
     this->calculCapsa3D();
     float y_desti = yorig + (-capsa.pmin.y);
-    point4 desti = point4(capsa.pmin.x, y_desti, capsa.pmin.z, 1.0); // vector destino
+    point4 desti = point4(capsa.pmin.x, y_desti, capsa.pmin.z, 1.0); // punto destino
     this->aplicaTG(Translate(desti));
 }
 
@@ -180,24 +178,32 @@ void Cotxe::make(){
  *Hace un aplicaTG a la carroceria y las ruedas;
  */
 void Cotxe::aplicaTG(mat4 trans){
-    //std::cout<<"aplicaTG del cotxe"<<endl;
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
         if(*fill_iter!=NULL)(*fill_iter)->aplicaTG(trans);
     }
 }
 
-void Cotxe::toGPU(QGLShaderProgram *program){
-    //std::cout<<"toGPU del cotxe"<<endl;
+void Cotxe::aplicaTGRotate(mat4 trans){
     for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        if(*fill_iter!=NULL)(*fill_iter)->toGPU(program);
+        if(*fill_iter!=NULL)(*fill_iter)->aplicaTGNormals(trans);
     }
 }
 
-void Cotxe::draw(){
-    //std::cout<<"draw del cotxe"<<endl;
-    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
-        if(*fill_iter!=NULL)(*fill_iter)->draw();
-    }
+/*
+ *Hace un aplicaTGCentrat a la carroceria y las ruedas;
+ */
+void Cotxe::aplicaTGCentrat(mat4 trans){
+    //calculamos la caja del coche
+    calculCapsa3D();
+
+    // calculamos el centro del coche
+    point4 centre = calculCentre();
+
+    // montamos la matriz en orden inverso al que queremos aplicar las transformaciones
+    mat4 transform_centrada = ( Translate(centre) * trans * Translate(-centre) );
+
+    this->aplicaTG(transform_centrada);
+
 }
 
 void Cotxe::aplicaTGPoints(mat4 trans){
@@ -206,30 +212,26 @@ void Cotxe::aplicaTGPoints(mat4 trans){
     }
 }
 
-void Cotxe::aplicaTGCentrat(mat4 trans){
-    //calculamos la caja del coche
-    calculCapsa3D();
-    // calculamos el centro del coche
-    point4 centre = calculCentre();
+void Cotxe::toGPU(QGLShaderProgram *program){
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        if(*fill_iter!=NULL)(*fill_iter)->toGPU(program);
+    }
+}
 
-    // montamos la matriz en orden inverso al que queremos aplicar las
-
-    // transformaciones
-    mat4 transform_centrada = ( Translate(centre) * trans * Translate(-centre) );
-
-    this->aplicaTG(transform_centrada);
-
+void Cotxe::draw(){
+    for (fill_iter = this->vector_fills.begin(); fill_iter < this->vector_fills.end(); ++fill_iter) {
+        if(*fill_iter!=NULL)(*fill_iter)->draw();
+    }
 }
 
 void Cotxe::moviment(){
 
     if(girant){
-        //cout << "girant" << endl;
         this->girar_cotxe(angle_gir);
     }
 
     point4 desti = point4(
-            this->direction[0] * velocitat * FACTOR_VELOCITAT,
+                this->direction[0] * velocitat * FACTOR_VELOCITAT,
             this->direction[1] * velocitat * FACTOR_VELOCITAT,
             this->direction[2] * velocitat * FACTOR_VELOCITAT,
             this->direction[3] * velocitat * FACTOR_VELOCITAT
@@ -237,6 +239,7 @@ void Cotxe::moviment(){
 
     mat4 moviment = (Translate(desti));
     this->aplicaTG(moviment);
+
     //apliquem moviment a les rodes
     this->avansar_rodes();
 
@@ -305,15 +308,17 @@ void Cotxe::girar_cotxe(float angle){
     vec4 nova  = (RotateY(angle_resultant) * this->direction);
 
     this->aplicaTGCentrat(RotateY(angle_resultant));
+    // rotem les normals
+    this->aplicaTGRotate(RotateY(angle_resultant));
+
     this->direction[0] = nova.x;
     this->direction[1] = nova.y;
     this->direction[2] = nova.z;
     this->direction[3] = nova.w;
 
 }
+
 void Cotxe::temps(){
-
-
 
     // si ja no estem girant fem un reset dels angles
     if(reset_rodes == 1){
@@ -361,9 +366,10 @@ void Cotxe::llibera_gir(){
 }
 
 void Cotxe::readObj(QString filename)
-{   Objecte *current;
-    //std::cout<< "Estic en el readobjdel cotxe del cotxe\n" << endl;
+{
+    Objecte *current;
     FILE *fp = fopen(filename.toLocal8Bit(),"rb");
+
     if (!fp)
     {
         cout << "No puc obrir el fitxer " << endl;
@@ -403,10 +409,11 @@ void Cotxe::readObj(QString filename)
                     fprintf (stderr, "Too few coordinates");//: '%s'", str_orig);
                     exit (-1);
                 }
+
                 QString sx(ReadFile::words[1]);
                 QString sy(ReadFile::words[2]);
-
                 QString sz(ReadFile::words[3]);
+
                 double x = sx.toDouble();
                 double y = sy.toDouble();
                 double z = sz.toDouble();
@@ -419,9 +426,11 @@ void Cotxe::readObj(QString filename)
                     y/=w;
                     z/=w;
                 }
+
                 // S'afegeix el vertex a l'objecte
                 current = vector_fills[currentObj];
                 current->vertexs.push_back(point4(x, y, z, 1));
+
                 vindexAct++;
 
 
@@ -458,6 +467,7 @@ void Cotxe::readObj(QString filename)
         }
     }
 }
+
 void Cotxe::actualitzaAngle(int angle){
     angle_total += angle;
     if(angle_total > 360) angle_total -=360;

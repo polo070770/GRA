@@ -11,6 +11,7 @@ GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
     setFocusPolicy( Qt::StrongFocus );
+
     esc = new escena();
 
     xRot = 0;
@@ -40,6 +41,7 @@ GLWidget::GLWidget(QWidget *parent)
     // cambiamos los valores del tamaño en la escena
     int w = this->size().width();
     int h = this->size().height();
+
     esc->setWidthGLWidget(w);
     esc->setHeightGLWidget(h);
 }
@@ -85,7 +87,7 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
     program->addShader(fshader);
 
     program->bindAttributeLocation("vPosition", PROGRAM_VERTEX_ATTRIBUTE);
-    program->bindAttributeLocation("vColor", PROGRAM_COLOR_ATTRIBUTE);
+    program->bindAttributeLocation("vNormal", PROGRAM_COLOR_ATTRIBUTE);
 
     // Es munta el programa
     program->link();
@@ -160,8 +162,7 @@ void GLWidget::newObjecte(Objecte * obj)
 void GLWidget::newObstacle(QString fichero, int nombre)
 {
     // Metode que serveix per a donar d'alta un obstacle amb el punt original a xorig, yorig,zorig
-    // d'una certa mida
-    // ha d'estar a les ys del pla de la terra
+    // d'una certa mida, ha d'estar a les ys del pla de la terra
     GLfloat yorig = esc->getYOrig();
     // Metode a implementar
     Obstacle *obj;
@@ -183,8 +184,6 @@ void GLWidget::newTerra(float amplaria, float profunditat, float y)
 {
     // Metode que crea un objecte terra poligon amb el punt original a xorig, yorig, zorig
     // (quadrat d'una certa mida amb origen a xorig, yorig, zorig
-
-    // Metode a implementar
 
     Terra *obj;
     obj = new Terra(amplaria, profunditat, y);
@@ -217,10 +216,6 @@ void GLWidget::initializeGL()
 
 void GLWidget::resetView()
 {
-    xRot = 0;
-    yRot = 0;
-    zRot = 0;
-
     // Metode a modificar per a adaptar tots els objectes de l'escena.
 
     vector <Cotxe *> listado_cotxes = esc->getCotxes();
@@ -249,16 +244,6 @@ void GLWidget::paintGL()
 {
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    qNormalizeAngle(xRot);
-    qNormalizeAngle(yRot);
-    qNormalizeAngle(zRot);
-
-    //    mat4 transform = ( RotateX( xRot / 16.0 ) *
-    //                       RotateY( yRot / 16.0 ) *
-    //                       RotateZ( zRot / 16.0 ) );
-
-    //    esc->aplicaTGCentrat(transform);
 
     esc->camera_toGPU(program);
     esc->llum_toGPU(program); //las luces se crean al principio
@@ -304,7 +289,6 @@ void GLWidget::setZRotation(int angle)
 }
 
 void GLWidget::zoom(double in, int dy){
-    //cout << "in : " << in << " dy : " << dy <<endl;
     esc->zoom_camera(in * abs(dy));
 }
 
@@ -344,9 +328,6 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         // Si hi ha un desplacament en Y del viewport, es canviara l angle X
         setYRotation( 8 * dx);
         setXRotation( 8 * dy);
-
-        cout << dx << endl;
-        cout << dy << endl;
 
     } else if (event->buttons() & Qt::RightButton) {
 
@@ -406,7 +387,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
 
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
 {
-    //cout << "release" << endl;
     //AQUEST METODE TE UN FUNCIONAMENT EXTRANY
 
     // Metode a implementar
@@ -465,7 +445,6 @@ void GLWidget::accions_timer(){
         esc->llibera_gir_cotxe(cotxe);
     }
 
-
     cotxe = 1;
 
     if (pulsaciones.contains(Qt::Key_Up)){
@@ -500,6 +479,7 @@ void GLWidget::accions_timer(){
         esc->initLookAtCockpit();
         pulsaciones.remove(Qt::Key_1);
     }
+
     esc->temps();
     updateGL();
 }

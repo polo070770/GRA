@@ -46,9 +46,6 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima, bool person)
         piram.proj = PERSPECTIVA;
     }
 
-
-
-
     /*
 
             (piram.dant) -----        -----
@@ -58,10 +55,6 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima, bool person)
              ------------------------>|   |
                                       -----
     */
-
-
-
-
 
     // VIEWPORT
     // A viewport defines in normalized coordinates a rectangular area
@@ -112,8 +105,6 @@ void Camera::resetTopView(){
     piram.alfav = 45;
     piram.alfah = 45;
 
-
-
     CalculaMatriuModelView();
     CalculaMatriuProjection();
 }
@@ -149,7 +140,7 @@ void Camera::resetLookCockpit(Capsa3D capsaCotxe){
     piram.alfav = 120;
     piram.alfah = 120;
 
-/*
+    /*
     // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
     // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
     vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
@@ -212,7 +203,7 @@ void Camera::actualitzaCameraCockpit(Capsa3D capsaCotxe, vec4 direction){
 
     // colocamos al observador como piloto, retrasando la x tanto como el offset de la camara
     // i avanznadolo el offset del viewer ya que el centro del coche no es exactamente el hueco del piloto
-/*
+    /*
     vs.obs.x = centre.x + cockpit_camera_offset - (cockpit_viewer_offset);
     vs.obs.z = centre.z ;
     vs.obs.y = capsaCotxe.pmin.y + (3.5 * (capsaCotxe.h / 5));
@@ -334,7 +325,6 @@ void Camera::panning_2D_Y(double delta){
 }
 
 void Camera::zoom(double dy){
-    //cout << " dy : " << dy << endl;
     AmpliaWindow(dy);
     CalculaMatriuProjection();
 }

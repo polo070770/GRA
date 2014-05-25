@@ -4,19 +4,16 @@
 Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
     QObject(parent)
 {
-    std::cout<< "Estic en el constructor default\n";
     points = new point4[npoints];
-//    colors = new color4[npoints];
     normals = new vec4[npoints];
 }
 
 Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble y0, GLdouble z0, double girx, double giry, double girz) : numPoints(npoints)
 {
     points = new point4[npoints];
-//    colors = new color4[npoints];
     normals = new vec4[npoints];
     tam = tamanio;
-    //std::cout<< "Estic en el constructor parametritzat de l'objecte";
+
     xorig = x0;
     yorig = y0;
     zorig = z0;
@@ -37,7 +34,6 @@ Objecte::Objecte(int npoints, QString n, GLdouble tamanio, GLdouble x0, GLdouble
 Objecte::~Objecte()
 {
     delete points;
-//    delete colors;
     delete normals;
 }
 
@@ -116,28 +112,26 @@ void Objecte::aplicaTG(mat4 m)
     // Actualitzacio del vertex array per a preparar per pintar
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index,
                      &points[0] );
-
-//    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
-//                     &normals[0] );
-
 }
+
+void Objecte::aplicaTGRotate(mat4 trans){
+    aplicaTG(trans);
+    aplicaTGNormals(trans);
+}
+
 void Objecte::aplicaTGNormals(mat4 m)
 {
     vec4 *transformed_normals = new vec4[Index];
 
     for ( int i = 0; i < Index; ++i ) {
-
         transformed_normals[i] = m * normals[i] ;
-
     }
-
 
     transformed_normals = &transformed_normals[0];
     normals = &normals[0];
 
     for ( int i = 0; i < Index; ++i )
     {
-
         normals[i] = transformed_normals[i];
     }
 
@@ -145,37 +139,29 @@ void Objecte::aplicaTGNormals(mat4 m)
     delete transformed_normals;
 
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(vec4) * Index,
-                    &normals[0] );
+                     &normals[0] );
 
 }
-
-
 
 void Objecte::aplicaTGPoints(mat4 m)
 {
     point4  *transformed_points = new point4[Index];
-    vec4 *transformed_normals = new vec4[Index];
 
     for ( int i = 0; i < Index; ++i ) {
         transformed_points[i] = m * points[i];
-        //transformed_normals[i] = m * normals[i];
-        transformed_normals[i] = normals[i];
     }
 
     transformed_points = &transformed_points[0];
     points = &points[0];
-    transformed_normals = &transformed_normals[0];
-    normals = &normals[0];
 
     for ( int i = 0; i < Index; ++i )
     {
         points[i] = transformed_points[i];
-        normals[i] = transformed_normals[i];
     }
 
     delete transformed_points;
-    delete transformed_normals;
 }
+
 void Objecte::aplicaTGCentrat(mat4 m){
     // calculamos el centro
     calculCapsa3D();
@@ -190,8 +176,6 @@ void Objecte::aplicaTGCentrat(mat4 m){
 
 }
 
-
-
 void Objecte::toGPU(QGLShaderProgram *pr){
 
     program = pr;
@@ -200,13 +184,8 @@ void Objecte::toGPU(QGLShaderProgram *pr){
 
     glGenBuffers( 1, &buffer );
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
-    /*glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(color4) * Index,
-                  NULL, GL_STATIC_DRAW );
-     */
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(vec4) * Index,
-                      NULL, GL_STATIC_DRAW );
-
-    //program->link();
+                  NULL, GL_STATIC_DRAW );
 
     program->bind();
     glEnable( GL_DEPTH_TEST );
@@ -222,26 +201,21 @@ void Objecte::draw()
 
     // per si han canviat les coordenades dels punts
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index, &points[0] );
-    //glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4) * Index, sizeof(color4) * Index, &colors[0] );
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4) * Index, sizeof(vec4) * Index, &normals[0] );
 
     // Per a conservar el buffer
     int vertexLocation = program->attributeLocation("vPosition");
-    //int colorLocation = program->attributeLocation("vColor");
-
     int normalLocation = program->attributeLocation("vNormal");
 
     program->enableAttributeArray(vertexLocation);
     program->setAttributeBuffer("vPosition", GL_FLOAT, 0, 4);
-
-    //program->enableAttributeArray(colorLocation);
-    //program->setAttributeBuffer("vColor", GL_FLOAT, sizeof(point4) * Index, 4);
 
     program->enableAttributeArray(normalLocation);
     program->setAttributeBuffer("vNormal", GL_FLOAT, sizeof(vec4) * Index, 4);
 
     //enviamos los materiales
     this->material->toGPU(program);
+
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
     glDrawArrays( GL_TRIANGLES, 0, Index );
@@ -249,45 +223,72 @@ void Objecte::draw()
     // Abans nomes es feia: glDrawArrays( GL_TRIANGLES, 0, NumVerticesP );
 }
 
+//void Objecte::make(){
+
+//    // FLAT
+
+//    // Recorregut de totes les cares per a posar-les en les estructures de la GPU
+//    // Cal recorrer l'estructura de l'objecte per a pintar les seves cares
+
+//    Index = 0;
+
+//    for(unsigned int i=0; i<cares.size(); i++)
+//    {
+//        // calculamos las normal de las caras
+//        cares[i].calculaNormal(vertexs);
+//        for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
+//        {
+//            //cada vertice tiene la misma normal que su cara
+//            points[Index] = vertexs[cares[i].idxVertices[j]];
+//            normals[Index] = vec4(cares[i].normal);
+//            Index++;
+//        }
+//    }
+
+//}
+
 void Objecte::make(){
 
-    // Recorregut de totes les cares per a posar-les en les estructures de la GPU
-    // Cal recorrer l'estructura de l'objecte per a pintar les seves cares
+    // GOURAUD
 
-    Index = 0;
+    Index=0;
+    vector <Cara *> points_cara;
 
     for(unsigned int i=0; i<cares.size(); i++)
     {
-        // calculamos las normal de las caras
-        cares[i].calculaNormal(vertexs);
         for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
         {
             points[Index] = vertexs[cares[i].idxVertices[j]];
-            //colors[Index] = base_colors[i%4];
-            //cada vertice tiene la misma normal que su cara
-
-            normals[Index] = vec4(cares[i].normal);
+            points_cara.push_back(&cares[i]);
             Index++;
         }
     }
 
-    // S'ha de dimensionar uniformement l'objecte a la capsa de l'escena i s'ha posicionar en el lloc corresponent
-}
+    Cara * face_j;
 
-void Objecte::aplicaNormals(){
-    Index = 0;
-
-    for(unsigned int i=0; i<cares.size(); i++)
+    for(unsigned int i=0; i < Index; i++)
     {
-        // calculamos las normal de las caras
-        cares[i].calculaNormal(vertexs);
-        for(unsigned int j=0; j<cares[i].idxVertices.size(); j++){
-            normals[Index] = vec4(cares[i].normal);
-            Index++;
-        }
-    }
+        vec4 sum_normales = vec4(0.0, 0.0, 0.0, 1.0);
+        for(unsigned int j=0; j < Index; j++)
+        {
+            if (sameVector(points[i], points[j])){
+                face_j = (Cara *) points_cara[j];
+                face_j->calculaNormal(vertexs);
+                sum_normales.operator +=(face_j->normal);
 
+            }
+        }
+        normals[i] = (sum_normales) / length(sum_normales);
+    }
 }
+
+
+bool Objecte::sameVector(vec4 u, vec4 v){
+    return (u.x == v.x &&
+            u.y == v.y &&
+            u.z == v.z);
+}
+
 
 float Objecte::getYOrig() {
     return this->yorig;
@@ -430,8 +431,5 @@ void Objecte::construeix_cara ( char **words, int nwords, Objecte*objActual, int
         }
     }
 
-    face.color = vec4(1.0, 0.0, 0.0, 1.0);
     objActual->cares.push_back(face);
 }
-
-
