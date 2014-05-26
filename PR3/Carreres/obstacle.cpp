@@ -48,8 +48,12 @@ void Obstacle::init(){
 
 void Obstacle::make(){
 
+    // GOURAUD
+
     Index=0;
-    vector <Cara *> points_cara;
+
+    vector <int> points_idxVec;
+    vector <vec3 * > vec_normals (vertexs.size());
 
     for(unsigned int i=0; i<cares.size(); i++)
     {
@@ -57,24 +61,22 @@ void Obstacle::make(){
         for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
         {
             points[Index] = vertexs[cares[i].idxVertices[j]];
-            points_cara.push_back(&cares[i]);
+
+            points_idxVec.push_back(cares[i].idxVertices[j]);
             Index++;
-        }
-    }
 
-    Cara * face_j;
-
-    for(unsigned int i=0; i < Index; i++)
-    {
-        vec4 sum_normales = vec4(0.0, 0.0, 0.0, 1.0);
-        for(unsigned int j=0; j < Index; j++)
-        {
-            if (sameVector(points[i], points[j])){
-                face_j = (Cara *) points_cara[j];
-                sum_normales.operator +=(face_j->normal);
-
+            if (!vec_normals[cares[i].idxVertices[j]]){
+                vec_normals[cares[i].idxVertices[j]] = &cares[i].normal;
+            }else{
+                vec_normals[cares[i].idxVertices[j]]->operator += (cares[i].normal);
             }
+
         }
-        normals[i] = (sum_normales) / length(sum_normales);
     }
+
+    for (unsigned int i=0; i<Index; ++i)
+    {
+        normals[i] = *vec_normals[points_idxVec[i]] / length((*vec_normals[points_idxVec[i]]));
+    }
+
 }

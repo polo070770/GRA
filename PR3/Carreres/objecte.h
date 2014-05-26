@@ -46,12 +46,6 @@ protected:
     int Index; // index de control del numero de vertexs a posar a la GPU
     virtual void escalarFrom1(float factor);
 
-    // estructura on guardarem la relacio vertexs-normal segons Gouraud
-    struct vec_normal{
-        vec3 sum;
-        float size;
-    } * vector_normal;
-
 public:
 
     vector<point4> vertexs; // vertexs de l'objecte sense repetits
