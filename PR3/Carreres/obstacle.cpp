@@ -53,6 +53,7 @@ void Obstacle::make(){
 
     for(unsigned int i=0; i<cares.size(); i++)
     {
+        cares[i].calculaNormal(vertexs);
         for(unsigned int j=0; j<cares[i].idxVertices.size(); j++)
         {
             points[Index] = vertexs[cares[i].idxVertices[j]];
@@ -70,7 +71,6 @@ void Obstacle::make(){
         {
             if (sameVector(points[i], points[j])){
                 face_j = (Cara *) points_cara[j];
-                face_j->calculaNormal(vertexs);
                 sum_normales.operator +=(face_j->normal);
 
             }
