@@ -70,10 +70,11 @@ private:
 
 // Programa de la GPU
     QGLShaderProgram *program;
+    QGLShaderProgram *program2;
 
     //  Metode per a carregar de fitxers el vertex i el fragment shader
     void InitShader( const char* vertexShaderFile,
-                       const char* fragmentShaderFile );
+                       const char* fragmentShaderFile, QGLShaderProgram * prgm );
     // Metode per inicialitzar els shaders de l'aplicacio
     void initShadersGPU();
 

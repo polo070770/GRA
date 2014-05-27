@@ -1,22 +1,12 @@
-#if __VERSION__<130
-#define IN attribute
-#define OUT varying
-#else
-#define IN in
-#define OUT out
-#endif
+#version 150
 
-/* defiicio de les entrades  */
-IN vec4 vPosition;
-IN vec4 vNormal;
+/* definicio de les entrades  */
+in vec4 vPosition;
+in vec4 vNormal;
 
 /* definicio de les sortides */
-OUT vec4 color;
-
-/* Definicio dels tipus de llum */
-const int PUNTUAL =  0;
-const int DIRECCIONAL = 1;
-const int SPOT = 2;
+out vec4 position;
+out vec4 normal;
 
 /* definicio de l'estructura de les dades de la llum */
 struct tipusLlum{
@@ -43,57 +33,18 @@ struct tipusMaterial{
 /* uniforms */
 uniform tipusMaterial material;
 uniform tipusLlum light;
+uniform tipusLlum light2;
 
 uniform mat4 model_view;
 uniform mat4 projection;
 uniform float ambientGlobal;
 
-float attenuation();
+void main()
+{
 
-void main(){
-
-    vec3 diffuse, ambient, specular, N, V, L, H;
-
+    position = vPosition;
+    normal = vNormal;
     gl_Position = projection * model_view * vPosition;
 
-    // la normal del vertice, normalizada
-    N = normalize(vNormal.xyz);
-
-    // el vector desde el punt fins al viewer
-    V = normalize((model_view * vPosition).xyz);
-
-    // el vector direccion desde el punto hasta la fuente de luz, normalizada
-    if(light.Tipus == PUNTUAL){
-        L = normalize((light.Position - vPosition).xyz);
-    }else if(light.Tipus == DIRECCIONAL){
-        L = normalize(-light.Direction.xyz);
-    }
-
-    // the halfway, o l'optimitzacio de Blinn
-    H = (L+V) / length(L+V);
-
-    // la difusa es el producto de la difusa de la luz por la difusa del material
-    diffuse = (light.Diffuse.xyz * material.Diffuse.xyz) * max(dot(L, N), 0.0);
-
-    // la especular es el producto del producto especular de la luz por el del material y  el dot de N y H elevado a E
-    specular = (light.Specular.xyz * material.Specular.xyz) * max(pow(dot(N, H), material.Shinines) , 0.0);
-
-    // producto de light ambient y  ambient del material
-    ambient = light.Ambient.xyz * material.Ambient.xyz;
-
-    // al resultado final le aplicamos la atenuacion
-    color = vec4( attenuation() * (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
-
 }
 
-float attenuation(){
-    float a, b, c;
-    float distance = length((light.Position - vPosition).xyz);
-
-    a = light.Cuadratica * pow(length((light.Position - vPosition).xyz), 2.0);
-    b = light.Lineal * length((light.Position - vPosition).xyz);
-    c = light.Constant;
-
-    return (1.0 /(a + b + c));
-
-}

@@ -72,4 +72,6 @@ OTHER_FILES += \
     vshader11.glsl \
     fshader11.glsl \
     vshader1.glsl \
-    fshader1.glsl
+    fshader1.glsl \
+    fshader12.glsl \
+    vshader12.glsl

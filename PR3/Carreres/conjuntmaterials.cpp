@@ -15,7 +15,7 @@ void ConjuntMaterials::crearConjuntMaterials(){
     // Difusa: Componente que refleja según la dirección de procedencia de la luz.
     // Especular: Componente que refleja la luz especular provoca el efecto brillo
 
-    // carrosseria
+    // carrosseria, rojo ferrari
     Material *carrosseria = new Material("Carrosseria");
     carrosseria->coefEspecular = 0.9;
     carrosseria->intensitat.difusa = vec4(0.8, 0.0, 0.0 , 1.0);
@@ -23,28 +23,28 @@ void ConjuntMaterials::crearConjuntMaterials(){
     carrosseria->intensitat.especular = vec4(0.9, 0.1, 0.1, 1.0);
     conjunt[CARROSSERIA] = carrosseria;
 
-    // roda
+    // roda, black rubber
     Material *roda = new Material("Roda");
-    roda->coefEspecular = 0.4;
-    roda->intensitat.difusa = vec4(0.75, 0.75, 0.75 , 1.0);
-    roda->intensitat.ambient = vec4(0.9, 0.9, 0.9, 1.0);
-    roda->intensitat.especular = vec4(0.01, 0.01, 0.01 , 1.0);
+    roda->coefEspecular = 0.078125;
+    roda->intensitat.difusa = vec4(0.01, 0.01, 0.01 , 1.0);
+    roda->intensitat.ambient = vec4(0.02, 0.02, 0.02, 1.0);
+    roda->intensitat.especular = vec4(0.4, 0.4, 0.4 , 1.0);
     conjunt[RODA] = roda;
 
     // terra
     Material *terra = new Material("Terra");
     terra->coefEspecular = 0.4;
-    terra->intensitat.difusa = vec4(0.8, 0.0, 0.0, 1.0);
-    terra->intensitat.ambient = vec4(0.2, 0.0, 0.0, 1.0);
-    terra->intensitat.especular = vec4(0.9, 0.1, 0.1, 1.0);
+    terra->intensitat.difusa = vec4(0.4, 0.25, 0.23, 1.0);
+    terra->intensitat.ambient = vec4(0.25, 0.25, 0.25, 1.0);
+    terra->intensitat.especular = vec4(0.4, 0.4, 0.4, 1.0);
     conjunt[TERRA] = terra;
 
-    // obstacles
+    // obstacles, yellow rubber
     Material *obstacle = new Material("Obstacle");
-    obstacle->coefEspecular = 0.4;
-    obstacle->intensitat.difusa = vec4(0.75, 0.75, 0.75 , 1.0);
-    obstacle->intensitat.ambient = vec4(0.9, 0.9, 0.9, 1.0);
-    obstacle->intensitat.especular = vec4(0.01, 0.01, 0.01 , 1.0);
+    obstacle->coefEspecular = 0.078125;
+    obstacle->intensitat.difusa = vec4(0.5, 0.5, 0.4 , 1.0);
+    obstacle->intensitat.ambient = vec4(0.05, 0.05, 0.0, 1.0);
+    obstacle->intensitat.especular = vec4(0.7, 0.7, 0.04 , 1.0);
     conjunt[OBSTACLE] = obstacle;
 
 }

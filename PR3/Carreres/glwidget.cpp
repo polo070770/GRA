@@ -26,6 +26,7 @@ GLWidget::GLWidget(QWidget *parent)
     qtPurple = QColor::fromCmykF(0.39, 0.39, 0.0, 0.0);
 
     program = 0;
+    program2 = 0;
 
     // timer para controlar los frames
     QTimer *timer = new QTimer(this);
@@ -52,7 +53,7 @@ GLWidget::~GLWidget()
 }
 
 //  Metode per a carregar de fitxers el vertex i el fragment shader
-void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
+void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile, QGLShaderProgram * prgm )
 {
 
     struct Shader {
@@ -62,7 +63,7 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
     }  shaders[2] = {
     { vShaderFile, GL_VERTEX_SHADER, NULL },
     { fShaderFile, GL_FRAGMENT_SHADER, NULL }
-};
+    };
 
     QGLShader *vshader = new QGLShader(QGLShader::Vertex, this);
     QGLShader *fshader = new QGLShader(QGLShader::Fragment, this);
@@ -101,7 +102,8 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile)
 void GLWidget::initShadersGPU()
 {
     // Carrega dels shaders i posa a punt per utilitzar els programes carregats a la GPU
-    InitShader( "../Carreres/vshader11.glsl", "../Carreres/fshader11.glsl" );
+    //InitShader( "../Carreres/vshader11.glsl", "../Carreres/fshader11.glsl", program );
+    InitShader( "../Carreres/vshader12.glsl", "../Carreres/fshader12.glsl", program);
 
 }
 

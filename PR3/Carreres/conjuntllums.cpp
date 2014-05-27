@@ -8,7 +8,7 @@ ConjuntLlums::ConjuntLlums(){}
  * @param llum
  */
 void ConjuntLlums::add(Llum *llum){
-    this->listado.push_back((Llum*)llum);
+    this->listado.push_back(llum);
 }
 /**
  * @brief setAmbientToGPU

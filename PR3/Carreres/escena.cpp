@@ -335,15 +335,19 @@ void escena::crearLlumsEscena(){
     //    (completamente roja y verde sin azul), la luz aparece amarilla.
 
     //creamos la intensidad Global
-    llums.ambientGlobal = 0.05;
+    llums.ambientGlobal = 0.01;
 
     //creamos una luz blanca
 
     Llum* direccional = new Llum();
-    direccional->ini(vec3(0.0, -1.0, 0.0)); // direccional
+    direccional->ini(vec3(0.0, -1.0, 0.0), "light"); // direccional
     llums.add(direccional);
 
-//    Llum* puntual = new Llum();
-//    puntual->ini(vec4(0.0, 10.0, 0.0, 0.0)); // puntual
-//    llums.add(puntual);
+    Llum* puntual = new Llum();
+    puntual->ini(vec4(15.0, 4.0, 15.0, 0.0), "light2"); // puntual
+    llums.add(puntual);
+
+    Llum* focal = new Llum();
+    focal->ini(vec4(-29.0, 1.0, -15.0, 0.0), vec3(0.29, 0.0, 0.0), 5.0, "light3"); // focal
+    llums.add(focal);
 }

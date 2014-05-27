@@ -42,58 +42,107 @@ struct tipusMaterial{
 
 /* uniforms */
 uniform tipusMaterial material;
-uniform tipusLlum light;
+uniform tipusLlum light; // direccional
+uniform tipusLlum light2; // puntual
+uniform tipusLlum light3; // puntual
 
 uniform mat4 model_view;
 uniform mat4 projection;
 uniform float ambientGlobal;
 
-float attenuation();
 
-void main(){
+float attenuation(tipusLlum l);
+float spot_light();
+vec3 blinn_phong(tipusLlum l);
+vec4 get_color();
+
+float attenuation(tipusLlum l)
+{
+    // se retorna la atenuacion, calculada a partir de la formula de clase
+    float a, b, c, distance;
+
+    distance = length((l.Position - vPosition).xyz);
+
+    a = l.Cuadratica * pow(distance, 2.0);
+    b = l.Lineal * distance;
+    c = l.Constant;
+
+    return (1.0 /(a + b + c));
+
+}
+
+vec3 blinn_phong(tipusLlum l)
+{
 
     vec3 diffuse, ambient, specular, N, V, L, H;
-
-    gl_Position = projection * model_view * vPosition;
 
     // la normal del vertice, normalizada
     N = normalize(vNormal.xyz);
 
     // el vector desde el punt fins al viewer
-    V = normalize((model_view * vPosition).xyz);
+    V = normalize(vec3(model_view * vPosition));
 
     // el vector direccion desde el punto hasta la fuente de luz, normalizada
-    if(light.Tipus == PUNTUAL){
-        L = normalize((light.Position - vPosition).xyz);
-    }else if(light.Tipus == DIRECCIONAL){
-        L = normalize(-light.Direction.xyz);
+    if(l.Tipus == PUNTUAL)
+    {
+        L = normalize((l.Position - vPosition).xyz);
+    }else if(l.Tipus == DIRECCIONAL)
+    {
+        L = normalize(-l.Direction.xyz);
+    }else if (l.Tipus == SPOT)
+    {
+        L = normalize(-l.Direction.xyz);
     }
 
     // the halfway, o l'optimitzacio de Blinn
     H = (L+V) / length(L+V);
 
     // la difusa es el producto de la difusa de la luz por la difusa del material
-    diffuse = (light.Diffuse.xyz * material.Diffuse.xyz) * max(dot(L, N), 0.0);
+    diffuse = (l.Diffuse.xyz * material.Diffuse.xyz) * max(dot(L, N), 0.0);
 
     // la especular es el producto del producto especular de la luz por el del material y  el dot de N y H elevado a E
-    specular = (light.Specular.xyz * material.Specular.xyz) * max(pow(dot(N, H), material.Shinines) , 0.0);
+    specular = (l.Specular.xyz * material.Specular.xyz) * max(pow(dot(N, H), material.Shinines) , 0.0);
 
     // producto de light ambient y  ambient del material
-    ambient = light.Ambient.xyz * material.Ambient.xyz;
+    ambient = l.Ambient.xyz * material.Ambient.xyz;
 
-    // al resultado final le aplicamos la atenuacion
-    color = vec4( attenuation() * (ambientGlobal + ambient + diffuse + specular).xyz, 1.0);
+    return (ambientGlobal + ambient + diffuse + specular);
 
 }
 
-float attenuation(){
-    float a, b, c;
-    float distance = length((light.Position - vPosition).xyz);
+float spot_light()
+{
+    // calculamos el coseno del spotlight, a partir del angulo de obertura
+    float fConeCosine = cos(light3.Alpha);
 
-    a = light.Cuadratica * pow(length((light.Position - vPosition).xyz), 2.0);
-    b = light.Lineal * length((light.Position - vPosition).xyz);
-    c = light.Constant;
+    // vector director del punto a la luz
+    vec3 vDir = normalize((vPosition - light3.Position).xyz);
 
-    return (1.0 /(a + b + c));
+    // producto vectorial para calcular el coseno
+    float fCosine = dot(light3.Direction, vDir);
+
+    if (fCosine > fConeCosine)
+        return 1.0;
+
+    return 0.0;
+
+}
+
+vec4 get_Color()
+{
+
+    // calculamos los diferentes tipos de luces
+    vec4 color = vec4( blinn_phong(light), 1.0); // direccional
+    vec4 color2 = vec4((attenuation(light2) * blinn_phong(light2)), 1.0); // puntual
+    vec4 color3 = vec4(spot_light() * blinn_phong(light3), 1.0); // focal
+
+    // la luz total es la suma de las 3 anteriores
+    return color + color2 + color3;
+}
+
+void main()
+{
+    gl_Position = projection * model_view * vPosition;
+    color = get_Color();
 
 }

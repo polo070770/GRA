@@ -28,18 +28,20 @@ class Llum
 {
 public:
     Llum();
-    Intensitat intensitat;
-    Atenuacio atenuacio;
-    void ini(vec3 direccio); //inicia una llum direccional
-    void ini(vec4 posicio);  //inicia una llum puntual
-    void ini(vec4 posicio, vec3 direccio, float obertura); //inicia un focus (spotlight)
+    void ini(vec3 direccio, char * light); //inicia una llum direccional
+    void ini(vec4 posicio, char * light);  //inicia una llum puntual
+    void ini(vec4 posicio, vec3 direccio, float obertura, char * light); //inicia un focus (spotlight)
     void toGPU(QGLShaderProgram *program);
 
+
 private:
+    Intensitat intensitat;
+    Atenuacio atenuacio;
     TipusLlum tipus;
     vec4 posicio;
     vec3 direccio;
     float obertura;
+    char * light;
 
 };
 

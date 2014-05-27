@@ -62,23 +62,3 @@ void Cara::calculaNormal(vector<Vertices> &v)
 //    normal.normalize();
 }
 
-void Cara::calculaNormal(vec4 v1, vec4 v2, vec4 v3){
-
-    normal.x=0.0;
-    normal.y=0.0;
-    normal.z=0.0;
-
-    vec3 u = vec3(v2.x - v1.x,
-            v2.y - v1.y,
-            v2.z - v1.z);
-
-    vec3 t = vec3(v3.x - v1.x,
-            v3.y - v1.y,
-            v3.z - v1.z);
-
-    normal.x = (u.y * t.z) - (u.z * t.y);
-    normal.y = (u.z * t.x) - (u.x * t.z);
-    normal.z = (u.x * t.y) - (u.y * t.x);
-
-}
-
